@@ -1,0 +1,1751 @@
+---
+/**
+ * Sobre o Site — documentação pública da arquitetura, stack e guia de replicação.
+ * Rota: /sobre-o-site
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Sobre o Site"
+  description="Como este site foi construído: stack, arquitetura, deploy automatizado e guia para replicar do zero."
+>
+  <div class="docs-page">
+
+    <!-- ─── Hero ─────────────────────────────────────────────────────────── -->
+    <div class="docs-hero">
+      <div class="container">
+        <div class="docs-hero-content fade-in">
+          <span class="docs-badge">Documentação Técnica</span>
+          <h1>Sobre o Site</h1>
+          <p class="docs-hero-desc">
+            Como este site foi construído — stack, arquitetura, deploy automatizado e
+            um guia completo para qualquer pessoa replicar essa estrutura do zero.
+          </p>
+          <p class="docs-collab-note">
+            Desenvolvido em colaboração com <a href="https://claude.ai" target="_blank" rel="noopener">Claude (Anthropic)</a>
+            usando o <a href="https://claude.ai/code" target="_blank" rel="noopener">Claude Code</a> — uma CLI para desenvolvimento assistido por IA.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Layout: sidebar + content ────────────────────────────────────── -->
+    <div class="container docs-layout">
+
+      <!-- Sidebar (ancora nav) -->
+      <aside class="docs-sidebar" aria-label="Navegação da documentação">
+        <nav class="sidebar-nav">
+          <p class="sidebar-label">Nesta página</p>
+          <a href="#visao-geral" class="sidebar-link">1. Visão Geral</a>
+          <a href="#stack" class="sidebar-link">2. Stack de Tecnologias</a>
+          <a href="#arquitetura" class="sidebar-link">3. Arquitetura</a>
+          <a href="#local" class="sidebar-link">4. Rodar Localmente</a>
+          <a href="#deploy" class="sidebar-link">5. Deploy</a>
+          <a href="#agentes" class="sidebar-link">6. Agentes Claude Code</a>
+          <a href="#guia" class="sidebar-link">7. Guia do Zero</a>
+        </nav>
+      </aside>
+
+      <!-- Main content -->
+      <main class="docs-content" id="main-content">
+
+        <!-- ─── 1. Visão Geral ─────────────────────────────────────────── -->
+        <section id="visao-geral" class="docs-section fade-in">
+          <div class="section-number">01</div>
+          <h2>Visão Geral</h2>
+          <p>
+            Este é um site pessoal moderno com <strong>Server-Side Rendering (SSR)</strong> construído
+            em <strong>Astro</strong>. Vai além de uma simples página estática: inclui um blog com
+            editor de texto rico, área de games integrada com a Steam API em tempo real, e um sistema
+            de deploy completamente automatizado via Git hooks.
+          </p>
+          <p>
+            Todo o desenvolvimento foi feito em colaboração com
+            <a href="https://claude.ai" target="_blank" rel="noopener">Claude (Anthropic)</a> usando o
+            <strong>Claude Code</strong> — uma interface de linha de comando que permite desenvolvimento
+            assistido por IA diretamente no terminal, com acesso ao sistema de arquivos, Git e servidor.
+          </p>
+          <p>
+            O projeto utiliza um conjunto de <strong>agentes especializados</strong> que automatizam
+            tarefas de frontend, infraestrutura, qualidade e segurança — todos coordenados por linguagem
+            natural.
+          </p>
+          <div class="feature-grid">
+            <div class="feature-card">
+              <span class="feature-icon">&#9998;</span>
+              <strong>Blog com Editor Rico</strong>
+              <span>TipTap + SQLite, área admin protegida por JWT</span>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">&#9654;</span>
+              <strong>Games ao Vivo</strong>
+              <span>Steam API com dados de jogos em tempo real</span>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">&#8634;</span>
+              <strong>Deploy Automatizado</strong>
+              <span>git push → build → restart em segundos</span>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">&#128274;</span>
+              <strong>TLS Automático</strong>
+              <span>Traefik + Let's Encrypt sem configuração manual</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── 2. Stack ───────────────────────────────────────────────── -->
+        <section id="stack" class="docs-section fade-in">
+          <div class="section-number">02</div>
+          <h2>Stack de Tecnologias</h2>
+
+          <h3>Aplicação</h3>
+          <div class="tech-table-wrapper">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Tecnologia</th>
+                  <th>Versão</th>
+                  <th>Função</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tech-row">
+                  <td><span class="tech-name">Astro</span></td>
+                  <td class="tech-version">4.x</td>
+                  <td>
+                    <span class="tech-func">Framework SSR — server-side rendering</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Escolhido por ser o framework mais eficiente para sites com conteúdo misto — páginas estáticas e dinâmicas coexistindo. O modelo de "ilhas" permite hidratar apenas os componentes interativos, reduzindo o JavaScript enviado ao browser.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">@astrojs/node</span></td>
+                  <td class="tech-version">—</td>
+                  <td>
+                    <span class="tech-func">Adapter Node.js para modo SSR</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Necessário para rodar o Astro em modo servidor (SSR). Transforma o build em um servidor Node.js standalone que pode ser gerenciado pelo PM2.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">React</span></td>
+                  <td class="tech-version">18.x</td>
+                  <td>
+                    <span class="tech-func">Componentes interativos (ilhas Astro)</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Usado apenas onde há interatividade real — o editor TipTap do blog. O Astro carrega o React apenas nessas "ilhas", sem impacto no restante das páginas.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">Tailwind CSS</span></td>
+                  <td class="tech-version">3.x</td>
+                  <td>
+                    <span class="tech-func">Estilização utilitária</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Permite estilização rápida e consistente sem sair do HTML. Elimina o problema de CSS crescendo de forma descontrolada, pois as classes utilitárias são purged no build final.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">TipTap</span></td>
+                  <td class="tech-version">2.x</td>
+                  <td>
+                    <span class="tech-func">Editor de texto rico para o Blog</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Editor rico baseado em ProseMirror com API moderna para React. Escolhido pela flexibilidade de extensões, boa documentação e capacidade de exportar HTML limpo para salvar no banco.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">better-sqlite3</span></td>
+                  <td class="tech-version">—</td>
+                  <td>
+                    <span class="tech-func">Banco de dados SQLite local</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">SQLite síncrono e sem servidor separado — perfeito para um blog pessoal. Zero configuração de infraestrutura, o banco é um único arquivo no servidor.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">jose</span></td>
+                  <td class="tech-version">—</td>
+                  <td>
+                    <span class="tech-func">JWT para autenticação</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Biblioteca leve e moderna para JWT que funciona tanto no Node.js quanto em ambientes edge. Usada para gerar e verificar tokens de sessão da área admin.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">TypeScript</span></td>
+                  <td class="tech-version">—</td>
+                  <td>
+                    <span class="tech-func">Tipagem estática</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Adiciona tipagem estática ao JavaScript, prevenindo erros em tempo de desenvolvimento. No Astro, é suportado nativamente sem configuração extra.</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Infraestrutura</h3>
+          <div class="tech-table-wrapper">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Tecnologia</th>
+                  <th>Versão</th>
+                  <th>Função</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tech-row">
+                  <td><span class="tech-name">Ubuntu</span></td>
+                  <td class="tech-version">24.04 LTS</td>
+                  <td>
+                    <span class="tech-func">Sistema operacional do VPS</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Sistema operacional estável e amplamente suportado para servidores. A versão LTS garante suporte de segurança por 5 anos.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">Docker</span></td>
+                  <td class="tech-version">29.x</td>
+                  <td>
+                    <span class="tech-func">Orquestração de containers</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Permite rodar o Nginx em um container isolado sem conflitar com outros serviços já existentes no servidor (n8n, Traefik). Facilita atualizações e rollback.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">Traefik</span></td>
+                  <td class="tech-version">v3.6</td>
+                  <td>
+                    <span class="tech-func">Reverse proxy + TLS automático (Let's Encrypt)</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Já estava no servidor para gerenciar o n8n. Detecta containers Docker automaticamente via labels e provisiona certificados TLS pelo Let's Encrypt sem configuração manual.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">Nginx</span></td>
+                  <td class="tech-version">alpine</td>
+                  <td>
+                    <span class="tech-func">Container Docker — proxy para o Node.js</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Atua como proxy reverso dentro do Docker, recebendo as requisições do Traefik e encaminhando para o processo Node.js na porta 4321 do host via <code>host.docker.internal</code>.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">PM2</span></td>
+                  <td class="tech-version">6.x</td>
+                  <td>
+                    <span class="tech-func">Gerenciador de processos Node.js</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Mantém o processo Node.js do Astro sempre rodando. Se o processo cair, o PM2 reinicia automaticamente. Também persiste os processos entre reboots do servidor.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">Node.js</span></td>
+                  <td class="tech-version">v24.x</td>
+                  <td>
+                    <span class="tech-func">Runtime (via nvm)</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Runtime necessário para executar o servidor Astro SSR e rodar o build. Instalado via nvm para facilitar troca de versões sem conflitos com o sistema operacional.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">Git</span></td>
+                  <td class="tech-version">2.x</td>
+                  <td>
+                    <span class="tech-func">Controle de versão + trigger de deploy</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="3" class="why-content">
+                    <div class="why-inner">Além do controle de versão, serve como mecanismo de deploy. O hook <code>post-receive</code> no repositório bare dispara o build automaticamente a cada <code>git push</code>.</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Desenvolvimento</h3>
+          <div class="tech-table-wrapper">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Ferramenta</th>
+                  <th>Função</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tech-row">
+                  <td><span class="tech-name">Claude Code</span></td>
+                  <td>
+                    <span class="tech-func">CLI de desenvolvimento assistido por IA (Anthropic)</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="2" class="why-content">
+                    <div class="why-inner">CLI da Anthropic que permite ao Claude interagir diretamente com o sistema de arquivos, terminal e Git. Todo o desenvolvimento deste site foi feito através de conversas em linguagem natural com agentes especializados.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">VS Code</span></td>
+                  <td>
+                    <span class="tech-func">Editor de código</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="2" class="why-content">
+                    <div class="why-inner">Editor principal para revisão do código gerado pelos agentes, com suporte nativo a TypeScript, Astro e integração com o terminal onde o Claude Code roda.</div>
+                  </td>
+                </tr>
+                <tr class="tech-row">
+                  <td><span class="tech-name">nvm</span></td>
+                  <td>
+                    <span class="tech-func">Gerenciador de versões do Node.js</span>
+                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                  </td>
+                </tr>
+                <tr class="why-row" hidden>
+                  <td colspan="2" class="why-content">
+                    <div class="why-inner">Gerencia múltiplas versões do Node.js no servidor sem conflitos com o sistema. Essencial para que o hook de deploy encontre o Node.js correto em uma sessão não-interativa do bash.</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ─── 3. Arquitetura ─────────────────────────────────────────── -->
+        <section id="arquitetura" class="docs-section fade-in">
+          <div class="section-number">03</div>
+          <h2>Arquitetura</h2>
+          <p>
+            O tráfego percorre quatro camadas antes de chegar à aplicação. Cada camada tem uma
+            responsabilidade única e bem definida.
+          </p>
+
+          <!-- Diagrama HTML/CSS da arquitetura -->
+          <div class="arch-diagram" aria-label="Diagrama de arquitetura do site">
+            <div class="arch-node arch-internet">
+              <span class="arch-icon">&#127760;</span>
+              <div class="arch-info">
+                <strong>Visitante</strong>
+                <span>HTTPS / porta 443</span>
+              </div>
+            </div>
+            <div class="arch-arrow" aria-hidden="true">&#8595;</div>
+            <div class="arch-node">
+              <span class="arch-label">Traefik v3.6</span>
+              <div class="arch-info">
+                <strong>Reverse Proxy + TLS</strong>
+                <span>Let's Encrypt automático — portas 80 e 443</span>
+              </div>
+            </div>
+            <div class="arch-arrow" aria-hidden="true">&#8595;</div>
+            <div class="arch-node">
+              <span class="arch-label">Nginx alpine</span>
+              <div class="arch-info">
+                <strong>Container Docker</strong>
+                <span>proxy_pass para host.docker.internal:4321</span>
+              </div>
+            </div>
+            <div class="arch-arrow" aria-hidden="true">&#8595;</div>
+            <div class="arch-node arch-app">
+              <span class="arch-label">Astro SSR</span>
+              <div class="arch-info">
+                <strong>Node.js / PM2 — porta 4321</strong>
+                <span>Server-side rendering, rotas de API, autenticação JWT</span>
+              </div>
+            </div>
+            <div class="arch-arrow" aria-hidden="true">&#8595;</div>
+            <div class="arch-leaves">
+              <div class="arch-node arch-leaf">
+                <span class="arch-label">SQLite</span>
+                <div class="arch-info">
+                  <strong>Banco de dados local</strong>
+                  <span>Posts do blog</span>
+                </div>
+              </div>
+              <div class="arch-node arch-leaf">
+                <span class="arch-label">Steam API</span>
+                <div class="arch-info">
+                  <strong>API externa</strong>
+                  <span>Dados de jogos em tempo real</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>Por que cada camada?</h3>
+          <ul class="docs-list">
+            <li>
+              <strong>Traefik</strong> — gerencia TLS e certificados Let's Encrypt automaticamente.
+              Sem ele, renovar HTTPS seria um processo manual e propenso a erros.
+            </li>
+            <li>
+              <strong>Nginx</strong> — atua como buffer e proxy entre o mundo externo e o processo
+              Node.js. Permite configurações de headers, caching e logs independentes da aplicação.
+            </li>
+            <li>
+              <strong>PM2</strong> — garante que o processo Node.js reinicie automaticamente
+              após falhas ou reinicializações do servidor.
+            </li>
+            <li>
+              <strong>Astro SSR</strong> — renderiza HTML no servidor, garantindo boa performance,
+              SEO correto e suporte a lógica dinâmica (banco de dados, autenticação).
+            </li>
+          </ul>
+        </section>
+
+        <!-- ─── 4. Rodar Localmente ────────────────────────────────────── -->
+        <section id="local" class="docs-section fade-in">
+          <div class="section-number">04</div>
+          <h2>Como Rodar Localmente</h2>
+
+          <p><strong>Pré-requisitos:</strong> Node.js 18+, npm, Git.</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">bash</span>
+              <span class="code-title">Clone e instale</span>
+            </div>
+            <pre><code><span class="c"># 1. Clonar o repositório</span>
+git clone https://github.com/lescuciato/EscuciatoWebSitePersonal.git
+cd EscuciatoWebSitePersonal
+
+<span class="c"># 2. Instalar dependências</span>
+npm install
+
+<span class="c"># 3. Configurar variáveis de ambiente</span>
+cp .env.example .env
+<span class="c"># Editar .env com seus valores</span>
+
+<span class="c"># 4. Rodar em desenvolvimento</span>
+npm run dev
+<span class="c"># Acesse: http://localhost:4321</span></code></pre>
+          </div>
+
+          <h3>Variáveis de ambiente</h3>
+          <p>Crie um arquivo <code class="inline-code">.env</code> na raiz do projeto com as seguintes variáveis:</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">env</span>
+              <span class="code-title">.env</span>
+            </div>
+            <pre><code>ADMIN_PASSWORD=sua-senha-admin
+JWT_SECRET=chave-secreta-jwt-min-32-chars
+STEAM_API_KEY=sua-chave-api-steam   <span class="c"># opcional</span>
+STEAM_ID=seu-steam-id-64bits        <span class="c"># opcional</span>
+HOST=0.0.0.0
+PORT=4321</code></pre>
+          </div>
+
+          <div class="callout callout-info">
+            <span class="callout-icon">&#8505;</span>
+            <p>
+              As variáveis <code class="inline-code">STEAM_API_KEY</code> e
+              <code class="inline-code">STEAM_ID</code> são opcionais. Sem elas, a página de Games
+              exibirá um estado vazio mas o restante do site funcionará normalmente.
+            </p>
+          </div>
+        </section>
+
+        <!-- ─── 5. Deploy ──────────────────────────────────────────────── -->
+        <section id="deploy" class="docs-section fade-in">
+          <div class="section-number">05</div>
+          <h2>Deploy</h2>
+          <p>
+            O deploy é totalmente automatizado via um <strong>Git hook</strong> no servidor.
+            Basta fazer push para o remote de produção.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">bash</span>
+              <span class="code-title">Fluxo de deploy</span>
+            </div>
+            <pre><code><span class="c"># Configurar remote de produção (uma única vez)</span>
+git remote add production root@SEU_SERVIDOR:/root/repos/website.git
+
+<span class="c"># Deploy: commitar e enviar</span>
+git add .
+git commit -m "feat: descrição das mudanças"
+git push production main</code></pre>
+          </div>
+
+          <h3>O que acontece automaticamente no servidor</h3>
+          <p>O hook <code class="inline-code">post-receive</code> executa em sequência:</p>
+
+          <ol class="docs-steps">
+            <li>
+              <span class="step-num">1</span>
+              <div>
+                <strong>Checkout do código</strong>
+                <span>O código é extraído do repositório bare para <code class="inline-code">/root/WebSite/source</code></span>
+              </div>
+            </li>
+            <li>
+              <span class="step-num">2</span>
+              <div>
+                <strong><code class="inline-code">npm ci</code></strong>
+                <span>Instala dependências de forma determinística a partir do <code class="inline-code">package-lock.json</code></span>
+              </div>
+            </li>
+            <li>
+              <span class="step-num">3</span>
+              <div>
+                <strong><code class="inline-code">npm run build</code></strong>
+                <span>Gera o bundle SSR otimizado para produção</span>
+              </div>
+            </li>
+            <li>
+              <span class="step-num">4</span>
+              <div>
+                <strong><code class="inline-code">pm2 restart website</code></strong>
+                <span>Reinicia o processo Node.js com zero downtime percebido</span>
+              </div>
+            </li>
+          </ol>
+
+          <div class="callout callout-warning">
+            <span class="callout-icon">&#9888;</span>
+            <p>
+              O arquivo <code class="inline-code">.env</code> no servidor <strong>deve existir antes
+              do primeiro build</strong>. Se você adicionar novas variáveis ao projeto, é necessário
+              atualizá-las no servidor e fazer um novo deploy.
+            </p>
+          </div>
+        </section>
+
+        <!-- ─── 6. Agentes Claude Code ─────────────────────────────────── -->
+        <section id="agentes" class="docs-section fade-in">
+          <div class="section-number">06</div>
+          <h2>Agentes Claude Code</h2>
+          <p>
+            Este projeto utiliza <strong>Claude Code</strong> com um sistema de agentes especializados
+            definidos em <code class="inline-code">.claude/agents/</code>. Cada agente tem um domínio
+            de responsabilidade claro, e todos são coordenados por linguagem natural através do
+            <em>site-orchestrator</em>.
+          </p>
+
+          <div class="agents-grid">
+            <div class="agent-card agent-orchestrator">
+              <div class="agent-header">
+                <span class="agent-badge">Coordenador</span>
+                <strong>site-orchestrator</strong>
+              </div>
+              <p>Interpreta pedidos em linguagem natural e delega para os agentes corretos. Ponto de entrada para toda interação com o projeto.</p>
+            </div>
+            <div class="agent-card">
+              <div class="agent-header">
+                <span class="agent-badge">Frontend</span>
+                <strong>web-dev-craftsman</strong>
+              </div>
+              <p>Páginas Astro, componentes React, estilos, configurações de build, commits e push para produção.</p>
+            </div>
+            <div class="agent-card">
+              <div class="agent-header">
+                <span class="agent-badge">Infra</span>
+                <strong>vps-devops-manager</strong>
+              </div>
+              <p>Nginx, Docker, PM2, pipeline de deploy, diagnósticos do servidor via SSH.</p>
+            </div>
+            <div class="agent-card">
+              <div class="agent-header">
+                <span class="agent-badge">QA</span>
+                <strong>qa-bug-hunter</strong>
+              </div>
+              <p>Inspeciona o site em busca de bugs visuais, erros funcionais e regressões após deploys.</p>
+            </div>
+            <div class="agent-card">
+              <div class="agent-header">
+                <span class="agent-badge">Segurança</span>
+                <strong>security-auditor</strong>
+              </div>
+              <p>Audita o repositório por credenciais expostas, dados sensíveis e vulnerabilidades.</p>
+            </div>
+          </div>
+
+          <div class="callout callout-info">
+            <span class="callout-icon">&#128161;</span>
+            <p>
+              O Claude Code não substitui o desenvolvedor — ele amplifica a capacidade de
+              execução. Decisões de arquitetura, revisão de código e validação final sempre
+              ficam com o humano.
+            </p>
+          </div>
+        </section>
+
+        <!-- ─── 7. Guia do Zero ────────────────────────────────────────── -->
+        <section id="guia" class="docs-section guide-section fade-in">
+          <div class="section-number">07</div>
+          <h2>Guia: Construa um Site Igual do Zero</h2>
+          <p>
+            Passo a passo para replicar essa arquitetura completa em qualquer VPS.
+            Os placeholders <code class="inline-code">SEU_SERVIDOR</code>,
+            <code class="inline-code">SEU_DOMINIO</code> e <code class="inline-code">meusite</code>
+            devem ser substituídos pelos seus valores reais.
+          </p>
+
+          <!-- Diagrama de deploy -->
+          <div class="deploy-diagram" aria-label="Diagrama do fluxo de deploy">
+            <div class="deploy-box deploy-dev">
+              <div class="deploy-box-title">DESENVOLVEDOR</div>
+              <code>git push production main</code>
+            </div>
+            <div class="deploy-arrow-down">
+              <span class="deploy-arrow-line"></span>
+              <span class="deploy-arrow-label">SSH + Git</span>
+              <span class="deploy-arrow-line"></span>
+            </div>
+            <div class="deploy-server">
+              <div class="deploy-server-title">SERVIDOR VPS</div>
+              <div class="deploy-flow">
+                <div class="deploy-step">
+                  <div class="deploy-step-title">Hook post-receive</div>
+                  <code>npm ci &rarr; build &rarr; pm2 restart</code>
+                </div>
+                <div class="deploy-step-arrow">&#8595;</div>
+                <div class="deploy-step">
+                  <div class="deploy-step-title">Node.js SSR (PM2 :4321)</div>
+                </div>
+                <div class="deploy-step-arrow">&#8595;</div>
+                <div class="deploy-step">
+                  <div class="deploy-step-title">Nginx (Docker)</div>
+                </div>
+                <div class="deploy-step-arrow">&#8595;</div>
+                <div class="deploy-step">
+                  <div class="deploy-step-title">Traefik + TLS (Let's Encrypt)</div>
+                </div>
+              </div>
+            </div>
+            <div class="deploy-arrow-down">
+              <span class="deploy-arrow-line"></span>
+              <span class="deploy-arrow-label">HTTPS</span>
+              <span class="deploy-arrow-line"></span>
+            </div>
+            <div class="deploy-box deploy-visitor">
+              <span class="deploy-visitor-icon">&#127760;</span>
+              <div class="deploy-box-title">VISITANTE</div>
+            </div>
+          </div>
+
+          <!-- 7.1 -->
+          <div class="guide-step">
+            <h3><span class="guide-step-num">7.1</span> Preparar o Servidor VPS</h3>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <span class="code-title">Servidor — instalar Node.js e PM2</span>
+              </div>
+              <pre><code><span class="c"># Instalar Node.js via nvm</span>
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+nvm install --lts
+
+<span class="c"># Instalar PM2 globalmente</span>
+npm install -g pm2
+
+<span class="c"># Verificar Git (geralmente já instalado)</span>
+git --version</code></pre>
+            </div>
+          </div>
+
+          <!-- 7.2 -->
+          <div class="guide-step">
+            <h3><span class="guide-step-num">7.2</span> Configurar o Repositório Git Bare</h3>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <span class="code-title">Servidor — criar repositório bare</span>
+              </div>
+              <pre><code><span class="c"># Criar repositório bare para receber pushes</span>
+mkdir -p /root/repos/meusite.git
+cd /root/repos/meusite.git
+git init --bare
+
+<span class="c"># Criar diretório de trabalho</span>
+mkdir -p /root/MeuSite/source</code></pre>
+            </div>
+          </div>
+
+          <!-- 7.3 -->
+          <div class="guide-step">
+            <h3><span class="guide-step-num">7.3</span> Criar o Hook de Deploy</h3>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <span class="code-title">Servidor — criar post-receive hook</span>
+              </div>
+              <pre><code>nano /root/repos/meusite.git/hooks/post-receive</code></pre>
+            </div>
+            <p>Conteúdo do arquivo:</p>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <span class="code-title">hooks/post-receive</span>
+              </div>
+              <pre><code>#!/bin/bash
+set -e
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+REPO="/root/repos/meusite.git"
+WORK_DIR="/root/MeuSite/source"
+
+echo "--- Deploy iniciado ---"
+mkdir -p "$WORK_DIR"
+git --work-tree="$WORK_DIR" --git-dir="$REPO" checkout -f main
+cd "$WORK_DIR"
+npm ci
+npm run build
+pm2 restart meusite || pm2 start npm --name "meusite" -- run start
+pm2 save
+echo "--- Deploy concluído ---"</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <span class="code-title">Tornar executável</span>
+              </div>
+              <pre><code>chmod +x /root/repos/meusite.git/hooks/post-receive</code></pre>
+            </div>
+          </div>
+
+          <!-- 7.4 -->
+          <div class="guide-step">
+            <h3><span class="guide-step-num">7.4</span> Configurar Nginx + Traefik com Docker</h3>
+            <p>Crie o arquivo de configuração do Nginx:</p>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">nginx</span>
+                <span class="code-title">/root/MeuSite/nginx/default.conf</span>
+              </div>
+              <pre><code>server &#123;
+    listen 80;
+    location / &#123;
+        proxy_pass http://host.docker.internal:4321;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+    &#125;
+&#125;</code></pre>
+            </div>
+            <p>Crie o Docker Compose:</p>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">yaml</span>
+                <span class="code-title">/root/MeuSite/docker-compose.yml</span>
+              </div>
+              <pre><code>services:
+  website:
+    image: nginx:alpine
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.website.rule=Host(`SEU_DOMINIO`)"
+      - "traefik.http.routers.website.entrypoints=websecure"
+      - "traefik.http.routers.website.tls.certresolver=mytlschallenge"
+    networks:
+      - traefik_network
+
+networks:
+  traefik_network:
+    external: true</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <span class="code-title">Subir o container</span>
+              </div>
+              <pre><code>docker compose up -d</code></pre>
+            </div>
+          </div>
+
+          <!-- 7.5 -->
+          <div class="guide-step">
+            <h3><span class="guide-step-num">7.5</span> Criar o Projeto Astro</h3>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <span class="code-title">Local — criar projeto e instalar dependências</span>
+              </div>
+              <pre><code><span class="c"># Criar projeto Astro</span>
+npm create astro@latest meu-site
+cd meu-site
+
+<span class="c"># Dependências necessárias</span>
+npm install @astrojs/node @astrojs/react @astrojs/tailwind
+npm install better-sqlite3 jose
+npm install @tiptap/react @tiptap/starter-kit @tiptap/extension-link
+
+<span class="c"># Configurar astro.config.mjs para SSR com adapter Node</span></code></pre>
+            </div>
+          </div>
+
+          <!-- 7.6 -->
+          <div class="guide-step">
+            <h3><span class="guide-step-num">7.6</span> Configurar Remote e Fazer o Primeiro Deploy</h3>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <span class="code-title">Local + Servidor — primeiro deploy</span>
+              </div>
+              <pre><code><span class="c"># Adicionar o remote de produção (local)</span>
+git remote add production root@SEU_SERVIDOR:/root/repos/meusite.git
+
+<span class="c"># Criar .env no servidor ANTES do primeiro deploy</span>
+ssh root@SEU_SERVIDOR "cat > /root/MeuSite/source/.env &lt;&lt; 'EOF'
+ADMIN_PASSWORD=sua-senha-segura
+JWT_SECRET=sua-chave-secreta-com-32-chars-minimo
+HOST=0.0.0.0
+PORT=4321
+EOF"
+
+<span class="c"># Primeiro deploy</span>
+git push production main</code></pre>
+            </div>
+
+            <div class="callout callout-success">
+              <span class="callout-icon">&#10003;</span>
+              <p>
+                Após o push, o hook executa automaticamente. Em menos de um minuto seu site
+                estará disponível em <code class="inline-code">https://SEU_DOMINIO</code>
+                com TLS configurado.
+              </p>
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ─── Page layout ──────────────────────────────────────────────────────── */
+
+  .docs-page {
+    min-height: 100vh;
+  }
+
+  /* ─── Hero ─────────────────────────────────────────────────────────────── */
+
+  .docs-hero {
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.08) 0%, transparent 100%);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-12) 0 var(--space-8);
+  }
+
+  .docs-hero-content {
+    max-width: 720px;
+  }
+
+  .docs-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--color-accent-2);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-3);
+  }
+
+  .docs-hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+    line-height: 1.1;
+  }
+
+  .docs-hero-desc {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin-bottom: var(--space-2);
+    line-height: 1.7;
+  }
+
+  .docs-collab-note {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    padding: var(--space-2) var(--space-3);
+    background: rgba(99, 102, 241, 0.06);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    max-width: 600px;
+  }
+
+  /* ─── Layout: sidebar + content ────────────────────────────────────────── */
+
+  .docs-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .docs-layout {
+      grid-template-columns: 220px 1fr;
+    }
+  }
+
+  /* ─── Sidebar ───────────────────────────────────────────────────────────── */
+
+  .docs-sidebar {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .docs-sidebar {
+      display: block;
+      position: sticky;
+      top: 88px; /* header height + gap */
+    }
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sidebar-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    padding: 0 var(--space-2) var(--space-1);
+  }
+
+  .sidebar-link {
+    display: block;
+    padding: 7px var(--space-2);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    border-left: 2px solid transparent;
+    transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .sidebar-link:hover {
+    color: var(--color-text);
+    background: rgba(99, 102, 241, 0.08);
+    border-left-color: var(--color-accent);
+  }
+
+  /* ─── Content sections ──────────────────────────────────────────────────── */
+
+  .docs-content {
+    min-width: 0; /* prevent overflow in grid */
+  }
+
+  .docs-section {
+    margin-bottom: var(--space-12);
+    scroll-margin-top: 88px; /* offset for sticky header */
+  }
+
+  .docs-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-1);
+  }
+
+  .docs-section h2 {
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .docs-section h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+  }
+
+  .docs-section p {
+    color: var(--color-text-muted);
+    line-height: 1.75;
+    margin-bottom: var(--space-3);
+  }
+
+  .docs-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ─── Feature grid (section 1) ──────────────────────────────────────────── */
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .feature-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .feature-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .feature-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+  .feature-card strong {
+    font-size: 0.875rem;
+    color: var(--color-text);
+  }
+
+  .feature-card span {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+  }
+
+  /* ─── Tech tables ───────────────────────────────────────────────────────── */
+
+  .tech-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+  }
+
+  .tech-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .tech-table thead {
+    background: var(--color-surface);
+  }
+
+  .tech-table th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .tech-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    vertical-align: middle;
+  }
+
+  .tech-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .tech-table tr:hover td {
+    background: rgba(99, 102, 241, 0.04);
+  }
+
+  .tech-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--color-accent-2);
+    font-weight: 500;
+  }
+
+  .tech-version {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  /* ─── Architecture diagram ──────────────────────────────────────────────── */
+
+  .arch-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: var(--space-6) auto;
+    max-width: 480px;
+  }
+
+  .arch-node {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color var(--transition-fast);
+  }
+
+  .arch-node:hover {
+    border-color: var(--color-accent);
+  }
+
+  .arch-node.arch-internet {
+    border-color: rgba(99, 102, 241, 0.4);
+    background: rgba(99, 102, 241, 0.06);
+  }
+
+  .arch-node.arch-app {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: rgba(16, 185, 129, 0.06);
+  }
+
+  .arch-node.arch-leaf {
+    width: auto;
+    flex: 1;
+  }
+
+  .arch-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .arch-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-accent-2);
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: 110px;
+  }
+
+  .arch-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .arch-info strong {
+    font-size: 0.875rem;
+    color: var(--color-text);
+  }
+
+  .arch-info span {
+    font-size: 0.775rem;
+    color: var(--color-text-muted);
+  }
+
+  .arch-arrow {
+    font-size: 1.2rem;
+    color: var(--color-accent);
+    padding: 4px 0;
+    line-height: 1;
+  }
+
+  .arch-leaves {
+    display: flex;
+    gap: var(--space-2);
+    width: 100%;
+  }
+
+  /* ─── Lists ─────────────────────────────────────────────────────────────── */
+
+  .docs-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .docs-list li {
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .docs-list li::before {
+    content: '—';
+    color: var(--color-accent);
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .docs-list li strong {
+    color: var(--color-text);
+  }
+
+  /* ─── Steps ─────────────────────────────────────────────────────────────── */
+
+  .docs-steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .docs-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--color-accent-2);
+    border-radius: 50%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .docs-steps li div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .docs-steps li strong {
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  .docs-steps li span {
+    font-size: 0.825rem;
+    color: var(--color-text-muted);
+  }
+
+  /* ─── Code blocks ───────────────────────────────────────────────────────── */
+
+  .code-block {
+    margin: var(--space-3) 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: rgba(42, 42, 58, 0.8);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent-2);
+    background: rgba(99, 102, 241, 0.15);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .code-title {
+    font-size: 0.775rem;
+    color: var(--color-text-muted);
+  }
+
+  .code-block pre {
+    margin: 0;
+    padding: var(--space-3);
+    background: rgba(15, 15, 19, 0.8);
+    overflow-x: auto;
+  }
+
+  .code-block code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: #c9d1d9;
+    display: block;
+    white-space: pre;
+  }
+
+  /* Syntax: comments */
+  .code-block code .c {
+    color: #6a737d;
+  }
+
+  .inline-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82em;
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--color-accent-2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  /* ─── Callouts ──────────────────────────────────────────────────────────── */
+
+  .callout {
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    margin: var(--space-3) 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .callout p {
+    color: inherit !important;
+    margin: 0 !important;
+  }
+
+  .callout-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .callout-info {
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    color: var(--color-text-muted);
+  }
+
+  .callout-warning {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    color: #d4a24e;
+  }
+
+  .callout-success {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: #4ade80;
+  }
+
+  /* ─── Agents grid ───────────────────────────────────────────────────────── */
+
+  .agents-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .agents-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .agents-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .agent-card {
+    padding: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color var(--transition-base);
+  }
+
+  .agent-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .agent-card.agent-orchestrator {
+    border-color: rgba(99, 102, 241, 0.4);
+    background: rgba(99, 102, 241, 0.05);
+  }
+
+  .agent-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: var(--space-2);
+  }
+
+  .agent-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent-2);
+  }
+
+  .agent-header strong {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  .agent-card p {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin: 0 !important;
+  }
+
+  /* ─── Guide section ─────────────────────────────────────────────────────── */
+
+  .guide-section {
+    background: rgba(26, 26, 36, 0.4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+
+  .guide-section .docs-section h2 {
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .guide-step {
+    margin-top: var(--space-6);
+  }
+
+  .guide-step h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+    margin-top: 0;
+  }
+
+  .guide-step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: rgba(99, 102, 241, 0.12);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .guide-step p {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  /* ─── Deploy diagram ────────────────────────────────────────────────────── */
+
+  .deploy-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: var(--space-6) auto;
+    max-width: 380px;
+    gap: 0;
+  }
+
+  .deploy-box {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+
+  .deploy-box.deploy-dev {
+    border-color: rgba(99, 102, 241, 0.4);
+    background: rgba(99, 102, 241, 0.06);
+  }
+
+  .deploy-box.deploy-visitor {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: rgba(16, 185, 129, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .deploy-visitor-icon {
+    font-size: 1.4rem;
+  }
+
+  .deploy-box-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 4px;
+  }
+
+  .deploy-box code,
+  .deploy-box .deploy-box-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+  }
+
+  .deploy-box code {
+    color: var(--color-accent-2);
+  }
+
+  .deploy-arrow-down {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 0;
+  }
+
+  .deploy-arrow-line {
+    display: block;
+    width: 2px;
+    height: 12px;
+    background: var(--color-accent);
+    opacity: 0.5;
+  }
+
+  .deploy-arrow-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .deploy-server {
+    width: 100%;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .deploy-server-title {
+    background: rgba(99, 102, 241, 0.1);
+    border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+    padding: 6px var(--space-3);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-2);
+    text-align: center;
+  }
+
+  .deploy-flow {
+    padding: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .deploy-step {
+    width: 100%;
+    padding: 8px var(--space-2);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+
+  .deploy-step-title {
+    font-size: 0.78rem;
+    color: var(--color-text);
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .deploy-step code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+  }
+
+  .deploy-step-arrow {
+    color: var(--color-accent);
+    font-size: 0.9rem;
+    padding: 2px 0;
+    line-height: 1;
+  }
+
+  /* ─── "Por quê?" expandable rows ──────────────────────────────────────── */
+
+  .why-btn {
+    margin-left: 8px;
+    padding: 2px 8px;
+    font-size: 0.72rem;
+    background: transparent;
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    border-radius: 4px;
+    color: var(--color-accent-2);
+    cursor: pointer;
+    transition: all 150ms ease;
+    white-space: nowrap;
+  }
+
+  .why-btn:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: var(--color-accent);
+  }
+
+  .why-row td {
+    padding: 0;
+    border-top: none;
+  }
+
+  .why-inner {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 300ms ease, padding 250ms ease;
+    padding: 0 16px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    border-left: 2px solid rgba(99, 102, 241, 0.3);
+    margin: 0 8px;
+  }
+
+  .why-row.expanded .why-inner {
+    max-height: 200px;
+    padding: 10px 16px;
+    margin-bottom: 8px;
+  }
+
+  /* suppress hover highlight on why-rows */
+  .why-row:hover td {
+    background: transparent;
+  }
+</style>
+
+<script>
+  // ─── "Por quê?" expandable rows ────────────────────────────────────────────
+  document.querySelectorAll('.why-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const row = btn.closest('tr').nextElementSibling;
+      const expanded = row.classList.toggle('expanded');
+      row.hidden = false; // never re-hide via attr after first open
+      btn.textContent = expanded ? 'Fechar ↑' : 'Por quê? ↓';
+      btn.setAttribute('aria-expanded', String(expanded));
+    });
+  });
+</script>
