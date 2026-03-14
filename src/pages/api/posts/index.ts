@@ -6,6 +6,7 @@
 import type { APIRoute } from 'astro';
 import { postsDb } from '../../../lib/db';
 import { getSession } from '../../../lib/auth';
+import { sanitizePostContent } from '../../../lib/sanitize';
 
 function generateSlug(title: string): string {
   const base = title
@@ -67,16 +68,17 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const slug = generateSlug(title);
+  const safeContent = sanitizePostContent(content);
 
   try {
-    postsDb.create({ slug, title, excerpt, content, tags, published });
+    postsDb.create({ slug, title, excerpt, content: safeContent, tags, published });
     return new Response(JSON.stringify({ slug }), {
       status: 201,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Database error';
-    return new Response(JSON.stringify({ message }), {
+  } catch (err) {
+    console.error('[API Error] POST /api/posts', err);
+    return new Response(JSON.stringify({ message: 'Internal server error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

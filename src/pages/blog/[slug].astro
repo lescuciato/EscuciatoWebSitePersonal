@@ -5,6 +5,7 @@
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { postsDb } from '../../lib/db';
+import { sanitizePostContent } from '../../lib/sanitize';
 import { getLang, useTranslations } from '../../i18n/index';
 
 const lang = getLang(Astro.cookies);
@@ -67,8 +68,8 @@ const formattedDate = new Date(post.created_at).toLocaleDateString('en-US', {
         )}
       </header>
 
-      <!-- Post content — rendered HTML from TipTap -->
-      <div class="post-content prose" set:html={post.content} />
+      <!-- Post content — rendered HTML from TipTap (sanitized before render) -->
+      <div class="post-content prose" set:html={sanitizePostContent(post.content)} />
 
       <!-- Post footer -->
       <footer class="post-footer">

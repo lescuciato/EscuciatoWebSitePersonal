@@ -1,10 +1,11 @@
-// Astro middleware — protects admin routes by checking for a valid session cookie.
-// Protected paths: /blog/new, /blog/:slug/edit, /blog/admin, /games/admin
+// Astro middleware — protects admin routes and mutation API endpoints.
+// Protected page paths: /blog/new, /blog/:slug/edit, /blog/admin, /games/admin
+// Protected API paths (non-GET): /api/posts, /api/games
 
 import { defineMiddleware } from 'astro:middleware';
 import { getSession } from './lib/auth';
 
-// Routes that require authentication
+// Page routes that require authentication
 const PROTECTED_PATTERNS = [
   /^\/blog\/new$/,
   /^\/blog\/admin$/,
@@ -12,9 +13,28 @@ const PROTECTED_PATTERNS = [
   /^\/games\/admin$/,
 ];
 
+// API route prefixes where mutating methods (non-GET) require authentication.
+// Individual handlers also check auth, but this provides a centralised fallback.
+const API_PROTECTED = ['/api/posts', '/api/games'];
+
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = new URL(context.request.url);
 
+  // ─── Protect API mutation endpoints ──────────────────────────────────────────
+  if (
+    API_PROTECTED.some((p) => pathname.startsWith(p)) &&
+    context.request.method !== 'GET'
+  ) {
+    const session = await getSession(context.request);
+    if (!session) {
+      return new Response(JSON.stringify({ message: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
+  // ─── Protect admin page routes ────────────────────────────────────────────────
   const isProtected = PROTECTED_PATTERNS.some((pattern) => pattern.test(pathname));
 
   if (isProtected) {
