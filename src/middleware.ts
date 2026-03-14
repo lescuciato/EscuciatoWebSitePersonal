@@ -1,7 +1,5 @@
-/**
- * Astro middleware — protects admin routes by checking for a valid session cookie.
- * Protected paths: /blog/new, /blog/*/edit, /blog/admin, /games/admin
- */
+// Astro middleware — protects admin routes by checking for a valid session cookie.
+// Protected paths: /blog/new, /blog/:slug/edit, /blog/admin, /games/admin
 
 import { defineMiddleware } from 'astro:middleware';
 import { getSession } from './lib/auth';
