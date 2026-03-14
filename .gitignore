@@ -25,3 +25,7 @@ docs/servidor/
 
 # Instruções de agentes IA (contêm dados de infraestrutura)
 CLAUDE.md
+
+# Configurações e memória local dos agentes Claude Code
+.claude/settings.local.json
+.claude/agent-memory/

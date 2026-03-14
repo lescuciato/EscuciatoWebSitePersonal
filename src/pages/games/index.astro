@@ -1,65 +1,23 @@
 ---
 /**
- * Games page — cyberpunk-styled game collection feed.
- * Falls back to hardcoded sample data when the database is empty.
+ * Games page — cyberpunk-styled Steam library.
+ * Section 1: recently played games (last 2 weeks).
+ * Section 2: top 20 all-time most played games.
+ * Data is fetched server-side at render time via the Steam API.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import GameCard from '../../components/games/GameCard.astro';
-import { gamesDb, type Game } from '../../lib/db';
+import { getRecentlyPlayedGames, getTopPlayedGames, getCoverUrl, formatPlaytime } from '../../lib/steam';
 
-let games = gamesDb.getAll();
-
-// Hardcoded placeholder data shown when no games are in the database yet
-const sampleGames: Game[] = [
-  {
-    id: 0,
-    title: 'Cyberpunk 2077',
-    platform: 'PC',
-    status: 'finished',
-    rating: 5,
-    review: 'Night City is a masterpiece of world-building. After all the patches, this became one of my all-time favorites.',
-    cover_url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 0,
-    title: 'Hollow Knight',
-    platform: 'PC',
-    status: 'finished',
-    rating: 5,
-    review: 'Challenging but incredibly rewarding. The art direction and soundtrack are exceptional.',
-    cover_url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/header.jpg',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 0,
-    title: 'Baldur\'s Gate 3',
-    platform: 'PC',
-    status: 'playing',
-    rating: 5,
-    review: 'The depth and reactivity of this game is unmatched. Every decision feels meaningful.',
-    cover_url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 0,
-    title: 'Hades II',
-    platform: 'PC',
-    status: 'queued',
-    rating: 0,
-    review: 'Loved the first one. Early Access looks very promising — in my backlog.',
-    cover_url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145360/header.jpg',
-    created_at: new Date().toISOString(),
-  },
-];
-
-const displayGames = games.length > 0 ? games : sampleGames;
-const isPlaceholder = games.length === 0;
+// Fetch both datasets in parallel
+const [recentGames, topSteamGames] = await Promise.all([
+  getRecentlyPlayedGames(5),
+  getTopPlayedGames(20),
+]);
 ---
 
 <BaseLayout
   title="Games"
-  description="Leonardo Escuciato's game collection — what I'm playing, finished, and in queue."
+  description="Leonardo Escuciato's top played games of all time — pulled live from Steam."
 >
   <div class="games-page">
     <!-- Page hero — cyberpunk style -->
@@ -72,46 +30,127 @@ const isPlaceholder = games.length === 0;
             PLAYER ONE READY
           </div>
           <h1 class="games-title">
-            <span class="neon-text">GAME</span> COLLECTION
+            <span class="neon-text">MEUS</span> JOGOS
           </h1>
           <p class="games-subtitle">
-            What I'm playing, finished, and what's next in the queue.
+            Os últimos jogos que passei horas destruindo na Steam.
           </p>
         </div>
-
-        <!-- Status legend -->
-        <div class="status-legend">
-          <div class="legend-item"><span class="leg-dot" style="background:#00ff88"></span>Playing Now</div>
-          <div class="legend-item"><span class="leg-dot" style="background:#a78bfa"></span>Finished</div>
-          <div class="legend-item"><span class="leg-dot" style="background:#fbbf24"></span>In Queue</div>
-          <div class="legend-item"><span class="leg-dot" style="background:#94a3b8"></span>Paused</div>
-        </div>
       </div>
     </div>
 
-    <!-- Games grid -->
-    <div class="container games-container">
-      {isPlaceholder && (
-        <div class="placeholder-notice" role="note">
-          Showing sample data. Add games via the
-          <a href="/games/admin">admin panel</a>.
+    <!-- Section 1: recently played games (last 2 weeks) -->
+    <section class="container steam-section" aria-labelledby="recent-heading">
+      <div class="section-label">
+        <svg class="steam-icon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+          <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.252 0-2.265-1.014-2.265-2.265z"/>
+        </svg>
+        <h2 id="recent-heading" class="section-title">// JOGANDO RECENTEMENTE</h2>
+        <span class="section-badge">ÚLTIMAS 2 SEMANAS</span>
+      </div>
+
+      {recentGames.length === 0 ? (
+        <p class="steam-empty">Nenhum jogo jogado nas últimas 2 semanas.</p>
+      ) : (
+        <div class="steam-grid">
+          {recentGames.map((game) => (
+            <article class="steam-card">
+              <div class="steam-card-cover">
+                <img
+                  src={getCoverUrl(game.appid)}
+                  alt={`Capa de ${game.name}`}
+                  width="460"
+                  height="215"
+                  loading="lazy"
+                />
+                <div class="steam-card-overlay" aria-hidden="true"></div>
+                <div class="steam-card-active" aria-label="Jogado recentemente">
+                  <span class="active-dot"></span>
+                  ATIVO
+                </div>
+              </div>
+              <div class="steam-card-body">
+                <h3 class="steam-card-title">{game.name}</h3>
+                <div class="steam-card-meta">
+                  <span class="steam-tag steam-tag-recent">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" class="icon-clock">
+                      <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                    </svg>
+                    {formatPlaytime(game.playtime_2weeks)} nas últimas 2 semanas
+                  </span>
+                  <span class="steam-tag">
+                    {formatPlaytime(game.playtime_forever)} no total
+                  </span>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       )}
+    </section>
 
-      <div class="games-grid">
-        {displayGames.map((game) => (
-          <GameCard
-            id={game.id}
-            title={game.title}
-            platform={game.platform}
-            status={game.status}
-            rating={game.rating}
-            review={game.review}
-            cover_url={game.cover_url}
-          />
-        ))}
+    <!-- Visual divider between sections -->
+    <div class="section-divider" aria-hidden="true">
+      <div class="container">
+        <div class="divider-line"></div>
       </div>
     </div>
+
+    <!-- Section 2: top all-time played games -->
+    <section class="container steam-section steam-section--bottom" aria-labelledby="top-heading">
+      <div class="section-label">
+        <svg class="steam-icon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+          <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.252 0-2.265-1.014-2.265-2.265z"/>
+        </svg>
+        <h2 id="top-heading" class="section-title">// JOGOS MAIS JOGADOS</h2>
+        <span class="section-badge">ALL TIME</span>
+      </div>
+
+      {topSteamGames.length === 0 ? (
+        <p class="steam-empty">Nenhum dado de biblioteca encontrado na Steam.</p>
+      ) : (
+        <div class="steam-grid">
+          {topSteamGames.map((game) => (
+            <article class="steam-card">
+              <div class="steam-card-cover">
+                <img
+                  src={getCoverUrl(game.appid)}
+                  alt={`Capa de ${game.name}`}
+                  width="460"
+                  height="215"
+                  loading="lazy"
+                />
+                <div class="steam-card-overlay" aria-hidden="true"></div>
+                {game.playtime_2weeks > 0 && (
+                  <div class="steam-card-active" aria-label="Jogado recentemente">
+                    <span class="active-dot"></span>
+                    ATIVO
+                  </div>
+                )}
+              </div>
+              <div class="steam-card-body">
+                <h3 class="steam-card-title">{game.name}</h3>
+                <div class="steam-card-meta">
+                  <span class="steam-tag">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" class="icon-clock">
+                      <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                    </svg>
+                    {formatPlaytime(game.playtime_forever)} no total
+                  </span>
+                  {game.playtime_2weeks > 0 && (
+                    <span class="steam-tag steam-tag-recent">
+                      {formatPlaytime(game.playtime_2weeks)} recentes
+                    </span>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
   </div>
 </BaseLayout>
 
@@ -157,7 +196,6 @@ const isPlaceholder = games.length === 0;
   .games-hero-content {
     position: relative;
     text-align: center;
-    margin-bottom: 40px;
   }
 
   .games-badge {
@@ -214,72 +252,208 @@ const isPlaceholder = games.length === 0;
     margin: 0 auto;
   }
 
-  /* ─── Status legend ─── */
-  .status-legend {
+  /* ─── Section headings ─── */
+  .section-label {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 24px;
-    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
   }
 
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    color: #64748b;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .leg-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+  .steam-icon {
+    width: 20px;
+    height: 20px;
+    color: #94a3b8;
     flex-shrink: 0;
   }
 
-  /* ─── Games grid ─── */
-  .games-container {
+  .icon-clock {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .section-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #00ff88;
+  }
+
+  /* ─── Steam sections ─── */
+  .steam-section {
     padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .steam-section--bottom {
     padding-bottom: 80px;
   }
 
-  .placeholder-notice {
-    margin-bottom: 24px;
-    padding: 10px 16px;
-    background: rgba(251, 191, 36, 0.08);
-    border: 1px solid rgba(251, 191, 36, 0.2);
-    border-radius: 6px;
-    font-size: 0.85rem;
-    color: #94a3b8;
+  /* ─── Divider between sections ─── */
+  .section-divider {
+    padding: 0;
   }
 
-  .placeholder-notice a {
-    color: #a78bfa;
+  .divider-line {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(99, 102, 241, 0.25) 20%,
+      rgba(99, 102, 241, 0.25) 80%,
+      transparent 100%
+    );
   }
 
-  .games-grid {
+  .steam-empty {
+    font-size: 0.875rem;
+    color: #475569;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 24px 0;
+  }
+
+  .steam-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
 
   @media (min-width: 480px) {
-    .games-grid {
+    .steam-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
-  @media (min-width: 900px) {
-    .games-grid {
+  @media (min-width: 768px) {
+    .steam-grid {
       grid-template-columns: repeat(3, 1fr);
     }
   }
 
-  @media (min-width: 1200px) {
-    .games-grid {
+  @media (min-width: 1100px) {
+    .steam-grid {
       grid-template-columns: repeat(4, 1fr);
     }
+  }
+
+  /* ─── Steam card ─── */
+  .steam-card {
+    background: #0d0d20;
+    border: 1px solid #1e1e3f;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 200ms ease, transform 200ms ease;
+  }
+
+  .steam-card:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .steam-card-cover {
+    position: relative;
+    aspect-ratio: 460 / 215;
+    overflow: hidden;
+  }
+
+  .steam-card-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 300ms ease;
+  }
+
+  .steam-card:hover .steam-card-cover img {
+    transform: scale(1.03);
+  }
+
+  .steam-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(5, 5, 16, 0.6) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* "JOGANDO AGORA" badge — top-right corner of the cover */
+  .steam-card-active {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    background: rgba(0, 255, 136, 0.12);
+    border: 1px solid rgba(0, 255, 136, 0.4);
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #00ff88;
+    backdrop-filter: blur(4px);
+  }
+
+  .active-dot {
+    width: 6px;
+    height: 6px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: blink 1s step-end infinite;
+    flex-shrink: 0;
+  }
+
+  .steam-card-body {
+    padding: 12px 14px 14px;
+  }
+
+  .steam-card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin: 0 0 8px;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .steam-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .steam-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: #64748b;
+  }
+
+  .steam-tag-recent {
+    color: #4ade80;
+    opacity: 0.8;
   }
 </style>

@@ -23,16 +23,16 @@ if (!post) {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
           </svg>
-          Back to Admin
+          Voltar ao Admin
         </a>
-        <h1 class="section-title">Edit <span>Post</span></h1>
+        <h1 class="section-title">Editar <span>Post</span></h1>
       </div>
 
       <form id="post-form" class="editor-form">
         <input type="hidden" id="post-id" value={post.id} />
 
         <div class="form-group">
-          <label for="title" class="form-label">Title *</label>
+          <label for="title" class="form-label">Título *</label>
           <input
             type="text"
             id="title"
@@ -52,24 +52,24 @@ if (!post) {
               name="tags"
               class="form-input"
               value={post.tags ?? ''}
-              placeholder="astro, agile, jira (comma-separated)"
+              placeholder="astro, agile, jira (separadas por vírgula)"
             />
           </div>
           <div class="form-group">
-            <label for="excerpt" class="form-label">Excerpt</label>
+            <label for="excerpt" class="form-label">Resumo</label>
             <input
               type="text"
               id="excerpt"
               name="excerpt"
               class="form-input"
               value={post.excerpt ?? ''}
-              placeholder="Brief summary shown in feed..."
+              placeholder="Breve resumo exibido no feed..."
             />
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Content *</label>
+          <label class="form-label">Conteúdo *</label>
           <TipTapEditor
             client:load
             content={post.content}
@@ -79,19 +79,26 @@ if (!post) {
         </div>
 
         <div class="editor-footer">
-          <a href={`/blog/${post.slug}`} class="btn btn-ghost">View Post</a>
-          <a href="/blog/admin" class="btn btn-ghost">Cancel</a>
+          <a href={`/blog/${post.slug}`} class="btn btn-ghost">Ver Post</a>
+          <a href="/blog/admin" class="btn btn-ghost">Cancelar</a>
           <button type="submit" class="btn btn-primary" id="update-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            Update Post
+            Atualizar Post
           </button>
         </div>
       </form>
     </div>
   </div>
 </BaseLayout>
+
+<script define:vars={{ initialContent: post.content }}>
+  // Pre-seed __postContent with the existing content so submit works even without edits
+  if (!(window as any).__postContent) {
+    (window as any).__postContent = initialContent;
+  }
+</script>
 
 <script>
   const form = document.getElementById('post-form') as HTMLFormElement;
@@ -103,7 +110,7 @@ if (!post) {
 
     const content = (window as any).__postContent ?? '';
     if (!content || content === '<p></p>') {
-      alert('Post content cannot be empty.');
+      alert('O conteúdo do post não pode estar vazio.');
       return;
     }
 
@@ -120,7 +127,7 @@ if (!post) {
 
     const btn = document.getElementById('update-btn') as HTMLButtonElement;
     btn.disabled = true;
-    btn.textContent = 'Saving...';
+    btn.textContent = 'Salvando...';
 
     try {
       const res = await fetch(`/api/posts/${postId}`, {
@@ -134,14 +141,14 @@ if (!post) {
         window.location.href = `/blog/${data.slug}`;
       } else {
         const err = await res.json();
-        alert(`Error: ${err.message ?? 'Failed to update post.'}`);
+        alert(`Erro: ${err.message ?? 'Falha ao atualizar o post.'}`);
         btn.disabled = false;
-        btn.textContent = 'Update Post';
+        btn.textContent = 'Atualizar Post';
       }
     } catch (err) {
-      alert('Network error. Please try again.');
+      alert('Erro de rede. Tente novamente.');
       btn.disabled = false;
-      btn.textContent = 'Update Post';
+      btn.textContent = 'Atualizar Post';
     }
   });
 </script>

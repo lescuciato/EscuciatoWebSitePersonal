@@ -104,7 +104,7 @@ const certifications = [
                         <span class="exp-period">{exp.period}</span>
                       </p>
                     </div>
-                    <span class="hover-hint" aria-hidden="true">Detalhes ↗</span>
+                    <span class="hover-hint" aria-hidden="true">ver mais ↓</span>
                   </div>
                   <div class="tooltip-content" role="tooltip">
                     <p>{exp.tooltip}</p>
@@ -175,7 +175,6 @@ const certifications = [
   /* ─── Summary ─── */
   .summary-section {
     padding-top: var(--space-12);
-    border-bottom: 1px solid var(--color-border);
   }
 
   .summary-card {
@@ -203,7 +202,6 @@ const certifications = [
 
   /* ─── Timeline ─── */
   .timeline-section {
-    border-bottom: 1px solid var(--color-border);
   }
 
   .timeline {
@@ -214,7 +212,7 @@ const certifications = [
 
   .timeline-item {
     display: flex;
-    gap: var(--space-4);
+    gap: var(--space-6);
     min-height: 80px;
   }
 
@@ -263,8 +261,9 @@ const certifications = [
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: var(--space-4) var(--space-5);
+    padding: 10px 16px;
     cursor: default;
+    overflow: hidden;
     transition: border-color var(--transition-base), box-shadow var(--transition-base);
   }
 
@@ -284,7 +283,7 @@ const certifications = [
     font-size: 1rem;
     font-weight: 600;
     color: var(--color-text);
-    margin: 0 0 4px;
+    margin: 0 0 10px;
   }
 
   .exp-meta {
@@ -311,16 +310,19 @@ const certifications = [
 
   .hover-hint {
     font-size: 0.75rem;
-    color: var(--color-text-muted);
-    opacity: 0.6;
+    color: var(--color-accent-2);
+    opacity: 0.7;
     white-space: nowrap;
-    transition: opacity var(--transition-fast);
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
     flex-shrink: 0;
     margin-top: 2px;
+    line-height: 1;
+    letter-spacing: 0.03em;
   }
 
   .timeline-card:hover .hover-hint {
-    opacity: 0;
+    opacity: 0.4;
+    transform: translateY(2px);
   }
 
   /* Tooltip — hidden by default, revealed on hover */
@@ -333,7 +335,7 @@ const certifications = [
   }
 
   .timeline-card:hover .tooltip-content {
-    max-height: 200px;
+    max-height: 300px;
     opacity: 1;
     margin-top: var(--space-3);
   }
@@ -345,6 +347,8 @@ const certifications = [
     margin: 0;
     padding-top: var(--space-3);
     border-top: 1px solid var(--color-border);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   /* ─── Certifications ─── */

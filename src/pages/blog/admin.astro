@@ -22,24 +22,24 @@ const posts = postsDb.getAll();
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
-            New Post
+            Novo Post
           </a>
-          <a href="/api/auth/logout" class="btn btn-ghost">Log out</a>
+          <a href="/api/auth/logout" class="btn btn-ghost">Sair</a>
         </div>
       </div>
 
       {posts.length === 0 ? (
         <div class="admin-empty">
-          <p>No posts yet. <a href="/blog/new">Create your first post.</a></p>
+          <p>Nenhum post ainda. <a href="/blog/new">Crie seu primeiro post.</a></p>
         </div>
       ) : (
         <div class="posts-table">
           {posts.map((post) => (
             <div class={`post-row ${post.published ? 'published' : 'draft'}`}>
               <div class="post-row-main">
-                <div class="post-row-status" aria-label={post.published ? 'Published' : 'Draft'}>
+                <div class="post-row-status" aria-label={post.published ? 'Publicado' : 'Rascunho'}>
                   <span class={`status-dot ${post.published ? 'live' : 'draft'}`}></span>
-                  {post.published ? 'Published' : 'Draft'}
+                  {post.published ? 'Publicado' : 'Rascunho'}
                 </div>
                 <div class="post-row-info">
                   <h3 class="post-row-title">{post.title}</h3>
@@ -55,12 +55,12 @@ const posts = postsDb.getAll();
               </div>
 
               <div class="post-row-date">
-                {new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                {new Date(post.created_at).toLocaleDateString('pt-BR', { month: 'short', day: 'numeric', year: 'numeric' })}
               </div>
 
               <div class="post-row-actions">
                 <a href={`/blog/${post.slug}/edit`} class="btn btn-ghost btn-sm">
-                  Edit
+                  Editar
                 </a>
                 <button
                   class="btn btn-ghost btn-sm"
@@ -68,14 +68,14 @@ const posts = postsDb.getAll();
                   data-action="toggle"
                   data-published={post.published}
                 >
-                  {post.published ? 'Unpublish' : 'Publish'}
+                  {post.published ? 'Despublicar' : 'Publicar'}
                 </button>
                 <button
                   class="btn btn-danger btn-sm"
                   data-post-id={post.id}
                   data-action="delete"
                 >
-                  Delete
+                  Excluir
                 </button>
               </div>
             </div>
@@ -95,10 +95,10 @@ const posts = postsDb.getAll();
       const action = el.dataset.action;
 
       if (action === 'delete') {
-        if (!confirm('Delete this post permanently?')) return;
+        if (!confirm('Excluir este post permanentemente?')) return;
         const res = await fetch(`/api/posts/${postId}`, { method: 'DELETE' });
         if (res.ok) window.location.reload();
-        else alert('Failed to delete post.');
+        else alert('Falha ao excluir o post.');
       }
 
       if (action === 'toggle') {
@@ -109,7 +109,7 @@ const posts = postsDb.getAll();
           body: JSON.stringify({ published: currentlyPublished ? 0 : 1 }),
         });
         if (res.ok) window.location.reload();
-        else alert('Failed to update post status.');
+        else alert('Falha ao atualizar o status do post.');
       }
     });
   });

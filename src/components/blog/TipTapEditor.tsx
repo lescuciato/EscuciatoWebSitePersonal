@@ -50,14 +50,14 @@ function Toolbar({ editor }: { editor: Editor | null }) {
   if (!editor) return null;
 
   const addLink = useCallback(() => {
-    const url = window.prompt('Enter URL:');
+    const url = window.prompt('Digite a URL:');
     if (url) {
       editor.chain().focus().setLink({ href: url }).run();
     }
   }, [editor]);
 
   return (
-    <div className="tiptap-toolbar" role="toolbar" aria-label="Text formatting">
+    <div className="tiptap-toolbar" role="toolbar" aria-label="Formatação de texto">
       {/* Headings */}
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -175,8 +175,16 @@ export default function TipTapEditor({ content = '', onUpdate }: TipTapEditorPro
       CodeBlock,
     ],
     content,
-    onUpdate: ({ editor }) => {
+    onCreate: ({ editor }) => {
+      // Initialize with existing content (important for edit page)
+      (window as any).__postContent = editor.getHTML();
       onUpdate?.(editor.getHTML());
+    },
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      // Always keep window.__postContent in sync (Astro can't serialize function props)
+      (window as any).__postContent = html;
+      onUpdate?.(html);
     },
   });
 
@@ -194,7 +202,7 @@ export default function TipTapEditor({ content = '', onUpdate }: TipTapEditorPro
 
       <div className="tiptap-actions">
         <button type="button" className="btn-preview" onClick={handlePreview}>
-          Preview
+          Pré-visualizar
         </button>
       </div>
 
@@ -204,17 +212,17 @@ export default function TipTapEditor({ content = '', onUpdate }: TipTapEditorPro
           className="preview-overlay"
           role="dialog"
           aria-modal="true"
-          aria-label="Post preview"
+          aria-label="Pré-visualização do post"
           onClick={(e) => e.target === e.currentTarget && setShowPreview(false)}
         >
           <div className="preview-modal">
             <div className="preview-header">
-              <h3>Preview</h3>
+              <h3>Pré-visualização</h3>
               <button
                 type="button"
                 className="preview-close"
                 onClick={() => setShowPreview(false)}
-                aria-label="Close preview"
+                aria-label="Fechar pré-visualização"
               >
                 ✕
               </button>

@@ -5,6 +5,7 @@
  */
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import DevIndicator from '../components/layout/DevIndicator.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -41,6 +42,8 @@ const {
     </main>
 
     <Footer />
+
+    <DevIndicator />
 
     <!-- Intersection Observer for .fade-in elements -->
     <script>
