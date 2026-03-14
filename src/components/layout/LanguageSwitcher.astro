@@ -69,3 +69,23 @@ const currentPath = Astro.url.pathname + Astro.url.search;
     color: white;
   }
 </style>
+
+<script>
+  // Scroll position restoration when switching language.
+  // Before submitting: save scrollY to sessionStorage.
+  // On page load: if a saved position exists, restore it and clear.
+  document.querySelectorAll<HTMLFormElement>('.lang-form').forEach((form) => {
+    form.addEventListener('submit', () => {
+      sessionStorage.setItem('lang-scroll-y', String(Math.round(window.scrollY)));
+    });
+  });
+
+  const savedY = sessionStorage.getItem('lang-scroll-y');
+  if (savedY !== null) {
+    sessionStorage.removeItem('lang-scroll-y');
+    // Use requestAnimationFrame to ensure the page has fully painted before scrolling
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: parseInt(savedY, 10), behavior: 'instant' });
+    });
+  }
+</script>

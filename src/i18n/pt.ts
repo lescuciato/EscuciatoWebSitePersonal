@@ -22,13 +22,12 @@ export const pt = {
   // ─── Home / Hobbies ───────────────────────────────────────────────────────
   hobbies: {
     sectionTitle: 'Interesses',
-    sectionSubtitle: 'O que me move além do trabalho',
     items: [
       { emoji: '🎾', label: 'Tênis', description: 'Nas quadras sempre que possível' },
       { emoji: '🎮', label: 'Video Games', description: 'Aventuras digitais de todo tipo' },
       { emoji: '🍖', label: 'Boa Mesa', description: 'Churrasco, vinho e boa companhia' },
       { emoji: '⚽', label: 'Futebol', description: 'Torcedor da Macaca' },
-      { emoji: '📈', label: 'Finanças & Investimentos', description: 'Investimentos no Brasil e ETFs irlandeses' },
+      { emoji: '👶', label: 'Pedrinho chegando', description: 'Em agosto chega o Pedro!' },
     ],
   },
 

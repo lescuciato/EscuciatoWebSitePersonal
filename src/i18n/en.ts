@@ -24,13 +24,12 @@ export const en: Translations = {
   // ─── Home / Hobbies ───────────────────────────────────────────────────────
   hobbies: {
     sectionTitle: 'Interests',
-    sectionSubtitle: 'What drives me beyond work',
     items: [
       { emoji: '🎾', label: 'Tennis', description: 'On the court whenever possible' },
       { emoji: '🎮', label: 'Video Games', description: 'Digital adventures of all kinds' },
       { emoji: '🍖', label: 'Good Food', description: 'BBQ, wine, and great company' },
       { emoji: '⚽', label: 'Football', description: 'Ponte Preta supporter' },
-      { emoji: '📈', label: 'Finance & Investing', description: 'Brazilian equities and Irish ETFs' },
+      { emoji: '👶', label: 'Pedrinho is coming!', description: 'Pedro arrives in August!' },
     ],
   },
 
