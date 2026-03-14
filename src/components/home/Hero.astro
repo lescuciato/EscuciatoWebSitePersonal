@@ -3,6 +3,13 @@
  * Hero — above-the-fold introduction section (personal version).
  * Profile photo placeholder at /images/profile.jpg
  */
+import type { Translations } from '../../i18n/pt';
+
+interface Props {
+  t: Translations;
+}
+
+const { t } = Astro.props;
 ---
 
 <section class="hero">
@@ -12,7 +19,7 @@
       <h1 class="hero-name">Leonardo Escuciato</h1>
 
       <p class="hero-summary">
-        Vivo em Campinas, jogo tênis quando o corpo deixa e faço churrasco quando não deixa. Bebo vinho nos dois casos. Aos domingos, torço pela Ponte Preta e chamo isso de hobby.
+        {t.hero.summary}
       </p>
 
       <div class="hero-cta">
@@ -21,7 +28,7 @@
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
             <polyline points="22,6 12,13 2,6"/>
           </svg>
-          Contato
+          {t.hero.contact}
         </a>
         <a
           href="https://www.linkedin.com/in/leonardo-escuciato"
@@ -37,7 +44,7 @@
           LinkedIn
         </a>
         <a href="/profissional" class="btn btn-ghost">
-          Ver perfil profissional →
+          {t.hero.viewProfile}
         </a>
       </div>
     </div>

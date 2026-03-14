@@ -12,17 +12,19 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  lang?: string;
 }
 
 const {
   title,
   description = 'Leonardo Escuciato — Sr. Atlassian Consultant based in Campinas, Brazil.',
   ogImage = '/images/og-default.png',
+  lang = 'pt',
 } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

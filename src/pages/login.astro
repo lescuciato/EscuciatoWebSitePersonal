@@ -5,6 +5,10 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSession } from '../lib/auth';
+import { getLang, useTranslations } from '../i18n/index';
+
+const lang = getLang(Astro.cookies);
+const t = useTranslations(lang);
 
 // If already logged in, redirect directly
 const session = await getSession(Astro.request);
@@ -16,7 +20,7 @@ const next = Astro.url.searchParams.get('next') ?? '/blog/admin';
 const error = Astro.url.searchParams.get('error');
 ---
 
-<BaseLayout title="Login" description="Admin login">
+<BaseLayout title={t.login.title} description="Admin login" lang={lang}>
   <div class="login-page">
     <div class="login-card card-glass">
       <div class="login-icon" aria-hidden="true">
@@ -26,12 +30,12 @@ const error = Astro.url.searchParams.get('error');
         </svg>
       </div>
 
-      <h1 class="login-title">Admin Access</h1>
-      <p class="login-subtitle">Enter your password to continue.</p>
+      <h1 class="login-title">{t.login.title}</h1>
+      <p class="login-subtitle">{t.login.subtitle}</p>
 
       {error && (
         <div class="login-error" role="alert">
-          Incorrect password. Please try again.
+          {t.login.errorMessage}
         </div>
       )}
 
@@ -39,7 +43,7 @@ const error = Astro.url.searchParams.get('error');
         <input type="hidden" name="next" value={next} />
 
         <div class="form-group">
-          <label for="password" class="form-label">Password</label>
+          <label for="password" class="form-label">{t.login.passwordLabel}</label>
           <input
             type="password"
             id="password"
@@ -48,12 +52,12 @@ const error = Astro.url.searchParams.get('error');
             autocomplete="current-password"
             required
             autofocus
-            placeholder="Enter admin password"
+            placeholder={t.login.passwordPlaceholder}
           />
         </div>
 
         <button type="submit" class="btn btn-primary login-submit">
-          Sign In
+          {t.login.submitButton}
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="5" y1="12" x2="19" y2="12"/>
             <polyline points="12 5 19 12 12 19"/>

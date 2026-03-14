@@ -3,39 +3,12 @@
  * Profissional — career and certifications page for Leonardo Escuciato.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLang, useTranslations } from '../i18n/index';
 
-const experiences = [
-  {
-    role: 'Sr. Atlassian Consultant',
-    company: 'Modus Create',
-    period: 'Jan 2022 – Presente',
-    tooltip: 'Implementação de setups de Project Management com ferramentas Atlassian para diferentes empresas. Grande experiência com Jira Automation, Advanced Roadmaps e adaptação de processos ágeis a diferentes contextos organizacionais.',
-  },
-  {
-    role: 'Squad Leader',
-    company: 'Modus Create',
-    period: 'Jun 2021 – Fev 2022',
-    tooltip: 'Liderança de cerimônias ágeis, organização do Jira para relatórios e métricas, trabalho em formato Kanban com foco em qualidade, distribuição de tarefas e comunicação com o cliente.',
-  },
-  {
-    role: 'Transformation Lead',
-    company: 'Zup Innovation',
-    period: 'Out 2019 – Jun 2021',
-    tooltip: 'Gestão da saúde financeira do projeto, liderança de rituais ágeis, aplicação da metodologia SAFe, extração de métricas via APIs do Jira e construção de dashboards de qualidade e previsibilidade.',
-  },
-  {
-    role: 'Agile Coach & Jira Administrator',
-    company: 'Softvaro',
-    period: 'Set 2018 – Out 2019',
-    tooltip: 'Melhoria da visibilidade do desenvolvimento de software através de metodologias ágeis. Administração do Jira com padrões customizados por cliente e extração de dados via APIs REST para métricas.',
-  },
-  {
-    role: 'Scrum Master',
-    company: 'CI&T',
-    period: 'Set 2015 – Ago 2018 (Europa)',
-    tooltip: 'Liderança de times como Scrum Master, melhorando processos e entrega através de métricas como Velocity e Produtividade. Deploy de MVP Mobile para grande empresa de bebidas na Europa, República Dominicana e México.',
-  },
-];
+const lang = getLang(Astro.cookies);
+const t = useTranslations(lang);
+
+const experiences = t.experiences;
 
 const certifications = [
   {
@@ -57,24 +30,20 @@ const certifications = [
 ---
 
 <BaseLayout
-  title="Perfil Profissional"
-  description="Leonardo Escuciato — Sr. Atlassian Consultant. Experiência em gestão ágil, consultoria Atlassian e liderança de equipes."
+  title={t.professional.pageTitle}
+  description={t.professional.metaDescription}
+  lang={lang}
 >
   <div class="pro-page">
 
     <!-- ─── Resumo profissional ─── -->
     <section class="section summary-section">
       <div class="container">
-        <h1 class="page-title">Perfil Profissional</h1>
+        <h1 class="page-title">{t.professional.pageTitle}</h1>
         <div class="summary-card">
           <div class="summary-icon" aria-hidden="true">💼</div>
           <p class="summary-text">
-            Profissional com sólida experiência em gestão de times ágeis e consultoria Atlassian.
-            Ao longo da carreira, liderou equipes de desenvolvimento, implementou metodologias ágeis
-            (Scrum, Kanban, SAFe) e se especializou nas ferramentas do ecossistema Atlassian —
-            especialmente Jira e Confluence. Certificado pela Atlassian (ACP-620 e ACP-120), atua hoje
-            como Sr. Atlassian Consultant na Modus Create, ajudando empresas a extrair o máximo das
-            ferramentas de gestão de projetos.
+            {t.professional.summaryText}
           </p>
         </div>
       </div>
@@ -83,8 +52,8 @@ const certifications = [
     <!-- ─── Timeline de carreira ─── -->
     <section class="section timeline-section">
       <div class="container">
-        <h2 class="section-title">Trajetória</h2>
-        <p class="section-subtitle">Passe o mouse sobre cada experiência para ver os detalhes</p>
+        <h2 class="section-title">{t.professional.timelineTitle}</h2>
+        <p class="section-subtitle">{t.professional.timelineSubtitle}</p>
 
         <div class="timeline">
           {experiences.map((exp, i) => (
@@ -104,7 +73,7 @@ const certifications = [
                         <span class="exp-period">{exp.period}</span>
                       </p>
                     </div>
-                    <span class="hover-hint" aria-hidden="true">ver mais ↓</span>
+                    <span class="hover-hint" aria-hidden="true">{t.professional.hoverHint}</span>
                   </div>
                   <div class="tooltip-content" role="tooltip">
                     <p>{exp.tooltip}</p>
@@ -120,7 +89,7 @@ const certifications = [
     <!-- ─── Certificações ─── -->
     <section class="section certs-section">
       <div class="container">
-        <h2 class="section-title">Certificações</h2>
+        <h2 class="section-title">{t.professional.certsTitle}</h2>
 
         <div class="certs-grid">
           {certifications.map((cert) => (

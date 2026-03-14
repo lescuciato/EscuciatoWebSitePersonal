@@ -1,0 +1,306 @@
+/**
+ * Spanish translations.
+ */
+import type { Translations } from './pt';
+
+export const es: Translations = {
+  // ─── Navigation ───────────────────────────────────────────────────────────
+  nav: {
+    home: 'Inicio',
+    professional: 'Profesional',
+    blog: 'Blog',
+    games: 'Games',
+    about: 'Acerca de',
+  },
+
+  // ─── Home / Hero ──────────────────────────────────────────────────────────
+  hero: {
+    summary:
+      'Vivo en Campinas, juego tenis cuando el cuerpo me lo permite y hago asado cuando no. Tomo vino en ambos casos. Los domingos, hincho por el Ponte Preta y lo llamo hobby.',
+    contact: 'Contacto',
+    viewProfile: 'Ver perfil profesional →',
+  },
+
+  // ─── Home / Hobbies ───────────────────────────────────────────────────────
+  hobbies: {
+    sectionTitle: 'Intereses',
+    sectionSubtitle: 'Lo que me mueve más allá del trabajo',
+    items: [
+      { emoji: '🎾', label: 'Tenis', description: 'En las canchas siempre que puedo' },
+      { emoji: '🎮', label: 'Videojuegos', description: 'Aventuras digitales de todo tipo' },
+      { emoji: '🍖', label: 'Buena Mesa', description: 'Asado, vino y buena compañía' },
+      { emoji: '⚽', label: 'Fútbol', description: 'Hincha del Ponte Preta' },
+      { emoji: '📈', label: 'Finanzas e Inversiones', description: 'Inversiones en Brasil y ETFs irlandeses' },
+    ],
+  },
+
+  // ─── Professional page ────────────────────────────────────────────────────
+  professional: {
+    pageTitle: 'Perfil Profesional',
+    metaDescription:
+      'Leonardo Escuciato — Sr. Atlassian Consultant. Experiencia en gestión ágil, consultoría Atlassian y liderazgo de equipos.',
+    summaryText:
+      'Profesional con sólida experiencia en gestión de equipos ágiles y consultoría Atlassian. A lo largo de su carrera ha liderado equipos de desarrollo, implementado metodologías ágiles (Scrum, Kanban, SAFe) y se ha especializado en las herramientas del ecosistema Atlassian — especialmente Jira y Confluence. Certificado por Atlassian (ACP-620 y ACP-120), actualmente trabaja como Sr. Atlassian Consultant en Modus Create, ayudando a empresas a sacar el máximo provecho de sus herramientas de gestión de proyectos.',
+    timelineTitle: 'Trayectoria',
+    timelineSubtitle: 'Pase el cursor sobre cada experiencia para ver los detalles',
+    certsTitle: 'Certificaciones',
+    hoverHint: 'ver más ↓',
+    present: 'Presente',
+  },
+
+  // ─── Games page ───────────────────────────────────────────────────────────
+  games: {
+    metaDescription: "Los juegos más jugados de Leonardo Escuciato — datos en vivo desde Steam.",
+    heroBadge: 'PLAYER ONE READY',
+    heroTitleNeon: 'MIS',
+    heroTitleRest: ' JUEGOS',
+    heroSubtitle: 'Los últimos juegos en los que pasé horas en Steam.',
+    recentHeading: '// JUGANDO RECIENTEMENTE',
+    recentBadge: 'ÚLTIMAS 2 SEMANAS',
+    topHeading: '// JUEGOS MÁS JUGADOS',
+    topBadge: 'ALL TIME',
+    emptyRecent: 'Ningún juego jugado en las últimas 2 semanas.',
+    emptyTop: 'No se encontraron datos de biblioteca en Steam.',
+    activeLabel: 'Jugado recientemente',
+    activeBadge: 'ACTIVO',
+    weeksLabel: 'en las últimas 2 semanas',
+    totalLabel: 'en total',
+    recentLabel: 'recientes',
+    coverAlt: 'Portada de',
+  },
+
+  // ─── Blog listing ─────────────────────────────────────────────────────────
+  blog: {
+    metaDescription: 'Reflexiones sobre transformación ágil, herramientas Atlassian, liderazgo de equipos y tecnología.',
+    pageTitle: 'Blog',
+    subtitle: 'Reflexiones sobre transformación ágil, herramientas Atlassian, liderazgo de equipos y tecnología.',
+    emptyTitle: 'Aún sin publicaciones',
+    emptyText: 'Vuelve pronto — el contenido está en camino.',
+    readMore: 'Leer más',
+    publishedOn: 'Publicado el',
+    by: 'por',
+  },
+
+  // ─── Blog post ────────────────────────────────────────────────────────────
+  blogPost: {
+    backToBlog: 'Volver al Blog',
+    by: 'por',
+  },
+
+  // ─── Login ────────────────────────────────────────────────────────────────
+  login: {
+    title: 'Acceso Admin',
+    subtitle: 'Ingresa tu contraseña para continuar.',
+    passwordLabel: 'Contraseña',
+    passwordPlaceholder: 'Ingresa la contraseña admin',
+    submitButton: 'Ingresar',
+    errorMessage: 'Contraseña incorrecta. Inténtalo de nuevo.',
+  },
+
+  // ─── Sobre o Site ─────────────────────────────────────────────────────────
+  sobreSite: {
+    pageTitle: 'Acerca del Sitio',
+    metaDescription: 'Cómo se construyó este sitio: stack, arquitectura, despliegue automatizado y guía para replicarlo desde cero.',
+    heroBadge: 'Documentación Técnica',
+    heroTitle: 'Acerca del Sitio',
+    heroDesc: 'Cómo se construyó este sitio — stack, arquitectura, despliegue automatizado y una guía completa para que cualquiera pueda replicar esta estructura desde cero.',
+    heroCollabNote: 'Desarrollado en colaboración con',
+    heroCollabUsing: 'usando',
+    heroCollabSuffix: '— una CLI para desarrollo asistido por IA.',
+    sidebarAriaLabel: 'Navegación de la documentación',
+    sidebarLabel: 'En esta página',
+    nav: {
+      overview: '1. Descripción General',
+      stack: '2. Stack de Tecnologías',
+      architecture: '3. Arquitectura',
+      local: '4. Ejecutar Localmente',
+      deploy: '5. Despliegue',
+      agents: '6. Agentes Claude Code',
+      guide: '7. Guía desde Cero',
+      ai: '8. Usando IA',
+      i18n: '9. Internacionalización',
+    },
+    sections: {
+      visaoGeral: {
+        title: 'Visión General',
+        desc1: 'Este es un sitio personal moderno con <strong>Server-Side Rendering (SSR)</strong> construido con <strong>Astro</strong>. Va más allá de una simple página estática: incluye un blog con editor de texto enriquecido, un área de juegos integrada con la Steam API en tiempo real, y un sistema de despliegue completamente automatizado mediante Git hooks.',
+        desc2: 'Todo el desarrollo se realizó en colaboración con Claude (Anthropic) usando <strong>Claude Code</strong> — una interfaz de línea de comandos que permite el desarrollo asistido por IA directamente en la terminal, con acceso al sistema de archivos, Git y el servidor.',
+        desc3: 'El proyecto utiliza un conjunto de <strong>agentes especializados</strong> que automatizan tareas de frontend, infraestructura, calidad y seguridad — todos coordinados por lenguaje natural.',
+        featureBlog: 'Blog con Editor Rico',
+        featureBlogDesc: 'TipTap + SQLite, área admin protegida por JWT',
+        featureGames: 'Juegos en Vivo',
+        featureGamesDesc: 'Steam API con datos de juegos en tiempo real',
+        featureDeploy: 'Despliegue Automatizado',
+        featureDeployDesc: 'git push → build → restart en segundos',
+        featureTls: 'TLS Automático',
+        featureTlsDesc: "Traefik + Let's Encrypt sin configuración manual",
+      },
+      stack: {
+        title: 'Stack de Tecnologías',
+        subtitleApp: 'Aplicación',
+        subtitleInfra: 'Infraestructura',
+        subtitleDev: 'Desarrollo',
+        colTech: 'Tecnología',
+        colVersion: 'Versión',
+        colRole: 'Función',
+        colTool: 'Herramienta',
+        whyBtn: '¿Por qué? ↓',
+      },
+      arquitetura: {
+        title: 'Arquitectura',
+        desc: 'El tráfico atraviesa cuatro capas antes de llegar a la aplicación. Cada capa tiene una responsabilidad única y bien definida.',
+        diagramAriaLabel: 'Diagrama de arquitectura del sitio',
+        visitor: 'Visitante',
+        whyTitle: '¿Por qué cada capa?',
+        whyTraefik: 'gestiona TLS y certificados Let\'s Encrypt automáticamente. Sin él, renovar HTTPS sería un proceso manual y propenso a errores.',
+        whyNginx: 'actúa como buffer y proxy entre el mundo externo y el proceso Node.js. Permite configurar headers, caché y logs de forma independiente a la aplicación.',
+        whyPm2: 'garantiza que el proceso Node.js se reinicie automáticamente tras fallos o reinicios del servidor.',
+        whyAstro: 'renderiza HTML en el servidor, garantizando buen rendimiento, SEO correcto y soporte para lógica dinámica (base de datos, autenticación).',
+      },
+      local: {
+        title: 'Ejecutar Localmente',
+        prereq: '<strong>Requisitos previos:</strong> Node.js 18+, npm, Git.',
+        cloneTitle: 'Clonar e instalar',
+        envTitle: 'Variables de entorno',
+        envDesc: 'Crea un archivo <code class="inline-code">.env</code> en la raíz del proyecto con las siguientes variables:',
+        calloutSteam: 'Las variables <code class="inline-code">STEAM_API_KEY</code> y <code class="inline-code">STEAM_ID</code> son opcionales. Sin ellas, la página de Juegos mostrará un estado vacío pero el resto del sitio funcionará normalmente.',
+      },
+      deploy: {
+        title: 'Despliegue',
+        desc: 'El despliegue está totalmente automatizado mediante un <strong>Git hook</strong> en el servidor. Basta con hacer push al remote de producción.',
+        flowTitle: 'Flujo de despliegue',
+        autoTitle: 'Qué ocurre automáticamente en el servidor',
+        autoDesc: 'El hook <code class="inline-code">post-receive</code> se ejecuta en secuencia:',
+        step1Title: 'Checkout del código',
+        step1Desc: 'El código se extrae del repositorio bare a <code class="inline-code">/root/WebSite/source</code>',
+        step2Desc: 'Instala dependencias de forma determinista desde <code class="inline-code">package-lock.json</code>',
+        step3Desc: 'Genera el bundle SSR optimizado para producción',
+        step4Desc: 'Reinicia el proceso Node.js con cero downtime percibido',
+        calloutWarning: 'El archivo <code class="inline-code">.env</code> en el servidor <strong>debe existir antes del primer build</strong>. Si añades nuevas variables al proyecto, es necesario actualizarlas en el servidor y hacer un nuevo despliegue.',
+      },
+      agentes: {
+        title: 'Agentes Claude Code',
+        desc: 'Este proyecto usa <strong>Claude Code</strong> con un sistema de agentes especializados definidos en <code class="inline-code">.claude/agents/</code>. Cada agente tiene un dominio de responsabilidad claro, y todos son coordinados por lenguaje natural a través del <em>site-orchestrator</em>.',
+        badgeCoord: 'Coordinador',
+        descOrchestrator: 'Interpreta solicitudes en lenguaje natural y delega a los agentes correctos. Punto de entrada para toda interacción con el proyecto.',
+        badgeFrontend: 'Frontend',
+        descWebDev: 'Páginas Astro, componentes React, estilos, configuraciones de build, commits y push a producción.',
+        badgeInfra: 'Infra',
+        descDevops: 'Nginx, Docker, PM2, pipeline de despliegue, diagnósticos del servidor vía SSH.',
+        badgeQa: 'QA',
+        descQa: 'Inspecciona el sitio en busca de errores visuales, funcionales y regresiones tras despliegues.',
+        badgeSec: 'Seguridad',
+        descSec: 'Audita el repositorio en busca de credenciales expuestas, datos sensibles y vulnerabilidades.',
+        callout: 'Claude Code no reemplaza al desarrollador — amplifica la capacidad de ejecución. Las decisiones de arquitectura, la revisión de código y la validación final siempre quedan en manos del humano.',
+      },
+      guia: {
+        title: 'Guía: Construye un Sitio Igual desde Cero',
+        desc: 'Paso a paso para replicar esta arquitectura completa en cualquier VPS. Los marcadores de posición <code class="inline-code">TU_SERVIDOR</code>, <code class="inline-code">TU_DOMINIO</code> y <code class="inline-code">misitio</code> deben reemplazarse con tus valores reales.',
+        diagramAriaLabel: 'Diagrama del flujo de despliegue',
+        diagramDev: 'DESARROLLADOR',
+        diagramServer: 'SERVIDOR VPS',
+        diagramVisitor: 'VISITANTE',
+        step71Title: 'Preparar el Servidor VPS',
+        step71CodeTitle: 'Servidor — instalar Node.js y PM2',
+        step72Title: 'Configurar el Repositorio Git Bare',
+        step72CodeTitle: 'Servidor — crear repositorio bare',
+        step73Title: 'Crear el Hook de Despliegue',
+        step73CodeTitle: 'Servidor — crear hook post-receive',
+        step73FileContent: 'Contenido del archivo:',
+        step74Title: 'Configurar Nginx + Traefik con Docker',
+        step74NginxDesc: 'Crea el archivo de configuración de Nginx:',
+        step74DockerDesc: 'Crea el Docker Compose:',
+        step74UpTitle: 'Levantar el contenedor',
+        step75Title: 'Crear el Proyecto Astro',
+        step75CodeTitle: 'Local — crear proyecto e instalar dependencias',
+        step76Title: 'Configurar Remote y Hacer el Primer Despliegue',
+        step76CodeTitle: 'Local + Servidor — primer despliegue',
+        step76Callout: 'Tras el push, el hook se ejecuta automáticamente. En menos de un minuto tu sitio estará disponible en <code class="inline-code">https://TU_DOMINIO</code> con TLS configurado.',
+      },
+      usandoAI: {
+        title: 'Usando IA',
+        desc1: 'Todo este sitio fue construido usando <strong>Claude Code</strong> — una CLI que permite a un modelo de IA leer archivos, escribir código, acceder al servidor vía SSH y gestionar el ciclo completo de desarrollo. El proceso humano fue casi enteramente de <em>dirección</em>: describir lo que se quería, revisar el resultado y aprobar o pedir ajustes.',
+        desc2: 'Con los dos prompts a continuación, cualquiera puede replicar este proyecto completo — desde cero hasta el sitio en línea — con como máximo <strong>1 comando manual</strong>.',
+        prereqTitle: 'Antes de comenzar — lo que necesitas tener',
+        prereq1: 'Claude Code instalado',
+        prereq1Detail: ' — <code class="inline-code">npm install -g @anthropic-ai/claude-code</code>',
+        prereq2: 'Node.js 20+ local',
+        prereq2Detail: ' — para ejecutar el proyecto durante el desarrollo',
+        prereq3: 'VPS con Ubuntu 24.04',
+        prereq3Detail: ' — Docker instalado, Traefik en ejecución con un wildcard/dominio configurado',
+        prereq4: 'Acceso root al servidor vía SSH',
+        prereq4Detail: ' — el agente necesitará ejecutar comandos en el servidor',
+        prereq5: 'Clave de Steam API',
+        prereq5Detail: ' — opcional, solo si quieres la integración con Steam en la página de Juegos',
+        gatherTitle: 'Ten a mano antes de comenzar:',
+        gatherItems: [
+          'IP de tu servidor y contraseña root',
+          'Dominio o subdominio que apunta al servidor',
+          'Tu currículum / experiencias profesionales (texto o PDF)',
+          'Una contraseña para el admin del blog y una clave JWT (cualquier cadena aleatoria larga)',
+          'Steam ID o vanity URL (opcional)',
+        ],
+        prompt1Badge: 'Prompt 1 de 2',
+        prompt1Title: 'Construir el proyecto + configurar el servidor',
+        prompt1Desc: 'Pega este prompt en Claude Code desde una carpeta vacía en tu computadora. El agente creará el proyecto completo localmente <em>y</em> configurará el servidor — al final mostrará la clave SSH pública que debe ser autorizada en el servidor.',
+        prompt1CodeTitle: 'Claude Code — Prompt 1',
+        manualBadge: 'Paso Manual',
+        manualTitle: 'Autorizar la clave SSH en el servidor',
+        manualDesc: 'Este es el único paso manual. Claude Code no puede autorizarse en el servidor sin que ejecutes este comando una vez. Reemplaza con la clave mostrada en el Prompt 1.',
+        manualCodeTitle: 'Ejecutar en el servidor (vía SSH)',
+        prompt2Badge: 'Prompt 2 de 2',
+        prompt2Title: 'Crear .env + despliegue + verificación',
+        prompt2Desc: 'Tras autorizar la clave SSH, ejecuta este segundo prompt en la misma sesión de Claude Code (o una nueva, dentro de la carpeta del proyecto). El agente creará el archivo <code class="inline-code">.env</code> en el servidor, hará el primer despliegue y verificará que el sitio está en línea.',
+        prompt2CodeTitle: 'Claude Code — Prompt 2',
+        finalCallout: 'Listo — sitio en línea con despliegue automatizado. A partir de ahí, cualquier cambio se hace describiendo en lenguaje natural y confirmando con <code class="inline-code">git push production main</code>.',
+      },
+      i18n: {
+        title: 'Internacionalización (i18n)',
+        desc: 'El sitio admite tres idiomas — <strong>Português (PT)</strong>, <strong>English (EN)</strong> y <strong>Español (ES)</strong> — sin cambiar las URLs. El cambio de idioma se realiza mediante la cookie <code class="inline-code">lang</code>, leída en el SSR en cada renderizado.',
+        archTitle: 'Arquitectura',
+        howTitle: 'Cómo funciona en cada página SSR',
+        howCodeTitle: 'Ejemplo de uso en una página',
+        callout: 'Las páginas de administración (<code class="inline-code">/blog/admin</code>, <code class="inline-code">/blog/new</code>) permanecen en portugués — son áreas internas sin necesidad de internacionalización. Las APIs tampoco fueron modificadas.',
+      },
+    },
+  },
+
+  // ─── Professional experiences ─────────────────────────────────────────────
+  experiences: [
+    {
+      role: 'Sr. Atlassian Consultant',
+      company: 'Modus Create',
+      period: 'Ene 2022 – Presente',
+      tooltip: 'Implementación de configuraciones de gestión de proyectos con herramientas Atlassian para diferentes empresas. Gran experiencia con Jira Automation, Advanced Roadmaps y adaptación de procesos ágiles a distintos contextos organizacionales.',
+    },
+    {
+      role: 'Squad Leader',
+      company: 'Modus Create',
+      period: 'Jun 2021 – Feb 2022',
+      tooltip: 'Liderazgo de ceremonias ágiles, organización de Jira para informes y métricas, trabajo en formato Kanban con foco en calidad, distribución de tareas y comunicación con el cliente.',
+    },
+    {
+      role: 'Transformation Lead',
+      company: 'Zup Innovation',
+      period: 'Oct 2019 – Jun 2021',
+      tooltip: 'Gestión de la salud financiera del proyecto, liderazgo de rituales ágiles, aplicación de la metodología SAFe, extracción de métricas mediante APIs de Jira y construcción de dashboards de calidad y predictibilidad.',
+    },
+    {
+      role: 'Agile Coach & Jira Administrator',
+      company: 'Softvaro',
+      period: 'Sep 2018 – Oct 2019',
+      tooltip: 'Mejora de la visibilidad del desarrollo de software a través de metodologías ágiles. Administración de Jira con estándares personalizados por cliente y extracción de datos vía APIs REST para métricas.',
+    },
+    {
+      role: 'Scrum Master',
+      company: 'CI&T',
+      period: 'Sep 2015 – Ago 2018 (Europa)',
+      tooltip: 'Liderazgo de equipos como Scrum Master, mejorando procesos y entrega a través de métricas como Velocidad y Productividad. Despliegue de MVP Mobile para una gran empresa de bebidas en Europa, República Dominicana y México.',
+    },
+  ],
+
+  // ─── Footer ───────────────────────────────────────────────────────────────
+  footer: {
+    builtWith: 'Construido con',
+  },
+};

@@ -4,11 +4,16 @@
  * Rota: /sobre-o-site
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLang, useTranslations } from '../i18n/index';
+
+const lang = getLang(Astro.cookies);
+const t = useTranslations(lang);
 ---
 
 <BaseLayout
-  title="Sobre o Site"
-  description="Como este site foi construído: stack, arquitetura, deploy automatizado e guia para replicar do zero."
+  title={t.sobreSite.pageTitle}
+  description={t.sobreSite.metaDescription}
+  lang={lang}
 >
   <div class="docs-page">
 
@@ -16,15 +21,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="docs-hero">
       <div class="container">
         <div class="docs-hero-content fade-in">
-          <span class="docs-badge">Documentação Técnica</span>
-          <h1>Sobre o Site</h1>
+          <span class="docs-badge">{t.sobreSite.heroBadge}</span>
+          <h1>{t.sobreSite.heroTitle}</h1>
           <p class="docs-hero-desc">
-            Como este site foi construído — stack, arquitetura, deploy automatizado e
-            um guia completo para qualquer pessoa replicar essa estrutura do zero.
+            {t.sobreSite.heroDesc}
           </p>
           <p class="docs-collab-note">
-            Desenvolvido em colaboração com <a href="https://claude.ai" target="_blank" rel="noopener">Claude (Anthropic)</a>
-            usando o <a href="https://claude.ai/code" target="_blank" rel="noopener">Claude Code</a> — uma CLI para desenvolvimento assistido por IA.
+            {t.sobreSite.heroCollabNote} <a href="https://claude.ai" target="_blank" rel="noopener">Claude (Anthropic)</a>
+            {t.sobreSite.heroCollabUsing} <a href="https://claude.ai/code" target="_blank" rel="noopener">Claude Code</a> {t.sobreSite.heroCollabSuffix}
           </p>
         </div>
       </div>
@@ -34,17 +38,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="container docs-layout">
 
       <!-- Sidebar (ancora nav) -->
-      <aside class="docs-sidebar" aria-label="Navegação da documentação">
+      <aside class="docs-sidebar" aria-label={t.sobreSite.sidebarAriaLabel}>
         <nav class="sidebar-nav">
-          <p class="sidebar-label">Nesta página</p>
-          <a href="#visao-geral" class="sidebar-link">1. Visão Geral</a>
-          <a href="#stack" class="sidebar-link">2. Stack de Tecnologias</a>
-          <a href="#arquitetura" class="sidebar-link">3. Arquitetura</a>
-          <a href="#local" class="sidebar-link">4. Rodar Localmente</a>
-          <a href="#deploy" class="sidebar-link">5. Deploy</a>
-          <a href="#agentes" class="sidebar-link">6. Agentes Claude Code</a>
-          <a href="#guia" class="sidebar-link">7. Guia do Zero</a>
-          <a href="#usando-ai" class="sidebar-link">8. Usando AI</a>
+          <p class="sidebar-label">{t.sobreSite.sidebarLabel}</p>
+          <a href="#visao-geral" class="sidebar-link">{t.sobreSite.nav.overview}</a>
+          <a href="#stack" class="sidebar-link">{t.sobreSite.nav.stack}</a>
+          <a href="#arquitetura" class="sidebar-link">{t.sobreSite.nav.architecture}</a>
+          <a href="#local" class="sidebar-link">{t.sobreSite.nav.local}</a>
+          <a href="#deploy" class="sidebar-link">{t.sobreSite.nav.deploy}</a>
+          <a href="#agentes" class="sidebar-link">{t.sobreSite.nav.agents}</a>
+          <a href="#guia" class="sidebar-link">{t.sobreSite.nav.guide}</a>
+          <a href="#usando-ai" class="sidebar-link">{t.sobreSite.nav.ai}</a>
+          <a href="#i18n" class="sidebar-link">{t.sobreSite.nav.i18n}</a>
         </nav>
       </aside>
 
@@ -54,44 +59,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- ─── 1. Visão Geral ─────────────────────────────────────────── -->
         <section id="visao-geral" class="docs-section fade-in">
           <div class="section-number">01</div>
-          <h2>Visão Geral</h2>
-          <p>
-            Este é um site pessoal moderno com <strong>Server-Side Rendering (SSR)</strong> construído
-            em <strong>Astro</strong>. Vai além de uma simples página estática: inclui um blog com
-            editor de texto rico, área de games integrada com a Steam API em tempo real, e um sistema
-            de deploy completamente automatizado via Git hooks.
-          </p>
-          <p>
-            Todo o desenvolvimento foi feito em colaboração com
-            <a href="https://claude.ai" target="_blank" rel="noopener">Claude (Anthropic)</a> usando o
-            <strong>Claude Code</strong> — uma interface de linha de comando que permite desenvolvimento
-            assistido por IA diretamente no terminal, com acesso ao sistema de arquivos, Git e servidor.
-          </p>
-          <p>
-            O projeto utiliza um conjunto de <strong>agentes especializados</strong> que automatizam
-            tarefas de frontend, infraestrutura, qualidade e segurança — todos coordenados por linguagem
-            natural.
-          </p>
+          <h2>{t.sobreSite.sections.visaoGeral.title}</h2>
+          <p set:html={t.sobreSite.sections.visaoGeral.desc1} />
+          <p set:html={t.sobreSite.sections.visaoGeral.desc2} />
+          <p set:html={t.sobreSite.sections.visaoGeral.desc3} />
           <div class="feature-grid">
             <div class="feature-card">
               <span class="feature-icon">&#9998;</span>
-              <strong>Blog com Editor Rico</strong>
-              <span>TipTap + SQLite, área admin protegida por JWT</span>
+              <strong>{t.sobreSite.sections.visaoGeral.featureBlog}</strong>
+              <span>{t.sobreSite.sections.visaoGeral.featureBlogDesc}</span>
             </div>
             <div class="feature-card">
               <span class="feature-icon">&#9654;</span>
-              <strong>Games ao Vivo</strong>
-              <span>Steam API com dados de jogos em tempo real</span>
+              <strong>{t.sobreSite.sections.visaoGeral.featureGames}</strong>
+              <span>{t.sobreSite.sections.visaoGeral.featureGamesDesc}</span>
             </div>
             <div class="feature-card">
               <span class="feature-icon">&#8634;</span>
-              <strong>Deploy Automatizado</strong>
-              <span>git push → build → restart em segundos</span>
+              <strong>{t.sobreSite.sections.visaoGeral.featureDeploy}</strong>
+              <span>{t.sobreSite.sections.visaoGeral.featureDeployDesc}</span>
             </div>
             <div class="feature-card">
               <span class="feature-icon">&#128274;</span>
-              <strong>TLS Automático</strong>
-              <span>Traefik + Let's Encrypt sem configuração manual</span>
+              <strong>{t.sobreSite.sections.visaoGeral.featureTls}</strong>
+              <span>{t.sobreSite.sections.visaoGeral.featureTlsDesc}</span>
             </div>
           </div>
         </section>
@@ -99,16 +90,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- ─── 2. Stack ───────────────────────────────────────────────── -->
         <section id="stack" class="docs-section fade-in">
           <div class="section-number">02</div>
-          <h2>Stack de Tecnologias</h2>
+          <h2>{t.sobreSite.sections.stack.title}</h2>
 
-          <h3>Aplicação</h3>
+          <h3>{t.sobreSite.sections.stack.subtitleApp}</h3>
           <div class="tech-table-wrapper">
             <table class="tech-table">
               <thead>
                 <tr>
-                  <th>Tecnologia</th>
-                  <th>Versão</th>
-                  <th>Função</th>
+                  <th>{t.sobreSite.sections.stack.colTech}</th>
+                  <th>{t.sobreSite.sections.stack.colVersion}</th>
+                  <th>{t.sobreSite.sections.stack.colRole}</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,7 +108,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">4.x</td>
                   <td>
                     <span class="tech-func">Framework SSR — server-side rendering</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -130,7 +121,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">—</td>
                   <td>
                     <span class="tech-func">Adapter Node.js para modo SSR</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -143,7 +134,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">18.x</td>
                   <td>
                     <span class="tech-func">Componentes interativos (ilhas Astro)</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -156,7 +147,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">3.x</td>
                   <td>
                     <span class="tech-func">Estilização utilitária</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -169,7 +160,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">2.x</td>
                   <td>
                     <span class="tech-func">Editor de texto rico para o Blog</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -182,7 +173,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">—</td>
                   <td>
                     <span class="tech-func">Banco de dados SQLite local</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -195,7 +186,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">—</td>
                   <td>
                     <span class="tech-func">JWT para autenticação</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -208,7 +199,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">—</td>
                   <td>
                     <span class="tech-func">Tipagem estática</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -220,14 +211,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </table>
           </div>
 
-          <h3>Infraestrutura</h3>
+          <h3>{t.sobreSite.sections.stack.subtitleInfra}</h3>
           <div class="tech-table-wrapper">
             <table class="tech-table">
               <thead>
                 <tr>
-                  <th>Tecnologia</th>
-                  <th>Versão</th>
-                  <th>Função</th>
+                  <th>{t.sobreSite.sections.stack.colTech}</th>
+                  <th>{t.sobreSite.sections.stack.colVersion}</th>
+                  <th>{t.sobreSite.sections.stack.colRole}</th>
                 </tr>
               </thead>
               <tbody>
@@ -236,7 +227,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">24.04 LTS</td>
                   <td>
                     <span class="tech-func">Sistema operacional do VPS</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -249,7 +240,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">29.x</td>
                   <td>
                     <span class="tech-func">Orquestração de containers</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -262,7 +253,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">v3.6</td>
                   <td>
                     <span class="tech-func">Reverse proxy + TLS automático (Let's Encrypt)</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -275,7 +266,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">alpine</td>
                   <td>
                     <span class="tech-func">Container Docker — proxy para o Node.js</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -288,7 +279,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">6.x</td>
                   <td>
                     <span class="tech-func">Gerenciador de processos Node.js</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -301,7 +292,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">v24.x</td>
                   <td>
                     <span class="tech-func">Runtime (via nvm)</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -314,7 +305,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td class="tech-version">2.x</td>
                   <td>
                     <span class="tech-func">Controle de versão + trigger de deploy</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -326,13 +317,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </table>
           </div>
 
-          <h3>Desenvolvimento</h3>
+          <h3>{t.sobreSite.sections.stack.subtitleDev}</h3>
           <div class="tech-table-wrapper">
             <table class="tech-table">
               <thead>
                 <tr>
-                  <th>Ferramenta</th>
-                  <th>Função</th>
+                  <th>{t.sobreSite.sections.stack.colTool}</th>
+                  <th>{t.sobreSite.sections.stack.colRole}</th>
                 </tr>
               </thead>
               <tbody>
@@ -340,7 +331,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td><span class="tech-name">Claude Code</span></td>
                   <td>
                     <span class="tech-func">CLI de desenvolvimento assistido por IA (Anthropic)</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -352,7 +343,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td><span class="tech-name">VS Code</span></td>
                   <td>
                     <span class="tech-func">Editor de código</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -364,7 +355,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <td><span class="tech-name">nvm</span></td>
                   <td>
                     <span class="tech-func">Gerenciador de versões do Node.js</span>
-                    <button class="why-btn" aria-expanded="false">Por quê? ↓</button>
+                    <button class="why-btn" aria-expanded="false">{t.sobreSite.sections.stack.whyBtn}</button>
                   </td>
                 </tr>
                 <tr class="why-row" hidden>
@@ -380,18 +371,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- ─── 3. Arquitetura ─────────────────────────────────────────── -->
         <section id="arquitetura" class="docs-section fade-in">
           <div class="section-number">03</div>
-          <h2>Arquitetura</h2>
-          <p>
-            O tráfego percorre quatro camadas antes de chegar à aplicação. Cada camada tem uma
-            responsabilidade única e bem definida.
-          </p>
+          <h2>{t.sobreSite.sections.arquitetura.title}</h2>
+          <p>{t.sobreSite.sections.arquitetura.desc}</p>
 
           <!-- Diagrama HTML/CSS da arquitetura -->
-          <div class="arch-diagram" aria-label="Diagrama de arquitetura do site">
+          <div class="arch-diagram" aria-label={t.sobreSite.sections.arquitetura.diagramAriaLabel}>
             <div class="arch-node arch-internet">
               <span class="arch-icon">&#127760;</span>
               <div class="arch-info">
-                <strong>Visitante</strong>
+                <strong>{t.sobreSite.sections.arquitetura.visitor}</strong>
                 <span>HTTPS / porta 443</span>
               </div>
             </div>
@@ -438,23 +426,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
           </div>
 
-          <h3>Por que cada camada?</h3>
+          <h3>{t.sobreSite.sections.arquitetura.whyTitle}</h3>
           <ul class="docs-list">
             <li>
-              <strong>Traefik</strong> — gerencia TLS e certificados Let's Encrypt automaticamente.
-              Sem ele, renovar HTTPS seria um processo manual e propenso a erros.
+              <strong>Traefik</strong> — {t.sobreSite.sections.arquitetura.whyTraefik}
             </li>
             <li>
-              <strong>Nginx</strong> — atua como buffer e proxy entre o mundo externo e o processo
-              Node.js. Permite configurações de headers, caching e logs independentes da aplicação.
+              <strong>Nginx</strong> — {t.sobreSite.sections.arquitetura.whyNginx}
             </li>
             <li>
-              <strong>PM2</strong> — garante que o processo Node.js reinicie automaticamente
-              após falhas ou reinicializações do servidor.
+              <strong>PM2</strong> — {t.sobreSite.sections.arquitetura.whyPm2}
             </li>
             <li>
-              <strong>Astro SSR</strong> — renderiza HTML no servidor, garantindo boa performance,
-              SEO correto e suporte a lógica dinâmica (banco de dados, autenticação).
+              <strong>Astro SSR</strong> — {t.sobreSite.sections.arquitetura.whyAstro}
             </li>
           </ul>
         </section>
@@ -462,14 +446,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- ─── 4. Rodar Localmente ────────────────────────────────────── -->
         <section id="local" class="docs-section fade-in">
           <div class="section-number">04</div>
-          <h2>Como Rodar Localmente</h2>
+          <h2>{t.sobreSite.sections.local.title}</h2>
 
-          <p><strong>Pré-requisitos:</strong> Node.js 18+, npm, Git.</p>
+          <p set:html={t.sobreSite.sections.local.prereq} />
 
           <div class="code-block">
             <div class="code-header">
               <span class="code-lang">bash</span>
-              <span class="code-title">Clone e instale</span>
+              <span class="code-title">{t.sobreSite.sections.local.cloneTitle}</span>
             </div>
             <pre><code><span class="c"># 1. Clonar o repositório</span>
 git clone https://github.com/lescuciato/EscuciatoWebSitePersonal.git
@@ -487,8 +471,8 @@ npm run dev
 <span class="c"># Acesse: http://localhost:4321</span></code></pre>
           </div>
 
-          <h3>Variáveis de ambiente</h3>
-          <p>Crie um arquivo <code class="inline-code">.env</code> na raiz do projeto com as seguintes variáveis:</p>
+          <h3>{t.sobreSite.sections.local.envTitle}</h3>
+          <p set:html={t.sobreSite.sections.local.envDesc} />
 
           <div class="code-block">
             <div class="code-header">
@@ -505,27 +489,20 @@ PORT=4321</code></pre>
 
           <div class="callout callout-info">
             <span class="callout-icon">&#8505;</span>
-            <p>
-              As variáveis <code class="inline-code">STEAM_API_KEY</code> e
-              <code class="inline-code">STEAM_ID</code> são opcionais. Sem elas, a página de Games
-              exibirá um estado vazio mas o restante do site funcionará normalmente.
-            </p>
+            <p set:html={t.sobreSite.sections.local.calloutSteam} />
           </div>
         </section>
 
         <!-- ─── 5. Deploy ──────────────────────────────────────────────── -->
         <section id="deploy" class="docs-section fade-in">
           <div class="section-number">05</div>
-          <h2>Deploy</h2>
-          <p>
-            O deploy é totalmente automatizado via um <strong>Git hook</strong> no servidor.
-            Basta fazer push para o remote de produção.
-          </p>
+          <h2>{t.sobreSite.sections.deploy.title}</h2>
+          <p set:html={t.sobreSite.sections.deploy.desc} />
 
           <div class="code-block">
             <div class="code-header">
               <span class="code-lang">bash</span>
-              <span class="code-title">Fluxo de deploy</span>
+              <span class="code-title">{t.sobreSite.sections.deploy.flowTitle}</span>
             </div>
             <pre><code><span class="c"># Configurar remote de produção (uma única vez)</span>
 git remote add production root@SEU_SERVIDOR:/root/repos/website.git
@@ -536,124 +513,106 @@ git commit -m "feat: descrição das mudanças"
 git push production main</code></pre>
           </div>
 
-          <h3>O que acontece automaticamente no servidor</h3>
-          <p>O hook <code class="inline-code">post-receive</code> executa em sequência:</p>
+          <h3>{t.sobreSite.sections.deploy.autoTitle}</h3>
+          <p set:html={t.sobreSite.sections.deploy.autoDesc} />
 
           <ol class="docs-steps">
             <li>
               <span class="step-num">1</span>
               <div>
-                <strong>Checkout do código</strong>
-                <span>O código é extraído do repositório bare para <code class="inline-code">/root/WebSite/source</code></span>
+                <strong>{t.sobreSite.sections.deploy.step1Title}</strong>
+                <span set:html={t.sobreSite.sections.deploy.step1Desc} />
               </div>
             </li>
             <li>
               <span class="step-num">2</span>
               <div>
                 <strong><code class="inline-code">npm ci</code></strong>
-                <span>Instala dependências de forma determinística a partir do <code class="inline-code">package-lock.json</code></span>
+                <span set:html={t.sobreSite.sections.deploy.step2Desc} />
               </div>
             </li>
             <li>
               <span class="step-num">3</span>
               <div>
                 <strong><code class="inline-code">npm run build</code></strong>
-                <span>Gera o bundle SSR otimizado para produção</span>
+                <span>{t.sobreSite.sections.deploy.step3Desc}</span>
               </div>
             </li>
             <li>
               <span class="step-num">4</span>
               <div>
                 <strong><code class="inline-code">pm2 restart website</code></strong>
-                <span>Reinicia o processo Node.js com zero downtime percebido</span>
+                <span>{t.sobreSite.sections.deploy.step4Desc}</span>
               </div>
             </li>
           </ol>
 
           <div class="callout callout-warning">
             <span class="callout-icon">&#9888;</span>
-            <p>
-              O arquivo <code class="inline-code">.env</code> no servidor <strong>deve existir antes
-              do primeiro build</strong>. Se você adicionar novas variáveis ao projeto, é necessário
-              atualizá-las no servidor e fazer um novo deploy.
-            </p>
+            <p set:html={t.sobreSite.sections.deploy.calloutWarning} />
           </div>
         </section>
 
         <!-- ─── 6. Agentes Claude Code ─────────────────────────────────── -->
         <section id="agentes" class="docs-section fade-in">
           <div class="section-number">06</div>
-          <h2>Agentes Claude Code</h2>
-          <p>
-            Este projeto utiliza <strong>Claude Code</strong> com um sistema de agentes especializados
-            definidos em <code class="inline-code">.claude/agents/</code>. Cada agente tem um domínio
-            de responsabilidade claro, e todos são coordenados por linguagem natural através do
-            <em>site-orchestrator</em>.
-          </p>
+          <h2>{t.sobreSite.sections.agentes.title}</h2>
+          <p set:html={t.sobreSite.sections.agentes.desc} />
 
           <div class="agents-grid">
             <div class="agent-card agent-orchestrator">
               <div class="agent-header">
-                <span class="agent-badge">Coordenador</span>
+                <span class="agent-badge">{t.sobreSite.sections.agentes.badgeCoord}</span>
                 <strong>site-orchestrator</strong>
               </div>
-              <p>Interpreta pedidos em linguagem natural e delega para os agentes corretos. Ponto de entrada para toda interação com o projeto.</p>
+              <p>{t.sobreSite.sections.agentes.descOrchestrator}</p>
             </div>
             <div class="agent-card">
               <div class="agent-header">
-                <span class="agent-badge">Frontend</span>
+                <span class="agent-badge">{t.sobreSite.sections.agentes.badgeFrontend}</span>
                 <strong>web-dev-craftsman</strong>
               </div>
-              <p>Páginas Astro, componentes React, estilos, configurações de build, commits e push para produção.</p>
+              <p>{t.sobreSite.sections.agentes.descWebDev}</p>
             </div>
             <div class="agent-card">
               <div class="agent-header">
-                <span class="agent-badge">Infra</span>
+                <span class="agent-badge">{t.sobreSite.sections.agentes.badgeInfra}</span>
                 <strong>vps-devops-manager</strong>
               </div>
-              <p>Nginx, Docker, PM2, pipeline de deploy, diagnósticos do servidor via SSH.</p>
+              <p>{t.sobreSite.sections.agentes.descDevops}</p>
             </div>
             <div class="agent-card">
               <div class="agent-header">
-                <span class="agent-badge">QA</span>
+                <span class="agent-badge">{t.sobreSite.sections.agentes.badgeQa}</span>
                 <strong>qa-bug-hunter</strong>
               </div>
-              <p>Inspeciona o site em busca de bugs visuais, erros funcionais e regressões após deploys.</p>
+              <p>{t.sobreSite.sections.agentes.descQa}</p>
             </div>
             <div class="agent-card">
               <div class="agent-header">
-                <span class="agent-badge">Segurança</span>
+                <span class="agent-badge">{t.sobreSite.sections.agentes.badgeSec}</span>
                 <strong>security-auditor</strong>
               </div>
-              <p>Audita o repositório por credenciais expostas, dados sensíveis e vulnerabilidades.</p>
+              <p>{t.sobreSite.sections.agentes.descSec}</p>
             </div>
           </div>
 
           <div class="callout callout-info">
             <span class="callout-icon">&#128161;</span>
-            <p>
-              O Claude Code não substitui o desenvolvedor — ele amplifica a capacidade de
-              execução. Decisões de arquitetura, revisão de código e validação final sempre
-              ficam com o humano.
-            </p>
+            <p>{t.sobreSite.sections.agentes.callout}</p>
           </div>
         </section>
 
         <!-- ─── 7. Guia do Zero ────────────────────────────────────────── -->
         <section id="guia" class="docs-section guide-section fade-in">
           <div class="section-number">07</div>
-          <h2>Guia: Construa um Site Igual do Zero</h2>
-          <p>
-            Passo a passo para replicar essa arquitetura completa em qualquer VPS.
-            Os placeholders <code class="inline-code">SEU_SERVIDOR</code>,
-            <code class="inline-code">SEU_DOMINIO</code> e <code class="inline-code">meusite</code>
-            devem ser substituídos pelos seus valores reais.
-          </p>
+          <h2>{t.sobreSite.sections.guia.title}</h2>
+          <p set:html={t.sobreSite.sections.guia.desc} />
 
           <!-- Diagrama de deploy -->
-          <div class="deploy-diagram" aria-label="Diagrama do fluxo de deploy">
+          <div class="deploy-diagram" aria-label={t.sobreSite.sections.guia.diagramAriaLabel}>
             <div class="deploy-box deploy-dev">
-              <div class="deploy-box-title">DESENVOLVEDOR</div>
+              <div class="deploy-box-title">{t.sobreSite.sections.guia.diagramDev}</div>
               <code>git push production main</code>
             </div>
             <div class="deploy-arrow-down">
@@ -662,7 +621,7 @@ git push production main</code></pre>
               <span class="deploy-arrow-line"></span>
             </div>
             <div class="deploy-server">
-              <div class="deploy-server-title">SERVIDOR VPS</div>
+              <div class="deploy-server-title">{t.sobreSite.sections.guia.diagramServer}</div>
               <div class="deploy-flow">
                 <div class="deploy-step">
                   <div class="deploy-step-title">Hook post-receive</div>
@@ -689,17 +648,17 @@ git push production main</code></pre>
             </div>
             <div class="deploy-box deploy-visitor">
               <span class="deploy-visitor-icon">&#127760;</span>
-              <div class="deploy-box-title">VISITANTE</div>
+              <div class="deploy-box-title">{t.sobreSite.sections.guia.diagramVisitor}</div>
             </div>
           </div>
 
           <!-- 7.1 -->
           <div class="guide-step">
-            <h3><span class="guide-step-num">7.1</span> Preparar o Servidor VPS</h3>
+            <h3><span class="guide-step-num">7.1</span> {t.sobreSite.sections.guia.step71Title}</h3>
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">bash</span>
-                <span class="code-title">Servidor — instalar Node.js e PM2</span>
+                <span class="code-title">{t.sobreSite.sections.guia.step71CodeTitle}</span>
               </div>
               <pre><code><span class="c"># Instalar Node.js via nvm</span>
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
@@ -716,11 +675,11 @@ git --version</code></pre>
 
           <!-- 7.2 -->
           <div class="guide-step">
-            <h3><span class="guide-step-num">7.2</span> Configurar o Repositório Git Bare</h3>
+            <h3><span class="guide-step-num">7.2</span> {t.sobreSite.sections.guia.step72Title}</h3>
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">bash</span>
-                <span class="code-title">Servidor — criar repositório bare</span>
+                <span class="code-title">{t.sobreSite.sections.guia.step72CodeTitle}</span>
               </div>
               <pre><code><span class="c"># Criar repositório bare para receber pushes</span>
 mkdir -p /root/repos/meusite.git
@@ -734,15 +693,15 @@ mkdir -p /root/MeuSite/source</code></pre>
 
           <!-- 7.3 -->
           <div class="guide-step">
-            <h3><span class="guide-step-num">7.3</span> Criar o Hook de Deploy</h3>
+            <h3><span class="guide-step-num">7.3</span> {t.sobreSite.sections.guia.step73Title}</h3>
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">bash</span>
-                <span class="code-title">Servidor — criar post-receive hook</span>
+                <span class="code-title">{t.sobreSite.sections.guia.step73CodeTitle}</span>
               </div>
               <pre><code>nano /root/repos/meusite.git/hooks/post-receive</code></pre>
             </div>
-            <p>Conteúdo do arquivo:</p>
+            <p>{t.sobreSite.sections.guia.step73FileContent}</p>
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">bash</span>
@@ -778,8 +737,8 @@ echo "--- Deploy concluído ---"</code></pre>
 
           <!-- 7.4 -->
           <div class="guide-step">
-            <h3><span class="guide-step-num">7.4</span> Configurar Nginx + Traefik com Docker</h3>
-            <p>Crie o arquivo de configuração do Nginx:</p>
+            <h3><span class="guide-step-num">7.4</span> {t.sobreSite.sections.guia.step74Title}</h3>
+            <p>{t.sobreSite.sections.guia.step74NginxDesc}</p>
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">nginx</span>
@@ -798,7 +757,7 @@ echo "--- Deploy concluído ---"</code></pre>
     &#125;
 &#125;</code></pre>
             </div>
-            <p>Crie o Docker Compose:</p>
+            <p>{t.sobreSite.sections.guia.step74DockerDesc}</p>
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">yaml</span>
@@ -827,7 +786,7 @@ networks:
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">bash</span>
-                <span class="code-title">Subir o container</span>
+                <span class="code-title">{t.sobreSite.sections.guia.step74UpTitle}</span>
               </div>
               <pre><code>docker compose up -d</code></pre>
             </div>
@@ -835,11 +794,11 @@ networks:
 
           <!-- 7.5 -->
           <div class="guide-step">
-            <h3><span class="guide-step-num">7.5</span> Criar o Projeto Astro</h3>
+            <h3><span class="guide-step-num">7.5</span> {t.sobreSite.sections.guia.step75Title}</h3>
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">bash</span>
-                <span class="code-title">Local — criar projeto e instalar dependências</span>
+                <span class="code-title">{t.sobreSite.sections.guia.step75CodeTitle}</span>
               </div>
               <pre><code><span class="c"># Criar projeto Astro</span>
 npm create astro@latest meu-site
@@ -856,11 +815,11 @@ npm install @tiptap/react @tiptap/starter-kit @tiptap/extension-link
 
           <!-- 7.6 -->
           <div class="guide-step">
-            <h3><span class="guide-step-num">7.6</span> Configurar Remote e Fazer o Primeiro Deploy</h3>
+            <h3><span class="guide-step-num">7.6</span> {t.sobreSite.sections.guia.step76Title}</h3>
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">bash</span>
-                <span class="code-title">Local + Servidor — primeiro deploy</span>
+                <span class="code-title">{t.sobreSite.sections.guia.step76CodeTitle}</span>
               </div>
               <pre><code><span class="c"># Adicionar o remote de produção (local)</span>
 git remote add production root@SEU_SERVIDOR:/root/repos/meusite.git
@@ -879,11 +838,7 @@ git push production main</code></pre>
 
             <div class="callout callout-success">
               <span class="callout-icon">&#10003;</span>
-              <p>
-                Após o push, o hook executa automaticamente. Em menos de um minuto seu site
-                estará disponível em <code class="inline-code">https://SEU_DOMINIO</code>
-                com TLS configurado.
-              </p>
+              <p set:html={t.sobreSite.sections.guia.step76Callout} />
             </div>
           </div>
 
@@ -892,55 +847,47 @@ git push production main</code></pre>
         <!-- ─── 8. Usando AI ──────────────────────────────────────────────── -->
         <section id="usando-ai" class="docs-section fade-in">
           <div class="section-number">08</div>
-          <h2>Usando AI</h2>
-          <p>
-            Todo este site foi construído usando o <strong>Claude Code</strong> — uma CLI que permite
-            que um modelo de IA leia arquivos, escreva código, acesse o servidor via SSH e gerencie
-            o ciclo completo de desenvolvimento. O processo humano foi quase inteiramente de
-            <em>direção</em>: descrever o que queria, revisar o resultado e aprovar ou pedir ajustes.
-          </p>
-          <p>
-            Com os dois prompts abaixo, qualquer pessoa pode replicar este projeto completo
-            — do zero ao site no ar — com no máximo <strong>1 comando manual</strong>.
-          </p>
+          <h2>{t.sobreSite.sections.usandoAI.title}</h2>
+          <p set:html={t.sobreSite.sections.usandoAI.desc1} />
+          <p set:html={t.sobreSite.sections.usandoAI.desc2} />
 
           <!-- Pré-requisitos -->
           <div class="ai-prereqs">
-            <h3 class="ai-prereqs-title">Antes de começar — o que você precisa ter</h3>
+            <h3 class="ai-prereqs-title">{t.sobreSite.sections.usandoAI.prereqTitle}</h3>
             <ul class="prereq-list">
               <li>
                 <span class="prereq-check">&#10003;</span>
                 <div>
-                  <strong>Claude Code instalado</strong>
-                  <span class="prereq-detail"> — <code class="inline-code">npm install -g @anthropic-ai/claude-code</code></span>
+                  <strong>{t.sobreSite.sections.usandoAI.prereq1}</strong>
+                  <span class="prereq-detail" set:html={t.sobreSite.sections.usandoAI.prereq1Detail} />
                 </div>
               </li>
               <li>
                 <span class="prereq-check">&#10003;</span>
                 <div>
-                  <strong>Node.js 20+ local</strong>
-                  <span class="prereq-detail"> — para rodar o projeto durante o desenvolvimento</span>
+                  <strong>{t.sobreSite.sections.usandoAI.prereq2}</strong>
+                  <span class="prereq-detail">{t.sobreSite.sections.usandoAI.prereq2Detail}</span>
                 </div>
               </li>
               <li>
                 <span class="prereq-check">&#10003;</span>
                 <div>
-                  <strong>VPS com Ubuntu 24.04</strong>
-                  <span class="prereq-detail"> — Docker instalado, Traefik rodando com um wildcard/domínio configurado</span>
+                  <strong>{t.sobreSite.sections.usandoAI.prereq3}</strong>
+                  <span class="prereq-detail">{t.sobreSite.sections.usandoAI.prereq3Detail}</span>
                 </div>
               </li>
               <li>
                 <span class="prereq-check">&#10003;</span>
                 <div>
-                  <strong>Acesso root ao servidor via SSH</strong>
-                  <span class="prereq-detail"> — o agente vai precisar executar comandos no servidor</span>
+                  <strong>{t.sobreSite.sections.usandoAI.prereq4}</strong>
+                  <span class="prereq-detail">{t.sobreSite.sections.usandoAI.prereq4Detail}</span>
                 </div>
               </li>
               <li>
                 <span class="prereq-check prereq-optional">?</span>
                 <div>
-                  <strong>Chave da Steam API</strong>
-                  <span class="prereq-detail"> — opcional, só se quiser a integração com Steam na página de Games</span>
+                  <strong>{t.sobreSite.sections.usandoAI.prereq5}</strong>
+                  <span class="prereq-detail">{t.sobreSite.sections.usandoAI.prereq5Detail}</span>
                 </div>
               </li>
             </ul>
@@ -950,13 +897,9 @@ git push production main</code></pre>
           <div class="callout callout-info" style="margin-bottom: var(--space-6);">
             <span class="callout-icon">&#128204;</span>
             <div>
-              <p style="margin:0 0 var(--space-2);"><strong>Tenha em mãos antes de iniciar:</strong></p>
+              <p style="margin:0 0 var(--space-2);"><strong>{t.sobreSite.sections.usandoAI.gatherTitle}</strong></p>
               <ul style="margin:0; padding-left: 1.25rem; font-size: 0.85rem; line-height: 1.8;">
-                <li>IP do seu servidor e senha root</li>
-                <li>Domínio ou subdomínio que aponta para o servidor</li>
-                <li>Seu currículo / experiências profissionais (texto ou PDF)</li>
-                <li>Uma senha para o admin do blog e uma chave JWT (qualquer string longa aleatória)</li>
-                <li>Steam ID ou vanity URL (opcional)</li>
+                {t.sobreSite.sections.usandoAI.gatherItems.map((item: string) => <li>{item}</li>)}
               </ul>
             </div>
           </div>
@@ -964,18 +907,14 @@ git push production main</code></pre>
           <!-- PROMPT 1 -->
           <div class="ai-prompt-block">
             <div class="ai-prompt-header">
-              <span class="ai-prompt-badge">Prompt 1 de 2</span>
-              <span class="ai-prompt-title">Construir o projeto + configurar o servidor</span>
+              <span class="ai-prompt-badge">{t.sobreSite.sections.usandoAI.prompt1Badge}</span>
+              <span class="ai-prompt-title">{t.sobreSite.sections.usandoAI.prompt1Title}</span>
             </div>
-            <p class="ai-prompt-desc">
-              Cole este prompt no Claude Code a partir de uma pasta vazia no seu computador.
-              O agente vai criar o projeto completo localmente <em>e</em> configurar o servidor
-              — ao final ele vai exibir a chave SSH pública que precisa ser autorizada no servidor.
-            </p>
+            <p class="ai-prompt-desc" set:html={t.sobreSite.sections.usandoAI.prompt1Desc} />
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">prompt</span>
-                <span class="code-title">Claude Code — Prompt 1</span>
+                <span class="code-title">{t.sobreSite.sections.usandoAI.prompt1CodeTitle}</span>
               </div>
               <pre><code>Quero construir um site pessoal usando Astro SSR e publicá-lo em um VPS.
 Ao final deste prompt você vai ter:
@@ -1025,17 +964,14 @@ Ao finalizar:
           <!-- AÇÃO MANUAL -->
           <div class="ai-human-action">
             <div class="ai-human-header">
-              <span class="ai-human-badge">Ação Manual</span>
-              <span class="ai-human-title">Autorizar a chave SSH no servidor</span>
+              <span class="ai-human-badge">{t.sobreSite.sections.usandoAI.manualBadge}</span>
+              <span class="ai-human-title">{t.sobreSite.sections.usandoAI.manualTitle}</span>
             </div>
-            <p class="ai-prompt-desc">
-              Esta é a única etapa manual. O Claude Code não pode se autorizar no servidor
-              sem que você execute este comando uma vez. Substitua pela chave exibida no Prompt 1.
-            </p>
+            <p class="ai-prompt-desc">{t.sobreSite.sections.usandoAI.manualDesc}</p>
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">bash</span>
-                <span class="code-title">Executar no servidor (via SSH)</span>
+                <span class="code-title">{t.sobreSite.sections.usandoAI.manualCodeTitle}</span>
               </div>
               <pre><code><span class="c"># Conectar ao servidor</span>
 ssh root@[IP_DO_SERVIDOR]
@@ -1051,19 +987,14 @@ exit</code></pre>
           <!-- PROMPT 2 -->
           <div class="ai-prompt-block">
             <div class="ai-prompt-header">
-              <span class="ai-prompt-badge">Prompt 2 de 2</span>
-              <span class="ai-prompt-title">Criar .env + deploy + verificação</span>
+              <span class="ai-prompt-badge">{t.sobreSite.sections.usandoAI.prompt2Badge}</span>
+              <span class="ai-prompt-title">{t.sobreSite.sections.usandoAI.prompt2Title}</span>
             </div>
-            <p class="ai-prompt-desc">
-              Após autorizar a chave SSH, execute este segundo prompt na mesma sessão do Claude Code
-              (ou em uma nova, dentro da pasta do projeto). O agente vai criar o arquivo
-              <code class="inline-code">.env</code> no servidor, fazer o primeiro deploy e verificar
-              se o site está no ar.
-            </p>
+            <p class="ai-prompt-desc" set:html={t.sobreSite.sections.usandoAI.prompt2Desc} />
             <div class="code-block">
               <div class="code-header">
                 <span class="code-lang">prompt</span>
-                <span class="code-title">Claude Code — Prompt 2</span>
+                <span class="code-title">{t.sobreSite.sections.usandoAI.prompt2CodeTitle}</span>
               </div>
               <pre><code>A chave SSH já foi autorizada no servidor. Agora execute as etapas finais:
 
@@ -1089,13 +1020,58 @@ Ao final, exibir a URL pública do site.</code></pre>
 
           <div class="callout callout-success" style="margin-top: var(--space-6);">
             <span class="callout-icon">&#10003;</span>
-            <p>
-              Pronto — site no ar com deploy automatizado. A partir daí, qualquer mudança é feita
-              descrevendo em linguagem natural e confirmada com
-              <code class="inline-code">git push production main</code>.
-            </p>
+            <p set:html={t.sobreSite.sections.usandoAI.finalCallout} />
           </div>
 
+        </section>
+
+        <!-- ─── 9. Internacionalização ────────────────────────────────────── -->
+        <section id="i18n" class="docs-section fade-in">
+          <div class="section-number">09</div>
+          <h2>{t.sobreSite.sections.i18n.title}</h2>
+          <p set:html={t.sobreSite.sections.i18n.desc} />
+
+          <h3>{t.sobreSite.sections.i18n.archTitle}</h3>
+          <ul class="docs-list">
+            <li>
+              <strong><code class="inline-code">src/i18n/pt.ts</code>, <code class="inline-code">en.ts</code>, <code class="inline-code">es.ts</code></strong> —
+              Dicionários de tradução em TypeScript, tipados a partir do arquivo PT (fonte de verdade).
+            </li>
+            <li>
+              <strong><code class="inline-code">src/i18n/index.ts</code></strong> —
+              Helper <code class="inline-code">useTranslations(lang)</code> e
+              <code class="inline-code">getLang(cookies)</code> para leitura segura do cookie.
+            </li>
+            <li>
+              <strong><code class="inline-code">src/pages/api/set-lang.ts</code></strong> —
+              Endpoint POST que seta o cookie <code class="inline-code">lang</code> (maxAge: 1 ano) e redireciona de volta via <code class="inline-code">Referer</code>.
+            </li>
+            <li>
+              <strong><code class="inline-code">src/components/layout/LanguageSwitcher.astro</code></strong> —
+              Três botões <code class="inline-code">PT | EN | ES</code> integrados ao Header, com o idioma ativo destacado.
+            </li>
+          </ul>
+
+          <h3>{t.sobreSite.sections.i18n.howTitle}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">astro</span>
+              <span class="code-title">{t.sobreSite.sections.i18n.howCodeTitle}</span>
+            </div>
+            <pre><code>import &#123; getLang, useTranslations &#125; from '../i18n/index';
+
+const lang = getLang(Astro.cookies); // 'pt' | 'en' | 'es'
+const t = useTranslations(lang);
+
+// Usar nas templates:
+// &#123;t.nav.home&#125; → 'Home' / 'Home' / 'Inicio'
+// &#123;t.hero.contact&#125; → 'Contato' / 'Contact' / 'Contacto'</code></pre>
+          </div>
+
+          <div class="callout callout-info">
+            <span class="callout-icon">&#8505;</span>
+            <p set:html={t.sobreSite.sections.i18n.callout} />
+          </div>
         </section>
 
       </main>

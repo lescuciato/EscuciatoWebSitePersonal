@@ -1,0 +1,71 @@
+---
+/**
+ * LanguageSwitcher — 3 compact buttons (PT | EN | ES).
+ * Submits a form POST to /api/set-lang, which sets the cookie and redirects back.
+ */
+import { getLang } from '../../i18n/index';
+
+const currentLang = getLang(Astro.cookies);
+const currentPath = Astro.url.pathname + Astro.url.search;
+---
+
+<div class="lang-switcher" aria-label="Language selector">
+  {(['pt', 'en', 'es'] as const).map((lang) => (
+    <form method="POST" action="/api/set-lang" class="lang-form">
+      <input type="hidden" name="lang" value={lang} />
+      <button
+        type="submit"
+        class={`lang-btn ${currentLang === lang ? 'lang-btn--active' : ''}`}
+        aria-label={`Switch to ${lang.toUpperCase()}`}
+        aria-pressed={currentLang === lang}
+      >
+        {lang.toUpperCase()}
+      </button>
+    </form>
+  ))}
+</div>
+
+<style>
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+  }
+
+  .lang-form {
+    display: contents;
+  }
+
+  .lang-btn {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color var(--transition-fast), background var(--transition-fast);
+    line-height: 1;
+  }
+
+  .lang-btn:hover {
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .lang-btn--active {
+    color: white;
+    background: var(--color-accent);
+  }
+
+  .lang-btn--active:hover {
+    background: var(--color-accent);
+    color: white;
+  }
+</style>

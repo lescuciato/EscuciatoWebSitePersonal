@@ -7,6 +7,10 @@
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getRecentlyPlayedGames, getTopPlayedGames, getCoverUrl, formatPlaytime } from '../../lib/steam';
+import { getLang, useTranslations } from '../../i18n/index';
+
+const lang = getLang(Astro.cookies);
+const t = useTranslations(lang);
 
 // Fetch both datasets in parallel
 const [recentGames, topSteamGames] = await Promise.all([
@@ -17,7 +21,8 @@ const [recentGames, topSteamGames] = await Promise.all([
 
 <BaseLayout
   title="Games"
-  description="Leonardo Escuciato's top played games of all time — pulled live from Steam."
+  description={t.games.metaDescription}
+  lang={lang}
 >
   <div class="games-page">
     <!-- Page hero — cyberpunk style -->
@@ -27,13 +32,13 @@ const [recentGames, topSteamGames] = await Promise.all([
         <div class="games-hero-content">
           <div class="games-badge">
             <span class="blink-dot"></span>
-            PLAYER ONE READY
+            {t.games.heroBadge}
           </div>
           <h1 class="games-title">
-            <span class="neon-text">MEUS</span> JOGOS
+            <span class="neon-text">{t.games.heroTitleNeon}</span>{t.games.heroTitleRest}
           </h1>
           <p class="games-subtitle">
-            Os últimos jogos que passei horas destruindo na Steam.
+            {t.games.heroSubtitle}
           </p>
         </div>
       </div>
@@ -45,12 +50,12 @@ const [recentGames, topSteamGames] = await Promise.all([
         <svg class="steam-icon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
           <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.252 0-2.265-1.014-2.265-2.265z"/>
         </svg>
-        <h2 id="recent-heading" class="section-title">// JOGANDO RECENTEMENTE</h2>
-        <span class="section-badge">ÚLTIMAS 2 SEMANAS</span>
+        <h2 id="recent-heading" class="section-title">{t.games.recentHeading}</h2>
+        <span class="section-badge">{t.games.recentBadge}</span>
       </div>
 
       {recentGames.length === 0 ? (
-        <p class="steam-empty">Nenhum jogo jogado nas últimas 2 semanas.</p>
+        <p class="steam-empty">{t.games.emptyRecent}</p>
       ) : (
         <div class="steam-grid">
           {recentGames.map((game) => (
@@ -58,15 +63,15 @@ const [recentGames, topSteamGames] = await Promise.all([
               <div class="steam-card-cover">
                 <img
                   src={getCoverUrl(game.appid)}
-                  alt={`Capa de ${game.name}`}
+                  alt={`${t.games.coverAlt} ${game.name}`}
                   width="460"
                   height="215"
                   loading="lazy"
                 />
                 <div class="steam-card-overlay" aria-hidden="true"></div>
-                <div class="steam-card-active" aria-label="Jogado recentemente">
+                <div class="steam-card-active" aria-label={t.games.activeLabel}>
                   <span class="active-dot"></span>
-                  ATIVO
+                  {t.games.activeBadge}
                 </div>
               </div>
               <div class="steam-card-body">
@@ -77,10 +82,10 @@ const [recentGames, topSteamGames] = await Promise.all([
                       <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
                       <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
                     </svg>
-                    {formatPlaytime(game.playtime_2weeks)} nas últimas 2 semanas
+                    {formatPlaytime(game.playtime_2weeks)} {t.games.weeksLabel}
                   </span>
                   <span class="steam-tag">
-                    {formatPlaytime(game.playtime_forever)} no total
+                    {formatPlaytime(game.playtime_forever)} {t.games.totalLabel}
                   </span>
                 </div>
               </div>
@@ -103,12 +108,12 @@ const [recentGames, topSteamGames] = await Promise.all([
         <svg class="steam-icon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
           <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.252 0-2.265-1.014-2.265-2.265z"/>
         </svg>
-        <h2 id="top-heading" class="section-title">// JOGOS MAIS JOGADOS</h2>
-        <span class="section-badge">ALL TIME</span>
+        <h2 id="top-heading" class="section-title">{t.games.topHeading}</h2>
+        <span class="section-badge">{t.games.topBadge}</span>
       </div>
 
       {topSteamGames.length === 0 ? (
-        <p class="steam-empty">Nenhum dado de biblioteca encontrado na Steam.</p>
+        <p class="steam-empty">{t.games.emptyTop}</p>
       ) : (
         <div class="steam-grid">
           {topSteamGames.map((game) => (
@@ -116,16 +121,16 @@ const [recentGames, topSteamGames] = await Promise.all([
               <div class="steam-card-cover">
                 <img
                   src={getCoverUrl(game.appid)}
-                  alt={`Capa de ${game.name}`}
+                  alt={`${t.games.coverAlt} ${game.name}`}
                   width="460"
                   height="215"
                   loading="lazy"
                 />
                 <div class="steam-card-overlay" aria-hidden="true"></div>
                 {game.playtime_2weeks > 0 && (
-                  <div class="steam-card-active" aria-label="Jogado recentemente">
+                  <div class="steam-card-active" aria-label={t.games.activeLabel}>
                     <span class="active-dot"></span>
-                    ATIVO
+                    {t.games.activeBadge}
                   </div>
                 )}
               </div>
@@ -137,11 +142,11 @@ const [recentGames, topSteamGames] = await Promise.all([
                       <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
                       <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
                     </svg>
-                    {formatPlaytime(game.playtime_forever)} no total
+                    {formatPlaytime(game.playtime_forever)} {t.games.totalLabel}
                   </span>
                   {game.playtime_2weeks > 0 && (
                     <span class="steam-tag steam-tag-recent">
-                      {formatPlaytime(game.playtime_2weeks)} recentes
+                      {formatPlaytime(game.playtime_2weeks)} {t.games.recentLabel}
                     </span>
                   )}
                 </div>
@@ -393,7 +398,7 @@ const [recentGames, topSteamGames] = await Promise.all([
     pointer-events: none;
   }
 
-  /* "JOGANDO AGORA" badge — top-right corner of the cover */
+  /* "ACTIVE" badge — top-right corner of the cover */
   .steam-card-active {
     position: absolute;
     top: 8px;

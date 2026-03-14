@@ -2,13 +2,17 @@
 /**
  * Footer — minimal, links to social profiles and current year.
  */
+import { getLang, useTranslations } from '../../i18n/index';
+
+const lang = getLang(Astro.cookies);
+const t = useTranslations(lang);
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="container footer-inner">
     <p class="footer-copy">
-      &copy; {year} Leonardo Escuciato. Built with
+      &copy; {year} Leonardo Escuciato. {t.footer.builtWith}
       <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>.
     </p>
 

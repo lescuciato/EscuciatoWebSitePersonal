@@ -2,40 +2,20 @@
 /**
  * Hobbies — personal interests section with emoji cards.
  */
+import type { Translations } from '../../i18n/pt';
 
-const hobbies = [
-  {
-    emoji: '🎾',
-    label: 'Tênis',
-    description: 'Nas quadras sempre que possível',
-  },
-  {
-    emoji: '🎮',
-    label: 'Video Games',
-    description: 'Aventuras digitais de todo tipo',
-  },
-  {
-    emoji: '🍖',
-    label: 'Boa Mesa',
-    description: 'Churrasco, vinho e boa companhia',
-  },
-  {
-    emoji: '⚽',
-    label: 'Futebol',
-    description: 'Torcedor da Macaca',
-  },
-  {
-    emoji: '📈',
-    label: 'Finanças & Investimentos',
-    description: 'Investimentos no Brasil e ETFs irlandeses',
-  },
-];
+interface Props {
+  t: Translations;
+}
+
+const { t } = Astro.props;
+const hobbies = t.hobbies.items;
 ---
 
 <section class="hobbies">
   <div class="container">
-    <h2 class="section-title">Interesses</h2>
-    <p class="section-subtitle">O que me move além do trabalho</p>
+    <h2 class="section-title">{t.hobbies.sectionTitle}</h2>
+    <p class="section-subtitle">{t.hobbies.sectionSubtitle}</p>
 
     <div class="hobbies-grid">
       {hobbies.map(({ emoji, label, description }) => (

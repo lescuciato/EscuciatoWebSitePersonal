@@ -5,21 +5,26 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/blog/PostCard.astro';
 import { postsDb } from '../../lib/db';
+import { getLang, useTranslations } from '../../i18n/index';
+
+const lang = getLang(Astro.cookies);
+const t = useTranslations(lang);
 
 const posts = postsDb.getPublished();
 ---
 
 <BaseLayout
-  title="Blog"
-  description="Thoughts on agile transformation, Atlassian tools, team leadership, and technology."
+  title={t.blog.pageTitle}
+  description={t.blog.metaDescription}
+  lang={lang}
 >
   <div class="blog-page section">
     <div class="container">
       <!-- Page header -->
       <header class="blog-header fade-in">
-        <h1 class="section-title">Blog</h1>
+        <h1 class="section-title">{t.blog.pageTitle}</h1>
         <p class="blog-subtitle">
-          Thoughts on agile transformation, Atlassian tools, team leadership, and technology.
+          {t.blog.subtitle}
         </p>
       </header>
 
@@ -27,8 +32,8 @@ const posts = postsDb.getPublished();
         <!-- Empty state -->
         <div class="blog-empty fade-in">
           <div class="empty-icon" aria-hidden="true">📝</div>
-          <h2>No posts yet</h2>
-          <p>Check back soon — content is on its way.</p>
+          <h2>{t.blog.emptyTitle}</h2>
+          <p>{t.blog.emptyText}</p>
         </div>
       ) : (
         <div class="posts-grid">
@@ -39,6 +44,7 @@ const posts = postsDb.getPublished();
               excerpt={post.excerpt}
               tags={post.tags}
               created_at={post.created_at}
+              readMoreLabel={t.blog.readMore}
             />
           ))}
         </div>
