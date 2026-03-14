@@ -114,10 +114,11 @@ export const en: Translations = {
       architecture: '3. Architecture',
       local: '4. Run Locally',
       deploy: '5. Deploy',
-      agents: '6. Claude Code Agents',
-      guide: '7. Guide from Scratch',
-      ai: '9. Using AI',
-      i18n: '8. Internationalization',
+      seguranca: '6. Security',
+      agents: '7. Claude Code Agents',
+      guide: '8. Guide from Scratch',
+      ai: '10. Using AI',
+      i18n: '9. Internationalization',
     },
     sections: {
       visaoGeral: {
@@ -176,6 +177,26 @@ export const en: Translations = {
         step3Desc: 'Generates the optimized SSR bundle for production',
         step4Desc: 'Restarts the Node.js process with zero perceived downtime',
         calloutWarning: 'The <code class="inline-code">.env</code> file on the server <strong>must exist before the first build</strong>. If you add new variables to the project, you must update them on the server and run a new deploy.',
+      },
+      seguranca: {
+        title: '6. Security',
+        intro: 'The admin area is protected by a JWT authentication layer. Below are the security practices adopted.',
+        item1Title: 'Secure Session Cookies',
+        item1Desc: 'Authentication cookies use the <code>Secure</code> attribute, ensuring they are only transmitted over HTTPS connections.',
+        item2Title: 'XSS Prevention',
+        item2Desc: 'Blog post content is sanitized using an allowlist approach before rendering, blocking malicious scripts.',
+        item3Title: 'Generic Error Responses',
+        item3Desc: 'Error responses are intentionally generic to avoid exposing internal system details.',
+        item4Title: 'Login Rate Limiting',
+        item4Desc: 'The login endpoint has attempt limiting to hinder brute-force attacks.',
+        item5Title: 'Session Expiry',
+        item5Desc: 'Sessions expire after a limited period of time, reducing the exposure window if a token is compromised.',
+        item6Title: 'Token Invalidation on Logout',
+        item6Desc: 'Tokens are explicitly invalidated on logout, preventing reuse even if they were previously captured.',
+        item7Title: 'Constant-Time Comparison',
+        item7Desc: 'Password verification uses constant-time comparison to prevent timing attacks.',
+        item8Title: 'Open Redirect Protection',
+        item8Desc: 'Redirect parameters are validated to prevent attackers from redirecting users to external domains.',
       },
       agentes: {
         title: 'Claude Code Agents',
@@ -236,7 +257,7 @@ export const en: Translations = {
           'Your server IP and root password',
           'Domain or subdomain pointing to the server',
           'Your resume / professional experience (text or PDF)',
-          'A password for the blog admin and a JWT key (any long random string)',
+          'A strong password for the blog admin (mix uppercase, lowercase, numbers and symbols) and a JWT secret (random string, minimum 32 characters)',
           'Steam ID or vanity URL (optional)',
         ],
         prompt1Badge: 'Prompt 1 of 2',
@@ -270,6 +291,7 @@ Desired stack (do not change):
 - JWT (jose library) for admin authentication
 - PM2 to manage the Node.js process
 - Nginx (Docker) as reverse proxy to port 4321
+- sanitize-html for blog content sanitization
 
 Pages the site should have:
 1. Home — personal presentation with hobbies
@@ -278,9 +300,20 @@ Pages the site should have:
 4. Games — optional Steam API integration (section can be empty for now)
 5. About — technical documentation of the project
 
+Mandatory security requirements (apply all):
+- Rate limiting on the login endpoint to hinder brute-force attacks
+- JWT token revocation on logout (revoke server-side, not just clear the cookie)
+- Constant-time password comparison (crypto.timingSafeEqual) to prevent timing attacks
+- Session cookie with Secure flag over HTTPS connections
+- Blog HTML sanitization with allowlist via sanitize-html before rendering
+- Redirect parameter validation to prevent open redirect attacks
+- Generic error responses to avoid leaking internal system details
+- Session with limited expiry time
+
 Agent tasks:
-- web-dev-craftsman: create the entire Astro project locally with the stack above
+- web-dev-craftsman: create the entire Astro project locally with the stack above, applying all security requirements
 - vps-devops-manager: configure the server (bare repo + deploy hook + Nginx Docker + PM2)
+- security-auditor: review the generated code before the first deploy
 
 When done:
 - Show the contents of ~/.ssh/id_ed25519.pub (public SSH key)
@@ -299,8 +332,8 @@ When done:
         prompt2Body: `The SSH key has already been authorized on the server. Now execute the final steps:
 
 1. vps-devops-manager: create the .env file on the server at /root/MySite/source/.env with:
-   ADMIN_PASSWORD=[BLOG_ADMIN_PASSWORD]
-   JWT_SECRET=[RANDOM_STRING_MIN_32_CHARS]
+   ADMIN_PASSWORD=[STRONG PASSWORD — e.g. MyP@ssw0rd2025! — use uppercase, lowercase, numbers and symbols]
+   JWT_SECRET=[RANDOM STRING MIN 32 CHARS — generate with: openssl rand -base64 48]
    HOST=0.0.0.0
    PORT=4321
    (If you want Steam: STEAM_API_KEY=[YOUR_STEAM_KEY] and STEAM_ID=[YOUR_STEAM_ID])
@@ -311,7 +344,10 @@ When done:
 
 3. vps-devops-manager: verify that PM2 started correctly after the deploy
 
-4. qa-bug-hunter: access [YOUR_DOMAIN] and verify the site is working —
+4. security-auditor: verify that no credentials are exposed in the repository
+   and that the authentication flow in production is working correctly
+
+5. qa-bug-hunter: access [YOUR_DOMAIN] and verify the site is working —
    check home, blog, professional and games
 
 When done, display the site's public URL.`,

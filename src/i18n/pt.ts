@@ -112,10 +112,11 @@ export const pt = {
       architecture: '3. Arquitetura',
       local: '4. Rodar Localmente',
       deploy: '5. Deploy',
-      agents: '6. Agentes Claude Code',
-      guide: '7. Guia do Zero',
-      ai: '9. Usando AI',
-      i18n: '8. Internacionalização',
+      seguranca: '6. Segurança',
+      agents: '7. Agentes Claude Code',
+      guide: '8. Guia do Zero',
+      ai: '10. Usando AI',
+      i18n: '9. Internacionalização',
     },
     sections: {
       visaoGeral: {
@@ -174,6 +175,26 @@ export const pt = {
         step3Desc: 'Gera o bundle SSR otimizado para produção',
         step4Desc: 'Reinicia o processo Node.js com zero downtime percebido',
         calloutWarning: 'O arquivo <code class="inline-code">.env</code> no servidor <strong>deve existir antes do primeiro build</strong>. Se você adicionar novas variáveis ao projeto, é necessário atualizá-las no servidor e fazer um novo deploy.',
+      },
+      seguranca: {
+        title: '6. Segurança',
+        intro: 'A área administrativa do site é protegida por uma camada de autenticação JWT. Abaixo estão as práticas de segurança adotadas.',
+        item1Title: 'Cookies de Sessão Seguros',
+        item1Desc: 'Os cookies de autenticação utilizam o atributo <code>Secure</code>, garantindo que só sejam transmitidos em conexões HTTPS.',
+        item2Title: 'Prevenção de XSS',
+        item2Desc: 'O conteúdo dos posts do blog passa por sanitização via lista de permissões (allowlist) antes de ser renderizado, bloqueando scripts maliciosos.',
+        item3Title: 'Respostas Genéricas de Erro',
+        item3Desc: 'As respostas de erro são intencionalmente genéricas para não expor detalhes internos do sistema.',
+        item4Title: 'Rate Limiting no Login',
+        item4Desc: 'O endpoint de login possui limitação de tentativas para dificultar ataques de força bruta.',
+        item5Title: 'Expiração de Sessão',
+        item5Desc: 'As sessões expiram após um período limitado de tempo, reduzindo a janela de exposição em caso de token comprometido.',
+        item6Title: 'Invalidação de Token no Logout',
+        item6Desc: 'Os tokens são explicitamente invalidados ao sair, impedindo que sejam reutilizados mesmo que tenham sido capturados.',
+        item7Title: 'Comparação em Tempo Constante',
+        item7Desc: 'A verificação de senha usa comparação em tempo constante para prevenir ataques de temporização.',
+        item8Title: 'Proteção contra Redirecionamento Aberto',
+        item8Desc: 'Os parâmetros de redirecionamento são validados para evitar que um atacante redirecione usuários para domínios externos.',
       },
       agentes: {
         title: 'Agentes Claude Code',
@@ -234,7 +255,7 @@ export const pt = {
           'IP do seu servidor e senha root',
           'Domínio ou subdomínio que aponta para o servidor',
           'Seu currículo / experiências profissionais (texto ou PDF)',
-          'Uma senha para o admin do blog e uma chave JWT (qualquer string longa aleatória)',
+          'Uma senha forte para o admin do blog (misture maiúsculas, minúsculas, números e símbolos) e uma chave JWT (string aleatória com mínimo 32 caracteres)',
           'Steam ID ou vanity URL (opcional)',
         ],
         prompt1Badge: 'Prompt 1 de 2',
@@ -268,6 +289,7 @@ Stack desejada (não alterar):
 - JWT (biblioteca jose) para autenticação do admin
 - PM2 para gerenciar o processo Node.js
 - Nginx (Docker) como proxy reverso para a porta 4321
+- sanitize-html para sanitização de conteúdo do blog
 
 Páginas que o site deve ter:
 1. Home — apresentação pessoal com hobbies
@@ -276,9 +298,20 @@ Páginas que o site deve ter:
 4. Games — integração opcional com Steam API (seção pode ficar vazia por ora)
 5. Sobre o Site — documentação técnica do projeto
 
+Requisitos de segurança obrigatórios (aplicar todos):
+- Rate limiting no endpoint de login para dificultar ataques de força bruta
+- Invalidação de token JWT no logout (revogar no servidor, não apenas apagar o cookie)
+- Comparação de senha em tempo constante (crypto.timingSafeEqual) para prevenir timing attacks
+- Cookie de sessão com flag Secure em conexões HTTPS
+- Sanitização do HTML do blog com allowlist via sanitize-html antes de renderizar
+- Validação de parâmetros de redirecionamento para prevenir open redirect
+- Respostas de erro genéricas para não expor detalhes internos do sistema
+- Sessão com expiração de tempo limitado
+
 Tarefa dos agentes:
-- web-dev-craftsman: criar todo o projeto Astro localmente com a stack acima
+- web-dev-craftsman: criar todo o projeto Astro localmente com a stack acima, aplicando todos os requisitos de segurança
 - vps-devops-manager: configurar o servidor (repositório bare + hook de deploy + Nginx Docker + PM2)
+- security-auditor: verificar o código gerado antes do primeiro deploy
 
 Ao finalizar:
 - Mostrar o conteúdo do arquivo ~/.ssh/id_ed25519.pub (chave SSH pública)
@@ -297,8 +330,8 @@ Ao finalizar:
         prompt2Body: `A chave SSH já foi autorizada no servidor. Agora execute as etapas finais:
 
 1. vps-devops-manager: criar o arquivo .env no servidor em /root/MeuSite/source/.env com:
-   ADMIN_PASSWORD=[SENHA_DO_ADMIN_DO_BLOG]
-   JWT_SECRET=[STRING_ALEATORIA_COM_32_CHARS_MINIMO]
+   ADMIN_PASSWORD=[SENHA_FORTE — ex: MinhaS3nh@2025! — use maiúsculas, minúsculas, números e símbolos]
+   JWT_SECRET=[STRING_ALEATÓRIA_COM_MÍNIMO_32_CARACTERES — ex: gere com: openssl rand -base64 48]
    HOST=0.0.0.0
    PORT=4321
    (Se quiser Steam: STEAM_API_KEY=[SUA_CHAVE_STEAM] e STEAM_ID=[SEU_STEAM_ID])
@@ -309,7 +342,10 @@ Ao finalizar:
 
 3. vps-devops-manager: verificar que o PM2 subiu corretamente após o deploy
 
-4. qa-bug-hunter: acessar [SEU_DOMINIO] e verificar que o site está funcionando —
+4. security-auditor: verificar que não há credenciais expostas no repositório
+   e que o fluxo de autenticação em produção está funcionando corretamente
+
+5. qa-bug-hunter: acessar [SEU_DOMINIO] e verificar que o site está funcionando —
    checar home, blog, profissional e games
 
 Ao final, exibir a URL pública do site.`,

@@ -114,10 +114,11 @@ export const es: Translations = {
       architecture: '3. Arquitectura',
       local: '4. Ejecutar Localmente',
       deploy: '5. Despliegue',
-      agents: '6. Agentes Claude Code',
-      guide: '7. Guía desde Cero',
-      ai: '9. Usando IA',
-      i18n: '8. Internacionalización',
+      seguranca: '6. Seguridad',
+      agents: '7. Agentes Claude Code',
+      guide: '8. Guía desde Cero',
+      ai: '10. Usando IA',
+      i18n: '9. Internacionalización',
     },
     sections: {
       visaoGeral: {
@@ -176,6 +177,26 @@ export const es: Translations = {
         step3Desc: 'Genera el bundle SSR optimizado para producción',
         step4Desc: 'Reinicia el proceso Node.js con cero downtime percibido',
         calloutWarning: 'El archivo <code class="inline-code">.env</code> en el servidor <strong>debe existir antes del primer build</strong>. Si añades nuevas variables al proyecto, es necesario actualizarlas en el servidor y hacer un nuevo despliegue.',
+      },
+      seguranca: {
+        title: '6. Seguridad',
+        intro: 'El área administrativa está protegida por una capa de autenticación JWT. A continuación se detallan las prácticas de seguridad adoptadas.',
+        item1Title: 'Cookies de Sesión Seguras',
+        item1Desc: 'Las cookies de autenticación usan el atributo <code>Secure</code>, garantizando que solo se transmitan en conexiones HTTPS.',
+        item2Title: 'Prevención de XSS',
+        item2Desc: 'El contenido de los posts del blog pasa por sanitización con lista de permisos (allowlist) antes de renderizarse, bloqueando scripts maliciosos.',
+        item3Title: 'Respuestas de Error Genéricas',
+        item3Desc: 'Las respuestas de error son intencionalmente genéricas para no exponer detalles internos del sistema.',
+        item4Title: 'Rate Limiting en el Login',
+        item4Desc: 'El endpoint de inicio de sesión tiene limitación de intentos para dificultar ataques de fuerza bruta.',
+        item5Title: 'Expiración de Sesión',
+        item5Desc: 'Las sesiones expiran después de un período de tiempo limitado, reduciendo la ventana de exposición ante un token comprometido.',
+        item6Title: 'Invalidación de Token al Salir',
+        item6Desc: 'Los tokens se invalidan explícitamente al cerrar sesión, impidiendo su reutilización incluso si fueron capturados.',
+        item7Title: 'Comparación en Tiempo Constante',
+        item7Desc: 'La verificación de contraseña usa comparación en tiempo constante para prevenir ataques de temporización.',
+        item8Title: 'Protección contra Redirección Abierta',
+        item8Desc: 'Los parámetros de redirección son validados para evitar que un atacante redirija usuarios a dominios externos.',
       },
       agentes: {
         title: 'Agentes Claude Code',
@@ -236,7 +257,7 @@ export const es: Translations = {
           'IP de tu servidor y contraseña root',
           'Dominio o subdominio que apunta al servidor',
           'Tu currículum / experiencias profesionales (texto o PDF)',
-          'Una contraseña para el admin del blog y una clave JWT (cualquier cadena aleatoria larga)',
+          'Una contraseña fuerte para el admin del blog (combina mayúsculas, minúsculas, números y símbolos) y un secreto JWT (cadena aleatoria de mínimo 32 caracteres)',
           'Steam ID o vanity URL (opcional)',
         ],
         prompt1Badge: 'Prompt 1 de 2',
@@ -270,6 +291,7 @@ Stack deseado (no modificar):
 - JWT (librería jose) para autenticación del admin
 - PM2 para gestionar el proceso Node.js
 - Nginx (Docker) como proxy inverso hacia el puerto 4321
+- sanitize-html para sanitización del contenido del blog
 
 Páginas que debe tener el sitio:
 1. Inicio — presentación personal con hobbies
@@ -278,9 +300,20 @@ Páginas que debe tener el sitio:
 4. Games — integración opcional con Steam API (la sección puede quedar vacía por ahora)
 5. Acerca de — documentación técnica del proyecto
 
+Requisitos de seguridad obligatorios (aplicar todos):
+- Rate limiting en el endpoint de login para dificultar ataques de fuerza bruta
+- Invalidación de token JWT al cerrar sesión (revocar en el servidor, no solo borrar la cookie)
+- Comparación de contraseña en tiempo constante (crypto.timingSafeEqual) para prevenir timing attacks
+- Cookie de sesión con flag Secure en conexiones HTTPS
+- Sanitización del HTML del blog con allowlist via sanitize-html antes de renderizar
+- Validación de parámetros de redirección para prevenir open redirect
+- Respuestas de error genéricas para no exponer detalles internos del sistema
+- Sesión con tiempo de expiración limitado
+
 Tarea de los agentes:
-- web-dev-craftsman: crear el proyecto Astro completo localmente con el stack anterior
+- web-dev-craftsman: crear el proyecto Astro completo localmente con el stack anterior, aplicando todos los requisitos de seguridad
 - vps-devops-manager: configurar el servidor (repositorio bare + hook de despliegue + Nginx Docker + PM2)
+- security-auditor: verificar el código generado antes del primer despliegue
 
 Al finalizar:
 - Mostrar el contenido del archivo ~/.ssh/id_ed25519.pub (clave SSH pública)
@@ -299,8 +332,8 @@ Al finalizar:
         prompt2Body: `La clave SSH ya fue autorizada en el servidor. Ahora ejecuta los pasos finales:
 
 1. vps-devops-manager: crear el archivo .env en el servidor en /root/MiSitio/source/.env con:
-   ADMIN_PASSWORD=[CONTRASEÑA_ADMIN_BLOG]
-   JWT_SECRET=[CADENA_ALEATORIA_MIN_32_CHARS]
+   ADMIN_PASSWORD=[CONTRASEÑA FUERTE — ej: MiP@ssw0rd2025! — usa mayúsculas, minúsculas, números y símbolos]
+   JWT_SECRET=[CADENA ALEATORIA MIN 32 CHARS — genera con: openssl rand -base64 48]
    HOST=0.0.0.0
    PORT=4321
    (Si quieres Steam: STEAM_API_KEY=[TU_CLAVE_STEAM] y STEAM_ID=[TU_STEAM_ID])
@@ -311,7 +344,10 @@ Al finalizar:
 
 3. vps-devops-manager: verificar que PM2 inició correctamente tras el despliegue
 
-4. qa-bug-hunter: acceder a [TU_DOMINIO] y verificar que el sitio funciona —
+4. security-auditor: verificar que no hay credenciales expuestas en el repositorio
+   y que el flujo de autenticación en producción funciona correctamente
+
+5. qa-bug-hunter: acceder a [TU_DOMINIO] y verificar que el sitio funciona —
    revisar inicio, blog, profesional y games
 
 Al finalizar, mostrar la URL pública del sitio.`,

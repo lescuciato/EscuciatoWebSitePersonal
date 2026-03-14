@@ -46,6 +46,7 @@ const t = useTranslations(lang);
           <a href="#arquitetura" class="sidebar-link">{t.sobreSite.nav.architecture}</a>
           <a href="#local" class="sidebar-link">{t.sobreSite.nav.local}</a>
           <a href="#deploy" class="sidebar-link">{t.sobreSite.nav.deploy}</a>
+          <a href="#seguranca" class="sidebar-link">{t.sobreSite.nav.seguranca}</a>
           <a href="#agentes" class="sidebar-link">{t.sobreSite.nav.agents}</a>
           <a href="#guia" class="sidebar-link">{t.sobreSite.nav.guide}</a>
           <a href="#i18n" class="sidebar-link">{t.sobreSite.nav.i18n}</a>
@@ -553,9 +554,51 @@ git push production main</code></pre>
           </div>
         </section>
 
-        <!-- ─── 6. Agentes Claude Code ─────────────────────────────────── -->
-        <section id="agentes" class="docs-section fade-in">
+        <!-- ─── 6. Segurança ──────────────────────────────────────────────── -->
+        <section id="seguranca" class="docs-section fade-in">
           <div class="section-number">06</div>
+          <h2>{t.sobreSite.sections.seguranca.title}</h2>
+          <p set:html={t.sobreSite.sections.seguranca.intro} />
+
+          <div class="security-grid">
+            <div class="security-item">
+              <h3 class="security-item-title">{t.sobreSite.sections.seguranca.item1Title}</h3>
+              <p set:html={t.sobreSite.sections.seguranca.item1Desc} />
+            </div>
+            <div class="security-item">
+              <h3 class="security-item-title">{t.sobreSite.sections.seguranca.item2Title}</h3>
+              <p set:html={t.sobreSite.sections.seguranca.item2Desc} />
+            </div>
+            <div class="security-item">
+              <h3 class="security-item-title">{t.sobreSite.sections.seguranca.item3Title}</h3>
+              <p set:html={t.sobreSite.sections.seguranca.item3Desc} />
+            </div>
+            <div class="security-item">
+              <h3 class="security-item-title">{t.sobreSite.sections.seguranca.item4Title}</h3>
+              <p set:html={t.sobreSite.sections.seguranca.item4Desc} />
+            </div>
+            <div class="security-item">
+              <h3 class="security-item-title">{t.sobreSite.sections.seguranca.item5Title}</h3>
+              <p set:html={t.sobreSite.sections.seguranca.item5Desc} />
+            </div>
+            <div class="security-item">
+              <h3 class="security-item-title">{t.sobreSite.sections.seguranca.item6Title}</h3>
+              <p set:html={t.sobreSite.sections.seguranca.item6Desc} />
+            </div>
+            <div class="security-item">
+              <h3 class="security-item-title">{t.sobreSite.sections.seguranca.item7Title}</h3>
+              <p set:html={t.sobreSite.sections.seguranca.item7Desc} />
+            </div>
+            <div class="security-item">
+              <h3 class="security-item-title">{t.sobreSite.sections.seguranca.item8Title}</h3>
+              <p set:html={t.sobreSite.sections.seguranca.item8Desc} />
+            </div>
+          </div>
+        </section>
+
+        <!-- ─── 7. Agentes Claude Code ─────────────────────────────────── -->
+        <section id="agentes" class="docs-section fade-in">
+          <div class="section-number">07</div>
           <h2>{t.sobreSite.sections.agentes.title}</h2>
           <p set:html={t.sobreSite.sections.agentes.desc} />
 
@@ -603,9 +646,9 @@ git push production main</code></pre>
           </div>
         </section>
 
-        <!-- ─── 7. Guia do Zero ────────────────────────────────────────── -->
+        <!-- ─── 8. Guia do Zero ────────────────────────────────────────── -->
         <section id="guia" class="docs-section guide-section fade-in">
-          <div class="section-number">07</div>
+          <div class="section-number">08</div>
           <h2>{t.sobreSite.sections.guia.title}</h2>
           <p set:html={t.sobreSite.sections.guia.desc} />
 
@@ -844,9 +887,9 @@ git push production main</code></pre>
 
         </section>
 
-        <!-- ─── 8. Internacionalização ────────────────────────────────────── -->
+        <!-- ─── 9. Internacionalização ────────────────────────────────────── -->
         <section id="i18n" class="docs-section fade-in">
-          <div class="section-number">08</div>
+          <div class="section-number">09</div>
           <h2>{t.sobreSite.sections.i18n.title}</h2>
           <p set:html={t.sobreSite.sections.i18n.desc} />
 
@@ -892,9 +935,9 @@ const t = useTranslations(lang);
           </div>
         </section>
 
-        <!-- ─── 9. Usando AI ──────────────────────────────────────────────── -->
+        <!-- ─── 10. Usando AI ─────────────────────────────────────────────── -->
         <section id="usando-ai" class="docs-section fade-in">
-          <div class="section-number">09</div>
+          <div class="section-number">10</div>
           <h2>{t.sobreSite.sections.usandoAI.title}</h2>
           <p set:html={t.sobreSite.sections.usandoAI.desc1} />
           <p set:html={t.sobreSite.sections.usandoAI.desc2} />
@@ -1992,6 +2035,28 @@ exit</code></pre>
   .ai-prompt-block .code-header,
   .ai-human-action .code-header {
     border-radius: 0;
+  }
+
+  /* ─── Security section ──────────────────────────────────────────────────── */
+  .security-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
+  .security-item {
+    background: rgba(99, 102, 241, 0.05);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3);
+  }
+
+  .security-item-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-accent-2);
+    margin-bottom: var(--space-1);
   }
 </style>
 
