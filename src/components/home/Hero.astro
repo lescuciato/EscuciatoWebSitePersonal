@@ -1,0 +1,289 @@
+---
+/**
+ * Hero — above-the-fold introduction section.
+ * Profile photo placeholder at /images/profile.jpg
+ */
+---
+
+<section class="hero">
+  <div class="container hero-inner">
+    <!-- Text content -->
+    <div class="hero-content fade-in">
+      <div class="hero-badge">
+        <span class="status-dot"></span>
+        Available for consulting
+      </div>
+
+      <h1 class="hero-name">Leonardo Escuciato</h1>
+      <p class="hero-title">Sr. Atlassian Consultant</p>
+
+      <p class="hero-summary">
+        Experienced consultant specializing in Atlassian tools, agile transformation,
+        and team leadership. Based in Campinas, São Paulo, Brazil.
+        Atlassian Certified (ACP-620, ACP-120).
+      </p>
+
+      <div class="hero-cta">
+        <a href="mailto:lescuciato@gmail.com" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          Get in Touch
+        </a>
+        <a
+          href="https://www.linkedin.com/in/leonardo-escuciato"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-ghost"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+            <rect x="2" y="9" width="4" height="12"/>
+            <circle cx="4" cy="4" r="2"/>
+          </svg>
+          LinkedIn
+        </a>
+      </div>
+
+      <!-- Certification badges -->
+      <div class="cert-badges">
+        <span class="cert-badge">ACP-120</span>
+        <span class="cert-badge">ACP-620</span>
+        <span class="cert-badge">Atlassian Certified</span>
+      </div>
+    </div>
+
+    <!-- Profile photo -->
+    <div class="hero-photo fade-in">
+      <div class="photo-frame">
+        <!--
+          PHOTO PLACEHOLDER
+          Replace the placeholder below with the actual profile photo.
+          File location: /public/images/profile.jpg
+          Recommended: square crop, at least 400×400px, .webp format preferred.
+        -->
+        <img
+          src="/images/profile.jpg"
+          alt="Leonardo Escuciato — Sr. Atlassian Consultant"
+          width="360"
+          height="360"
+          class="profile-img"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <!-- Fallback avatar when photo is not yet available -->
+        <div class="avatar-fallback" aria-hidden="true">
+          <span>LE</span>
+        </div>
+        <div class="photo-glow" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: var(--space-12) 0 var(--space-8);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle background gradient */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    align-items: center;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .hero-inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+
+  /* ─── Content ─── */
+  .hero-content {
+    flex: 1;
+    max-width: 600px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    color: var(--color-success);
+    margin-bottom: var(--space-3);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--color-success);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero-name {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-title {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--color-accent-2);
+    font-weight: 500;
+    margin-bottom: var(--space-3);
+  }
+
+  .hero-summary {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+    max-width: 520px;
+  }
+
+  @media (max-width: 767px) {
+    .hero-summary {
+      margin: 0 auto var(--space-4);
+    }
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-3);
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .hero-cta {
+      justify-content: flex-start;
+    }
+  }
+
+  .cert-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .cert-badges {
+      justify-content: flex-start;
+    }
+  }
+
+  .cert-badge {
+    padding: 4px 10px;
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    border-radius: 100px;
+    font-size: 0.75rem;
+    color: var(--color-accent-2);
+    font-weight: 500;
+  }
+
+  /* ─── Photo ─── */
+  .hero-photo {
+    flex-shrink: 0;
+  }
+
+  .photo-frame {
+    position: relative;
+    width: 240px;
+    height: 240px;
+  }
+
+  @media (min-width: 768px) {
+    .photo-frame {
+      width: 300px;
+      height: 300px;
+    }
+  }
+
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--color-accent);
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar-fallback {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-2) 100%);
+    border: 3px solid var(--color-accent);
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Show fallback by default (photo will hide it if it loads) */
+  .profile-img + .avatar-fallback {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  /* When image loads successfully, show it over the fallback */
+  .profile-img:not([style*="display: none"]) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+
+  .photo-glow {
+    position: absolute;
+    inset: -16px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+  }
+</style>

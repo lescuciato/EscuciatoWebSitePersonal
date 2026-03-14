@@ -1,0 +1,200 @@
+---
+/**
+ * Edit post — protected route.
+ * Pre-populates the TipTap editor with existing post data.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TipTapEditor from '../../../components/blog/TipTapEditor';
+import { postsDb } from '../../../lib/db';
+
+const { slug } = Astro.params;
+const post = postsDb.getBySlug(slug!);
+
+if (!post) {
+  return Astro.redirect('/blog/admin');
+}
+---
+
+<BaseLayout title={`Edit: ${post.title}`} description="Edit blog post">
+  <div class="editor-page section">
+    <div class="container">
+      <div class="editor-header">
+        <a href="/blog/admin" class="back-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Back to Admin
+        </a>
+        <h1 class="section-title">Edit <span>Post</span></h1>
+      </div>
+
+      <form id="post-form" class="editor-form">
+        <input type="hidden" id="post-id" value={post.id} />
+
+        <div class="form-group">
+          <label for="title" class="form-label">Title *</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            class="form-input form-input-lg"
+            value={post.title}
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tags" class="form-label">Tags</label>
+            <input
+              type="text"
+              id="tags"
+              name="tags"
+              class="form-input"
+              value={post.tags ?? ''}
+              placeholder="astro, agile, jira (comma-separated)"
+            />
+          </div>
+          <div class="form-group">
+            <label for="excerpt" class="form-label">Excerpt</label>
+            <input
+              type="text"
+              id="excerpt"
+              name="excerpt"
+              class="form-input"
+              value={post.excerpt ?? ''}
+              placeholder="Brief summary shown in feed..."
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Content *</label>
+          <TipTapEditor
+            client:load
+            content={post.content}
+            onUpdate={(html) => { (window as any).__postContent = html; }}
+          />
+          <input type="hidden" id="content" name="content" />
+        </div>
+
+        <div class="editor-footer">
+          <a href={`/blog/${post.slug}`} class="btn btn-ghost">View Post</a>
+          <a href="/blog/admin" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary" id="update-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Update Post
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('post-form') as HTMLFormElement;
+  const contentInput = document.getElementById('content') as HTMLInputElement;
+  const postIdEl = document.getElementById('post-id') as HTMLInputElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const content = (window as any).__postContent ?? '';
+    if (!content || content === '<p></p>') {
+      alert('Post content cannot be empty.');
+      return;
+    }
+
+    contentInput.value = content;
+
+    const formData = new FormData(form);
+    const postId = postIdEl.value;
+    const payload = {
+      title: formData.get('title') as string,
+      tags: formData.get('tags') as string,
+      excerpt: formData.get('excerpt') as string,
+      content,
+    };
+
+    const btn = document.getElementById('update-btn') as HTMLButtonElement;
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    try {
+      const res = await fetch(`/api/posts/${postId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        window.location.href = `/blog/${data.slug}`;
+      } else {
+        const err = await res.json();
+        alert(`Error: ${err.message ?? 'Failed to update post.'}`);
+        btn.disabled = false;
+        btn.textContent = 'Update Post';
+      }
+    } catch (err) {
+      alert('Network error. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Update Post';
+    }
+  });
+</script>
+
+<style>
+  .editor-header {
+    margin-bottom: var(--space-6);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    margin-bottom: var(--space-3);
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--color-accent-2);
+  }
+
+  .editor-form {
+    max-width: 900px;
+  }
+
+  .form-input-lg {
+    font-size: 1.1rem;
+    padding: 12px 16px;
+    font-weight: 600;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 640px) {
+    .form-row {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-3);
+    }
+  }
+
+  .editor-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-3);
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+/**
+ * Blog feed — list of all published posts.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/blog/PostCard.astro';
+import { postsDb } from '../../lib/db';
+
+const posts = postsDb.getPublished();
+---
+
+<BaseLayout
+  title="Blog"
+  description="Thoughts on agile transformation, Atlassian tools, team leadership, and technology."
+>
+  <div class="blog-page section">
+    <div class="container">
+      <!-- Page header -->
+      <header class="blog-header fade-in">
+        <h1 class="section-title">Blog</h1>
+        <p class="blog-subtitle">
+          Thoughts on agile transformation, Atlassian tools, team leadership, and technology.
+        </p>
+      </header>
+
+      {posts.length === 0 ? (
+        <!-- Empty state -->
+        <div class="blog-empty fade-in">
+          <div class="empty-icon" aria-hidden="true">📝</div>
+          <h2>No posts yet</h2>
+          <p>Check back soon — content is on its way.</p>
+        </div>
+      ) : (
+        <div class="posts-grid">
+          {posts.map((post) => (
+            <PostCard
+              slug={post.slug}
+              title={post.title}
+              excerpt={post.excerpt}
+              tags={post.tags}
+              created_at={post.created_at}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .blog-header {
+    margin-bottom: var(--space-8);
+  }
+
+  .blog-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    max-width: 560px;
+    margin-top: var(--space-1);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .posts-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .blog-empty {
+    text-align: center;
+    padding: var(--space-12) 0;
+    color: var(--color-text-muted);
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .blog-empty h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-1);
+    color: var(--color-text);
+  }
+
+  .blog-empty p {
+    font-size: 0.95rem;
+  }
+</style>

@@ -1,0 +1,243 @@
+---
+/**
+ * Blog admin — manage all posts (protected route).
+ * Lists all posts with publish/unpublish, edit, and delete controls.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { postsDb } from '../../lib/db';
+
+const posts = postsDb.getAll();
+---
+
+<BaseLayout title="Blog Admin" description="Manage blog posts">
+  <div class="admin-page section">
+    <div class="container">
+      <div class="admin-header">
+        <div>
+          <h1 class="section-title">Blog <span>Admin</span></h1>
+          <p class="admin-subtitle">{posts.length} post{posts.length !== 1 ? 's' : ''} total</p>
+        </div>
+        <div class="admin-actions">
+          <a href="/blog/new" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            New Post
+          </a>
+          <a href="/api/auth/logout" class="btn btn-ghost">Log out</a>
+        </div>
+      </div>
+
+      {posts.length === 0 ? (
+        <div class="admin-empty">
+          <p>No posts yet. <a href="/blog/new">Create your first post.</a></p>
+        </div>
+      ) : (
+        <div class="posts-table">
+          {posts.map((post) => (
+            <div class={`post-row ${post.published ? 'published' : 'draft'}`}>
+              <div class="post-row-main">
+                <div class="post-row-status" aria-label={post.published ? 'Published' : 'Draft'}>
+                  <span class={`status-dot ${post.published ? 'live' : 'draft'}`}></span>
+                  {post.published ? 'Published' : 'Draft'}
+                </div>
+                <div class="post-row-info">
+                  <h3 class="post-row-title">{post.title}</h3>
+                  <span class="post-row-slug">/{post.slug}</span>
+                  {post.tags && (
+                    <div class="post-row-tags">
+                      {post.tags.split(',').slice(0, 3).map((t) => (
+                        <span class="tag">{t.trim()}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div class="post-row-date">
+                {new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </div>
+
+              <div class="post-row-actions">
+                <a href={`/blog/${post.slug}/edit`} class="btn btn-ghost btn-sm">
+                  Edit
+                </a>
+                <button
+                  class="btn btn-ghost btn-sm"
+                  data-post-id={post.id}
+                  data-action="toggle"
+                  data-published={post.published}
+                >
+                  {post.published ? 'Unpublish' : 'Publish'}
+                </button>
+                <button
+                  class="btn btn-danger btn-sm"
+                  data-post-id={post.id}
+                  data-action="delete"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Handle publish toggle and delete via fetch API
+  document.querySelectorAll('[data-action]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const el = btn as HTMLButtonElement;
+      const postId = el.dataset.postId;
+      const action = el.dataset.action;
+
+      if (action === 'delete') {
+        if (!confirm('Delete this post permanently?')) return;
+        const res = await fetch(`/api/posts/${postId}`, { method: 'DELETE' });
+        if (res.ok) window.location.reload();
+        else alert('Failed to delete post.');
+      }
+
+      if (action === 'toggle') {
+        const currentlyPublished = el.dataset.published === '1';
+        const res = await fetch(`/api/posts/${postId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ published: currentlyPublished ? 0 : 1 }),
+        });
+        if (res.ok) window.location.reload();
+        else alert('Failed to update post status.');
+      }
+    });
+  });
+</script>
+
+<style>
+  .admin-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+  }
+
+  .admin-subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin-top: 4px;
+  }
+
+  .admin-actions {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .admin-empty {
+    text-align: center;
+    padding: var(--space-8) 0;
+    color: var(--color-text-muted);
+  }
+
+  /* ─── Posts table ─── */
+  .posts-table {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .post-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3);
+    flex-wrap: wrap;
+    transition: border-color var(--transition-fast);
+  }
+
+  .post-row:hover {
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .post-row-main {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex: 1;
+    min-width: 0;
+  }
+
+  .post-row-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    width: 90px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .status-dot.live { background: var(--color-success); }
+  .status-dot.draft { background: var(--color-text-muted); }
+
+  .post-row-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .post-row-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .post-row-slug {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    display: block;
+  }
+
+  .post-row-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .post-row-date {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+  }
+
+  .post-row-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .btn-sm {
+    padding: 5px 12px;
+    font-size: 0.78rem;
+  }
+</style>

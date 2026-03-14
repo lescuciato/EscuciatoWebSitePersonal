@@ -1,0 +1,285 @@
+---
+/**
+ * Games page — cyberpunk-styled game collection feed.
+ * Falls back to hardcoded sample data when the database is empty.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GameCard from '../../components/games/GameCard.astro';
+import { gamesDb, type Game } from '../../lib/db';
+
+let games = gamesDb.getAll();
+
+// Hardcoded placeholder data shown when no games are in the database yet
+const sampleGames: Game[] = [
+  {
+    id: 0,
+    title: 'Cyberpunk 2077',
+    platform: 'PC',
+    status: 'finished',
+    rating: 5,
+    review: 'Night City is a masterpiece of world-building. After all the patches, this became one of my all-time favorites.',
+    cover_url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 0,
+    title: 'Hollow Knight',
+    platform: 'PC',
+    status: 'finished',
+    rating: 5,
+    review: 'Challenging but incredibly rewarding. The art direction and soundtrack are exceptional.',
+    cover_url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/header.jpg',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 0,
+    title: 'Baldur\'s Gate 3',
+    platform: 'PC',
+    status: 'playing',
+    rating: 5,
+    review: 'The depth and reactivity of this game is unmatched. Every decision feels meaningful.',
+    cover_url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 0,
+    title: 'Hades II',
+    platform: 'PC',
+    status: 'queued',
+    rating: 0,
+    review: 'Loved the first one. Early Access looks very promising — in my backlog.',
+    cover_url: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145360/header.jpg',
+    created_at: new Date().toISOString(),
+  },
+];
+
+const displayGames = games.length > 0 ? games : sampleGames;
+const isPlaceholder = games.length === 0;
+---
+
+<BaseLayout
+  title="Games"
+  description="Leonardo Escuciato's game collection — what I'm playing, finished, and in queue."
+>
+  <div class="games-page">
+    <!-- Page hero — cyberpunk style -->
+    <div class="games-hero">
+      <div class="container">
+        <div class="hero-glow" aria-hidden="true"></div>
+        <div class="games-hero-content">
+          <div class="games-badge">
+            <span class="blink-dot"></span>
+            PLAYER ONE READY
+          </div>
+          <h1 class="games-title">
+            <span class="neon-text">GAME</span> COLLECTION
+          </h1>
+          <p class="games-subtitle">
+            What I'm playing, finished, and what's next in the queue.
+          </p>
+        </div>
+
+        <!-- Status legend -->
+        <div class="status-legend">
+          <div class="legend-item"><span class="leg-dot" style="background:#00ff88"></span>Playing Now</div>
+          <div class="legend-item"><span class="leg-dot" style="background:#a78bfa"></span>Finished</div>
+          <div class="legend-item"><span class="leg-dot" style="background:#fbbf24"></span>In Queue</div>
+          <div class="legend-item"><span class="leg-dot" style="background:#94a3b8"></span>Paused</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Games grid -->
+    <div class="container games-container">
+      {isPlaceholder && (
+        <div class="placeholder-notice" role="note">
+          Showing sample data. Add games via the
+          <a href="/games/admin">admin panel</a>.
+        </div>
+      )}
+
+      <div class="games-grid">
+        {displayGames.map((game) => (
+          <GameCard
+            id={game.id}
+            title={game.title}
+            platform={game.platform}
+            status={game.status}
+            rating={game.rating}
+            review={game.review}
+            cover_url={game.cover_url}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ─── Page wrapper ─── */
+  .games-page {
+    min-height: 100vh;
+  }
+
+  /* ─── Hero section — cyberpunk aesthetic ─── */
+  .games-hero {
+    position: relative;
+    background: #050510;
+    padding: 80px 0 60px;
+    overflow: hidden;
+    border-bottom: 1px solid #0d0d30;
+  }
+
+  /* Animated grid background */
+  .games-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(99, 102, 241, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Glow effect */
+  .hero-glow {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .games-hero-content {
+    position: relative;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .games-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(0, 255, 136, 0.08);
+    border: 1px solid rgba(0, 255, 136, 0.25);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #00ff88;
+    margin-bottom: 24px;
+  }
+
+  .blink-dot {
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .games-title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    margin-bottom: 16px;
+    color: #e2e8f0;
+    text-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
+  }
+
+  .neon-text {
+    background: linear-gradient(135deg, #6366f1 0%, #a78bfa 50%, #e879f9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(167, 139, 250, 0.5));
+  }
+
+  .games-subtitle {
+    font-size: 1rem;
+    color: #64748b;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ─── Status legend ─── */
+  .status-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #64748b;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .leg-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ─── Games grid ─── */
+  .games-container {
+    padding-top: 48px;
+    padding-bottom: 80px;
+  }
+
+  .placeholder-notice {
+    margin-bottom: 24px;
+    padding: 10px 16px;
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+  }
+
+  .placeholder-notice a {
+    color: #a78bfa;
+  }
+
+  .games-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media (min-width: 480px) {
+    .games-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .games-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .games-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

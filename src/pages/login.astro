@@ -1,0 +1,128 @@
+---
+/**
+ * Login page — single password field for admin access.
+ * On success: sets session cookie and redirects to /blog/admin.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getSession } from '../lib/auth';
+
+// If already logged in, redirect directly
+const session = await getSession(Astro.request);
+if (session) {
+  return Astro.redirect('/blog/admin');
+}
+
+const next = Astro.url.searchParams.get('next') ?? '/blog/admin';
+const error = Astro.url.searchParams.get('error');
+---
+
+<BaseLayout title="Login" description="Admin login">
+  <div class="login-page">
+    <div class="login-card card-glass">
+      <div class="login-icon" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+
+      <h1 class="login-title">Admin Access</h1>
+      <p class="login-subtitle">Enter your password to continue.</p>
+
+      {error && (
+        <div class="login-error" role="alert">
+          Incorrect password. Please try again.
+        </div>
+      )}
+
+      <form method="POST" action="/api/auth/login" class="login-form">
+        <input type="hidden" name="next" value={next} />
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-input"
+            autocomplete="current-password"
+            required
+            autofocus
+            placeholder="Enter admin password"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary login-submit">
+          Sign In
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+    padding: var(--space-6) var(--space-2);
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: var(--space-6) var(--space-4);
+    text-align: center;
+  }
+
+  .login-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    color: var(--color-accent-2);
+    margin-bottom: var(--space-3);
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .login-subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-4);
+  }
+
+  .login-error {
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius-sm);
+    color: #f87171;
+    font-size: 0.875rem;
+    margin-bottom: var(--space-3);
+    text-align: left;
+  }
+
+  .login-form {
+    text-align: left;
+  }
+
+  .login-submit {
+    width: 100%;
+    justify-content: center;
+    margin-top: var(--space-1);
+  }
+</style>

@@ -1,0 +1,133 @@
+---
+/**
+ * Achievements — 4 key impact cards from Leonardo's career.
+ */
+
+const achievements = [
+  {
+    icon: '⚡',
+    title: 'Jira Automation Integration',
+    description:
+      'Managed integration of Jira automation improving task efficiency across agile teams.',
+  },
+  {
+    icon: '🐛',
+    title: 'Bug Reduction Strategy',
+    description:
+      'Led team to significantly reduce bug incidence through effective Kanban practices and quality gates.',
+  },
+  {
+    icon: '📊',
+    title: 'Project Metrics Enhancement',
+    description:
+      'Implemented KPI frameworks and dashboards enhancing project visibility for stakeholders.',
+  },
+  {
+    icon: '🚀',
+    title: 'Team Delivery Speed Up',
+    description:
+      'Increased team delivery speed through effective backlog prioritization and agile coaching.',
+  },
+];
+---
+
+<section class="section achievements">
+  <div class="container">
+    <div class="section-header fade-in">
+      <h2 class="section-title">Key <span>Achievements</span></h2>
+      <p class="section-subtitle">Impact delivered across agile transformations and team leadership roles.</p>
+    </div>
+
+    <div class="achievements-grid">
+      {achievements.map((item, i) => (
+        <article class="achievement-card fade-in" style={`transition-delay: ${i * 80}ms`}>
+          <div class="achievement-icon" aria-hidden="true">{item.icon}</div>
+          <h3 class="achievement-title">{item.title}</h3>
+          <p class="achievement-desc">{item.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+
+  .section-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    max-width: 520px;
+    margin: var(--space-1) auto 0;
+  }
+
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .achievements-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .achievements-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .achievement-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    transition: border-color var(--transition-base), transform var(--transition-base);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .achievement-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
+  .achievement-card:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-4px);
+  }
+
+  .achievement-card:hover::before {
+    opacity: 1;
+  }
+
+  .achievement-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-2);
+    display: block;
+  }
+
+  .achievement-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+    color: var(--color-text);
+  }
+
+  .achievement-desc {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+</style>

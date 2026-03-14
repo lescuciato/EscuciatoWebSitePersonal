@@ -1,0 +1,133 @@
+---
+/**
+ * PostCard — displays a blog post summary in the feed.
+ */
+interface Props {
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  tags: string | null;
+  created_at: string;
+}
+
+const { slug, title, excerpt, tags, created_at } = Astro.props;
+
+const tagList = tags ? tags.split(',').map((t) => t.trim()).filter(Boolean) : [];
+
+const formattedDate = new Date(created_at).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="post-card card fade-in">
+  <header class="post-card-header">
+    <time class="post-date" datetime={created_at}>{formattedDate}</time>
+    {tagList.length > 0 && (
+      <div class="post-tags" aria-label="Tags">
+        {tagList.slice(0, 3).map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    )}
+  </header>
+
+  <h2 class="post-title">
+    <a href={`/blog/${slug}`}>{title}</a>
+  </h2>
+
+  {excerpt && (
+    <p class="post-excerpt">{excerpt}</p>
+  )}
+
+  <footer class="post-card-footer">
+    <a href={`/blog/${slug}`} class="post-read-more" aria-label={`Read more about ${title}`}>
+      Read more
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </a>
+  </footer>
+</article>
+
+<style>
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    height: 100%;
+  }
+
+  .post-card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .post-date {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+  }
+
+  .post-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .post-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .post-title a {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .post-title a:hover {
+    color: var(--color-accent-2);
+  }
+
+  .post-excerpt {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    flex: 1;
+
+    /* Clamp to 3 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-card-footer {
+    margin-top: auto;
+    padding-top: var(--space-1);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .post-read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-accent-2);
+    text-decoration: none;
+    transition: gap var(--transition-fast), color var(--transition-fast);
+  }
+
+  .post-read-more:hover {
+    gap: 10px;
+    color: var(--color-accent);
+  }
+</style>

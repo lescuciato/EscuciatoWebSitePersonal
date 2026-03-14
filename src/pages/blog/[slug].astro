@@ -1,0 +1,250 @@
+---
+/**
+ * Individual blog post page.
+ * Renders the post HTML content from the database.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { postsDb } from '../../lib/db';
+
+const { slug } = Astro.params;
+const post = postsDb.getBySlug(slug!);
+
+// 404 if post not found or not published
+if (!post || !post.published) {
+  return Astro.redirect('/blog');
+}
+
+const tagList = post.tags
+  ? post.tags.split(',').map((t) => t.trim()).filter(Boolean)
+  : [];
+
+const formattedDate = new Date(post.created_at).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout
+  title={post.title}
+  description={post.excerpt ?? undefined}
+>
+  <article class="post-page section">
+    <div class="container post-container">
+      <!-- Back link -->
+      <a href="/blog" class="post-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Back to Blog
+      </a>
+
+      <!-- Post header -->
+      <header class="post-header">
+        <div class="post-meta">
+          <time datetime={post.created_at} class="post-date">{formattedDate}</time>
+          <span class="post-author">by Leonardo Escuciato</span>
+        </div>
+
+        {tagList.length > 0 && (
+          <div class="post-tags" aria-label="Tags">
+            {tagList.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        )}
+
+        <h1 class="post-title">{post.title}</h1>
+
+        {post.excerpt && (
+          <p class="post-excerpt">{post.excerpt}</p>
+        )}
+      </header>
+
+      <!-- Post content — rendered HTML from TipTap -->
+      <div class="post-content prose" set:html={post.content} />
+
+      <!-- Post footer -->
+      <footer class="post-footer">
+        <a href="/blog" class="btn btn-ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 19"/>
+          </svg>
+          Back to Blog
+        </a>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-container {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .post-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    margin-bottom: var(--space-6);
+    transition: color var(--transition-fast);
+  }
+
+  .post-back:hover {
+    color: var(--color-accent-2);
+  }
+
+  .post-header {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .post-date {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .post-author {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+
+  .post-author::before {
+    content: '·';
+    margin-right: var(--space-2);
+  }
+
+  .post-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-3);
+  }
+
+  .post-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--space-2);
+  }
+
+  .post-excerpt {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  /* ─── Prose styles (rendered post content) ─── */
+  .post-content {
+    color: var(--color-text);
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .post-content :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 2rem 0 0.75rem;
+    color: var(--color-text);
+  }
+
+  .post-content :global(h3) {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.5rem;
+    color: var(--color-text);
+  }
+
+  .post-content :global(p) {
+    margin-bottom: 1rem;
+  }
+
+  .post-content :global(strong) {
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .post-content :global(em) {
+    font-style: italic;
+    color: #cbd5e1;
+  }
+
+  .post-content :global(a) {
+    color: var(--color-accent-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .post-content :global(code) {
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(15, 15, 19, 0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: var(--color-accent-2);
+    border: 1px solid var(--color-border);
+  }
+
+  .post-content :global(pre) {
+    background: #0a0a10;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  .post-content :global(pre code) {
+    background: none;
+    padding: 0;
+    border: none;
+    color: #94a3b8;
+    font-size: 0.88rem;
+  }
+
+  .post-content :global(blockquote) {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .post-content :global(ul) {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+    list-style: disc;
+  }
+
+  .post-content :global(ol) {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+    list-style: decimal;
+  }
+
+  .post-content :global(li) {
+    margin-bottom: 0.35rem;
+  }
+
+  .post-footer {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+</style>

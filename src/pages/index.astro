@@ -1,0 +1,20 @@
+---
+/**
+ * Home page — professional presentation for Leonardo Escuciato.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import Achievements from '../components/home/Achievements.astro';
+import Experience from '../components/home/Experience.astro';
+import Skills from '../components/home/Skills.astro';
+---
+
+<BaseLayout
+  title="Home"
+  description="Leonardo Escuciato — Sr. Atlassian Consultant based in Campinas, São Paulo, Brazil. Atlassian Certified (ACP-620, ACP-120)."
+>
+  <Hero />
+  <Achievements />
+  <Experience />
+  <Skills />
+</BaseLayout>

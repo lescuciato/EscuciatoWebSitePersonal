@@ -1,0 +1,97 @@
+---
+/**
+ * Skills — tag cloud of technical and soft skills.
+ */
+
+const skills = [
+  'Atlassian Suite',
+  'Jira',
+  'Confluence',
+  'Jira Service Desk',
+  'Scrum',
+  'Agile Methodologies',
+  'SAFe',
+  'Project Management',
+  'Team Leadership',
+  'Kanban',
+  'OKRs & KPIs',
+  'Backlog Refinement',
+  'Git',
+  'Software Configuration Management',
+  'Stakeholder Communication',
+];
+---
+
+<section class="section skills-section">
+  <div class="container">
+    <div class="skills-inner fade-in">
+      <h2 class="section-title">Skills & <span>Expertise</span></h2>
+      <p class="skills-summary">
+        Experience managing teams on software development for web and mobile. Team
+        management, agile transformation, and tooling expertise across the
+        Atlassian ecosystem.
+      </p>
+      <div class="skills-grid" role="list">
+        {skills.map((skill) => (
+          <span class="skill-tag" role="listitem">{skill}</span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .skills-inner {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6) var(--space-4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Accent top border */
+  .skills-inner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2), transparent);
+  }
+
+  .skills-summary {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 680px;
+    margin: var(--space-2) 0 var(--space-4);
+  }
+
+  .skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .skill-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 100px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    cursor: default;
+  }
+
+  .skill-tag:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: var(--color-accent);
+    color: var(--color-text);
+    transform: translateY(-1px);
+  }
+</style>

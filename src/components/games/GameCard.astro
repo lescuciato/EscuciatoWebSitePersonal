@@ -1,0 +1,241 @@
+---
+/**
+ * GameCard — displays a single game entry with cyberpunk-inspired styling.
+ */
+interface Props {
+  id: number;
+  title: string;
+  platform: string | null;
+  status: string;
+  rating: number;
+  review: string | null;
+  cover_url: string | null;
+  showAdminControls?: boolean;
+}
+
+const { id, title, platform, status, rating, review, cover_url, showAdminControls = false } = Astro.props;
+
+const statusConfig: Record<string, { label: string; color: string; emoji: string }> = {
+  playing:  { label: 'Playing Now',  color: '#00ff88', emoji: '🎮' },
+  finished: { label: 'Finished',     color: '#a78bfa', emoji: '✅' },
+  queued:   { label: 'In Queue',     color: '#fbbf24', emoji: '📋' },
+  paused:   { label: 'Paused',       color: '#94a3b8', emoji: '⏸️' },
+};
+
+const statusInfo = statusConfig[status] ?? statusConfig.queued;
+
+const stars = Array.from({ length: 5 }, (_, i) => i < rating);
+---
+
+<article class="game-card" data-status={status}>
+  <!-- Cover image -->
+  <div class="game-cover">
+    {cover_url ? (
+      <img
+        src={cover_url}
+        alt={`${title} cover art`}
+        width="280"
+        height="160"
+        loading="lazy"
+        class="cover-img"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      />
+    ) : null}
+    <div class="cover-fallback" style={!cover_url ? 'display:flex' : ''} aria-hidden="true">
+      <span>🎮</span>
+    </div>
+    <div class="cover-overlay" aria-hidden="true"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="game-body">
+    <div class="game-meta">
+      {platform && (
+        <span class="game-platform">{platform}</span>
+      )}
+      <span
+        class="game-status"
+        style={`color: ${statusInfo.color}; border-color: ${statusInfo.color}40; background: ${statusInfo.color}12`}
+        aria-label={`Status: ${statusInfo.label}`}
+      >
+        {statusInfo.emoji} {statusInfo.label}
+      </span>
+    </div>
+
+    <h3 class="game-title">{title}</h3>
+
+    <!-- Star rating -->
+    <div class="game-rating" role="img" aria-label={`Rating: ${rating} out of 5 stars`}>
+      {stars.map((filled) => (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill={filled ? '#fbbf24' : 'none'} stroke={filled ? '#fbbf24' : '#2a2a3a'} stroke-width="2" aria-hidden="true">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      ))}
+    </div>
+
+    {review && (
+      <p class="game-review">{review}</p>
+    )}
+
+    {showAdminControls && (
+      <div class="game-admin">
+        <a href={`/games/admin?edit=${id}`} class="btn btn-ghost btn-sm">Edit</a>
+        <button
+          class="btn btn-danger btn-sm"
+          data-game-id={id}
+          onclick={`deleteGame(${id})`}
+        >
+          Delete
+        </button>
+      </div>
+    )}
+  </div>
+
+  <!-- Scanline effect (cyberpunk aesthetic) -->
+  <div class="scanlines" aria-hidden="true"></div>
+</article>
+
+<style>
+  .game-card {
+    position: relative;
+    background: #0d0d1a;
+    border: 1px solid #1e1e3a;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+  }
+
+  .game-card:hover {
+    transform: translateY(-6px);
+    border-color: #6366f1;
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.25), 0 0 60px rgba(99, 102, 241, 0.1);
+  }
+
+  /* ─── Cover ─── */
+  .game-cover {
+    position: relative;
+    height: 160px;
+    background: #0a0a18;
+    overflow: hidden;
+  }
+
+  .cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms ease;
+  }
+
+  .game-card:hover .cover-img {
+    transform: scale(1.05);
+  }
+
+  .cover-fallback {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 3rem;
+    background: linear-gradient(135deg, #0a0a18 0%, #1a0a2e 100%);
+  }
+
+  .cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #0d0d1a 0%, transparent 60%);
+  }
+
+  /* ─── Body ─── */
+  .game-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .game-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .game-platform {
+    font-size: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    padding: 2px 8px;
+    background: rgba(99, 102, 241, 0.15);
+    color: #a78bfa;
+    border-radius: 4px;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .game-status {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 100px;
+    border: 1px solid;
+    letter-spacing: 0.02em;
+  }
+
+  .game-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    line-height: 1.3;
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+
+  .game-rating {
+    display: flex;
+    gap: 3px;
+  }
+
+  .game-review {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ─── Admin controls ─── */
+  .game-admin {
+    display: flex;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #1e1e3a;
+  }
+
+  .btn-sm {
+    padding: 5px 12px;
+    font-size: 0.78rem;
+  }
+
+  /* ─── Scanlines overlay (subtle CRT effect) ─── */
+  .scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 250ms ease;
+  }
+
+  .game-card:hover .scanlines {
+    opacity: 1;
+  }
+</style>
