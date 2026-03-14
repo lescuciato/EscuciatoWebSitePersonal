@@ -18,3 +18,10 @@ Thumbs.db
 
 # Astro cache
 .astro/
+
+# Documentação privada com dados sensíveis
+docs/PRIVADO.md
+docs/servidor/
+
+# Instruções de agentes IA (contêm dados de infraestrutura)
+CLAUDE.md

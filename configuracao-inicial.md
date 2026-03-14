@@ -1,8 +1,8 @@
 # Configuração Inicial do Servidor VPS
 
 **Data:** 13/03/2026
-**Servidor:** Hostinger VPS — `srv1103792.hstgr.cloud`
-**IP:** `72.61.39.74`
+**Servidor:** Hostinger VPS — `<HOSTNAME_DO_SERVIDOR>`
+**IP:** `<IP_DO_SERVIDOR>`
 **OS:** Ubuntu 24.04 LTS
 
 ---
@@ -182,7 +182,7 @@ services:
       # Habilitar roteamento pelo Traefik
       - "traefik.enable=true"
       # Rota HTTPS
-      - "traefik.http.routers.website.rule=Host(`srv1103792.hstgr.cloud`)"
+      - "traefik.http.routers.website.rule=Host(`<HOSTNAME_DO_SERVIDOR>`)"
       - "traefik.http.routers.website.entrypoints=websecure"
       - "traefik.http.routers.website.tls.certresolver=mytlschallenge"
     networks:
@@ -217,15 +217,15 @@ docker ps | grep website
 
 ```bash
 # Testar HTTPS
-curl -sk https://srv1103792.hstgr.cloud/
+curl -sk https://<HOSTNAME_DO_SERVIDOR>/
 # Resposta esperada: conteúdo HTML da página
 
 # Testar redirecionamento HTTP → HTTPS
-curl -I http://srv1103792.hstgr.cloud/
+curl -I http://<HOSTNAME_DO_SERVIDOR>/
 # Resposta esperada: 308 Permanent Redirect
 ```
 
-Resultado: site acessível em **https://srv1103792.hstgr.cloud** com HTTPS válido.
+Resultado: site acessível em **https://<HOSTNAME_DO_SERVIDOR>** com HTTPS válido.
 
 ---
 
@@ -235,7 +235,7 @@ Resultado: site acessível em **https://srv1103792.hstgr.cloud** com HTTPS váli
 
 ```bash
 # Dentro da pasta do projeto Astro
-git remote add production root@72.61.39.74:/root/repos/website.git
+git remote add production root@<IP_DO_SERVIDOR>:/root/repos/website.git
 ```
 
 ### A cada deploy

@@ -6,9 +6,9 @@
 
 import { SignJWT, jwtVerify } from 'jose';
 
-const JWT_SECRET = new TextEncoder().encode(
-  import.meta.env.JWT_SECRET || 'fallback-dev-secret-change-in-production'
-);
+const jwtSecretValue = import.meta.env.JWT_SECRET;
+if (!jwtSecretValue) throw new Error('JWT_SECRET environment variable must be set');
+const JWT_SECRET = new TextEncoder().encode(jwtSecretValue);
 const COOKIE_NAME = 'session';
 const SESSION_DURATION = '7d';
 
