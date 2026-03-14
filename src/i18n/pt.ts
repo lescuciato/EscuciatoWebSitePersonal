@@ -27,7 +27,7 @@ export const pt = {
       { emoji: '🎮', label: 'Video Games', description: 'Aventuras digitais de todo tipo' },
       { emoji: '🍖', label: 'Boa Mesa', description: 'Churrasco, vinho e boa companhia' },
       { emoji: '⚽', label: 'Futebol', description: 'Torcedor da Macaca' },
-      { emoji: '👶', label: 'Pedrinho chegando', description: 'Em agosto chega o Pedro!' },
+      { emoji: '🐣', label: 'Pedrinho chegando', description: 'Em agosto chega o Pedro!' },
     ],
   },
 

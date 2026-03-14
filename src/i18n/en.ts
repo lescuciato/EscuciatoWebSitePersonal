@@ -29,7 +29,7 @@ export const en: Translations = {
       { emoji: '🎮', label: 'Video Games', description: 'Digital adventures of all kinds' },
       { emoji: '🍖', label: 'Good Food', description: 'BBQ, wine, and great company' },
       { emoji: '⚽', label: 'Football', description: 'Ponte Preta supporter' },
-      { emoji: '👶', label: 'Pedrinho is coming!', description: 'Pedro arrives in August!' },
+      { emoji: '🐣', label: 'Pedrinho is coming!', description: 'Pedro arrives in August!' },
     ],
   },
 
