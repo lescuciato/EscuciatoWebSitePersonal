@@ -9,4 +9,7 @@ export default defineConfig({
     mode: 'standalone'
   }),
   integrations: [react(), tailwind()],
+  security: {
+    checkOrigin: false,
+  },
 });
