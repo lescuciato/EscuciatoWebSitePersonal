@@ -71,7 +71,7 @@ export const POST: APIRoute = async ({ request }) => {
   resetRateLimit(ip);
 
   const token = await createSessionToken();
-  const cookie = buildSessionCookie(token);
+  const cookie = buildSessionCookie(token, request.url);
   const redirectTo = safeRedirect(next);
 
   return new Response(null, {

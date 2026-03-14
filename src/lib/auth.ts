@@ -83,21 +83,22 @@ export async function verifySessionToken(
 
 /**
  * Build the Set-Cookie header string for the session cookie.
- * Adds the Secure flag in production environments.
+ * Adds the Secure flag only when the request was made over HTTPS.
  */
-export function buildSessionCookie(token: string): string {
+export function buildSessionCookie(token: string, requestUrl: string): string {
   const expires = new Date(Date.now() + SESSION_MS).toUTCString();
-  const isProduction = import.meta.env.PROD;
-  const secureFlag = isProduction ? '; Secure' : '';
+  const isHttps = requestUrl.startsWith('https://');
+  const secureFlag = isHttps ? '; Secure' : '';
   return `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax${secureFlag}; Expires=${expires}`;
 }
 
 /**
  * Build the Set-Cookie header that clears the session cookie.
+ * Adds the Secure flag only when the request was made over HTTPS.
  */
-export function clearSessionCookie(): string {
-  const isProduction = import.meta.env.PROD;
-  const secureFlag = isProduction ? '; Secure' : '';
+export function clearSessionCookie(requestUrl: string): string {
+  const isHttps = requestUrl.startsWith('https://');
+  const secureFlag = isHttps ? '; Secure' : '';
   return `${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax${secureFlag}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 }
 

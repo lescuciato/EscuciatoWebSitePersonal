@@ -27,7 +27,7 @@ export const GET: APIRoute = async ({ request }) => {
   return new Response(null, {
     status: 302,
     headers: {
-      'Set-Cookie': clearSessionCookie(),
+      'Set-Cookie': clearSessionCookie(request.url),
       Location: '/',
     },
   });
