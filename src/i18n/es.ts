@@ -257,7 +257,7 @@ export const es: Translations = {
           'IP de tu servidor y contraseña root',
           'Dominio o subdominio que apunta al servidor',
           'Tu currículum / experiencias profesionales (texto o PDF)',
-          'Una contraseña para el admin del blog y una clave JWT (cualquier cadena aleatoria larga)',
+          'Una contraseña fuerte para el admin del blog (combina mayúsculas, minúsculas, números y símbolos) y un secreto JWT (cadena aleatoria de mínimo 32 caracteres)',
           'Steam ID o vanity URL (opcional)',
         ],
         prompt1Badge: 'Prompt 1 de 2',
@@ -291,6 +291,7 @@ Stack deseado (no modificar):
 - JWT (librería jose) para autenticación del admin
 - PM2 para gestionar el proceso Node.js
 - Nginx (Docker) como proxy inverso hacia el puerto 4321
+- sanitize-html para sanitización del contenido del blog
 
 Páginas que debe tener el sitio:
 1. Inicio — presentación personal con hobbies
@@ -299,9 +300,20 @@ Páginas que debe tener el sitio:
 4. Games — integración opcional con Steam API (la sección puede quedar vacía por ahora)
 5. Acerca de — documentación técnica del proyecto
 
+Requisitos de seguridad obligatorios (aplicar todos):
+- Rate limiting en el endpoint de login para dificultar ataques de fuerza bruta
+- Invalidación de token JWT al cerrar sesión (revocar en el servidor, no solo borrar la cookie)
+- Comparación de contraseña en tiempo constante (crypto.timingSafeEqual) para prevenir timing attacks
+- Cookie de sesión con flag Secure en conexiones HTTPS
+- Sanitización del HTML del blog con allowlist via sanitize-html antes de renderizar
+- Validación de parámetros de redirección para prevenir open redirect
+- Respuestas de error genéricas para no exponer detalles internos del sistema
+- Sesión con tiempo de expiración limitado
+
 Tarea de los agentes:
-- web-dev-craftsman: crear el proyecto Astro completo localmente con el stack anterior
+- web-dev-craftsman: crear el proyecto Astro completo localmente con el stack anterior, aplicando todos los requisitos de seguridad
 - vps-devops-manager: configurar el servidor (repositorio bare + hook de despliegue + Nginx Docker + PM2)
+- security-auditor: verificar el código generado antes del primer despliegue
 
 Al finalizar:
 - Mostrar el contenido del archivo ~/.ssh/id_ed25519.pub (clave SSH pública)
@@ -320,8 +332,8 @@ Al finalizar:
         prompt2Body: `La clave SSH ya fue autorizada en el servidor. Ahora ejecuta los pasos finales:
 
 1. vps-devops-manager: crear el archivo .env en el servidor en /root/MiSitio/source/.env con:
-   ADMIN_PASSWORD=[CONTRASEÑA_ADMIN_BLOG]
-   JWT_SECRET=[CADENA_ALEATORIA_MIN_32_CHARS]
+   ADMIN_PASSWORD=[CONTRASEÑA FUERTE — ej: MiP@ssw0rd2025! — usa mayúsculas, minúsculas, números y símbolos]
+   JWT_SECRET=[CADENA ALEATORIA MIN 32 CHARS — genera con: openssl rand -base64 48]
    HOST=0.0.0.0
    PORT=4321
    (Si quieres Steam: STEAM_API_KEY=[TU_CLAVE_STEAM] y STEAM_ID=[TU_STEAM_ID])
@@ -332,7 +344,10 @@ Al finalizar:
 
 3. vps-devops-manager: verificar que PM2 inició correctamente tras el despliegue
 
-4. qa-bug-hunter: acceder a [TU_DOMINIO] y verificar que el sitio funciona —
+4. security-auditor: verificar que no hay credenciales expuestas en el repositorio
+   y que el flujo de autenticación en producción funciona correctamente
+
+5. qa-bug-hunter: acceder a [TU_DOMINIO] y verificar que el sitio funciona —
    revisar inicio, blog, profesional y games
 
 Al finalizar, mostrar la URL pública del sitio.`,
