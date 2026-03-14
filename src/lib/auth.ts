@@ -5,35 +5,75 @@
  */
 
 import { SignJWT, jwtVerify } from 'jose';
+import { timingSafeEqual, createHash, randomUUID } from 'crypto';
+import db from './db';
 
 const jwtSecretValue = import.meta.env.JWT_SECRET;
 if (!jwtSecretValue) throw new Error('JWT_SECRET environment variable must be set');
 const JWT_SECRET = new TextEncoder().encode(jwtSecretValue);
 const COOKIE_NAME = 'session';
-const SESSION_DURATION = '7d';
+const SESSION_DURATION = '8h';
+const SESSION_MS = 8 * 60 * 60 * 1000;
+
+// ─── Revoked tokens table ─────────────────────────────────────────────────────
+
+// Create revoked_tokens table if it does not exist
+db.exec(`
+  CREATE TABLE IF NOT EXISTS revoked_tokens (
+    jti        TEXT    PRIMARY KEY,
+    revoked_at INTEGER NOT NULL,
+    expires_at INTEGER NOT NULL
+  )
+`);
+
+// Prune tokens that have already expired — they can never be used again anyway
+db.exec(`DELETE FROM revoked_tokens WHERE expires_at < unixepoch()`);
+
+/**
+ * Mark a JWT ID as revoked until its expiry timestamp (Unix seconds).
+ */
+export function revokeToken(jti: string, expiresAt: number): void {
+  db.prepare(
+    `INSERT OR IGNORE INTO revoked_tokens (jti, revoked_at, expires_at)
+     VALUES (?, unixepoch(), ?)`
+  ).run(jti, expiresAt);
+}
+
+/**
+ * Return true if the given JWT ID has been explicitly revoked.
+ */
+export function isTokenRevoked(jti: string): boolean {
+  const row = db.prepare('SELECT 1 FROM revoked_tokens WHERE jti = ?').get(jti);
+  return row !== undefined;
+}
 
 // ─── Token helpers ────────────────────────────────────────────────────────────
 
 /**
  * Generate a signed JWT for an authenticated admin session.
+ * Includes a unique `jti` (JWT ID) to support server-side revocation.
  */
 export async function createSessionToken(): Promise<string> {
   return new SignJWT({ role: 'admin' })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(SESSION_DURATION)
+    .setJti(randomUUID())
     .sign(JWT_SECRET);
 }
 
 /**
- * Verify a JWT token. Returns the payload on success, null on failure.
+ * Verify a JWT token and check it has not been revoked.
+ * Returns the payload (including jti and exp) on success, null on failure.
  */
 export async function verifySessionToken(
   token: string
-): Promise<{ role: string } | null> {
+): Promise<{ role: string; jti?: string; exp?: number } | null> {
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET);
-    return payload as { role: string };
+    const jti = payload.jti;
+    if (jti && isTokenRevoked(jti)) return null;
+    return payload as { role: string; jti?: string; exp?: number };
   } catch {
     return null;
   }
@@ -43,17 +83,23 @@ export async function verifySessionToken(
 
 /**
  * Build the Set-Cookie header string for the session cookie.
+ * Adds the Secure flag only when the request was made over HTTPS.
  */
-export function buildSessionCookie(token: string): string {
-  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
-  return `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax; Expires=${expires}`;
+export function buildSessionCookie(token: string, requestUrl: string): string {
+  const expires = new Date(Date.now() + SESSION_MS).toUTCString();
+  const isHttps = requestUrl.startsWith('https://');
+  const secureFlag = isHttps ? '; Secure' : '';
+  return `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax${secureFlag}; Expires=${expires}`;
 }
 
 /**
  * Build the Set-Cookie header that clears the session cookie.
+ * Adds the Secure flag only when the request was made over HTTPS.
  */
-export function clearSessionCookie(): string {
-  return `${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+export function clearSessionCookie(requestUrl: string): string {
+  const isHttps = requestUrl.startsWith('https://');
+  const secureFlag = isHttps ? '; Secure' : '';
+  return `${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax${secureFlag}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 }
 
 /**
@@ -73,7 +119,7 @@ export function extractTokenFromCookies(cookieHeader: string | null): string | n
  */
 export async function getSession(
   request: Request
-): Promise<{ role: string } | null> {
+): Promise<{ role: string; jti?: string; exp?: number } | null> {
   const cookieHeader = request.headers.get('cookie');
   const token = extractTokenFromCookies(cookieHeader);
   if (!token) return null;
@@ -82,11 +128,14 @@ export async function getSession(
 
 /**
  * Verify the plain-text password against the ADMIN_PASSWORD env var.
+ * Uses timing-safe comparison via SHA-256 hashes to prevent timing attacks.
  */
 export function checkPassword(password: string): boolean {
   const adminPassword = import.meta.env.ADMIN_PASSWORD;
   if (!adminPassword) return false;
-  return password === adminPassword;
+  const a = Buffer.from(createHash('sha256').update(password).digest('hex'));
+  const b = Buffer.from(createHash('sha256').update(adminPassword).digest('hex'));
+  return timingSafeEqual(a, b);
 }
 
 export { COOKIE_NAME };

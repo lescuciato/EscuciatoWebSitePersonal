@@ -6,6 +6,7 @@
 import type { APIRoute } from 'astro';
 import { postsDb } from '../../../lib/db';
 import { getSession } from '../../../lib/auth';
+import { sanitizePostContent } from '../../../lib/sanitize';
 
 function generateSlug(title: string): string {
   const base = title
@@ -67,7 +68,8 @@ export const PUT: APIRoute = async ({ request, params }) => {
   }
 
   const title = body.title ?? post.title;
-  const content = body.content ?? post.content;
+  const rawContent = body.content ?? post.content;
+  const content = sanitizePostContent(rawContent);
   const excerpt = body.excerpt ?? post.excerpt ?? '';
   const tags = body.tags ?? post.tags ?? '';
   const published = body.published ?? post.published;
@@ -80,9 +82,9 @@ export const PUT: APIRoute = async ({ request, params }) => {
     return new Response(JSON.stringify({ slug }), {
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Database error';
-    return new Response(JSON.stringify({ message }), {
+  } catch (err) {
+    console.error('[API Error] PUT /api/posts/[id]', err);
+    return new Response(JSON.stringify({ message: 'Internal server error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

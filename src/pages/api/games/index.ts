@@ -7,6 +7,14 @@ import type { APIRoute } from 'astro';
 import { gamesDb } from '../../../lib/db';
 import { getSession } from '../../../lib/auth';
 
+/**
+ * Validate that cover_url is either absent/empty or a valid http/https URL.
+ */
+function isValidUrl(url: string | null | undefined): boolean {
+  if (!url) return true; // field is optional
+  return /^https?:\/\//.test(url);
+}
+
 export const GET: APIRoute = ({ request: _request }) => {
   const games = gamesDb.getAll();
   return new Response(JSON.stringify(games), {
@@ -50,15 +58,22 @@ export const POST: APIRoute = async ({ request }) => {
     });
   }
 
+  if (!isValidUrl(cover_url)) {
+    return new Response(JSON.stringify({ message: 'Invalid cover_url' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   try {
     const result = gamesDb.create({ title, platform, status, rating, review, cover_url });
     return new Response(JSON.stringify({ id: result.lastInsertRowid }), {
       status: 201,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Database error';
-    return new Response(JSON.stringify({ message }), {
+  } catch (err) {
+    console.error('[API Error] POST /api/games', err);
+    return new Response(JSON.stringify({ message: 'Internal server error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
