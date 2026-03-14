@@ -114,7 +114,7 @@ export const es: Translations = {
       architecture: '3. Arquitectura',
       local: '4. Ejecutar Localmente',
       deploy: '5. Despliegue',
-      seguranca: 'Seguridad',
+      seguranca: '6. Seguridad',
       agents: '7. Agentes Claude Code',
       guide: '8. Guía desde Cero',
       ai: '10. Usando IA',

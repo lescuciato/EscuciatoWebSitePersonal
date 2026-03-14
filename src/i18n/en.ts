@@ -114,7 +114,7 @@ export const en: Translations = {
       architecture: '3. Architecture',
       local: '4. Run Locally',
       deploy: '5. Deploy',
-      seguranca: 'Security',
+      seguranca: '6. Security',
       agents: '7. Claude Code Agents',
       guide: '8. Guide from Scratch',
       ai: '10. Using AI',

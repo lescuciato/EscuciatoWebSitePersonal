@@ -112,7 +112,7 @@ export const pt = {
       architecture: '3. Arquitetura',
       local: '4. Rodar Localmente',
       deploy: '5. Deploy',
-      seguranca: 'Segurança',
+      seguranca: '6. Segurança',
       agents: '7. Agentes Claude Code',
       guide: '8. Guia do Zero',
       ai: '10. Usando AI',
