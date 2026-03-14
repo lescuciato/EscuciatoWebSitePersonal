@@ -8,6 +8,23 @@
 import type { APIRoute } from 'astro';
 import { SUPPORTED_LANGS, type Lang } from '../../i18n/index';
 
+/**
+ * Validate the Referer redirect target to prevent open redirects.
+ * Accepts only relative paths starting with exactly one `/`.
+ */
+function safeReferer(referer: string): string {
+  try {
+    const url = new URL(referer);
+    // Same-origin: return only the path+search+hash
+    if (url.origin === 'null') return '/';
+    return url.pathname + url.search + url.hash;
+  } catch {
+    // Not an absolute URL — treat as relative path
+    if (!referer.startsWith('/') || referer.startsWith('//')) return '/';
+    return referer;
+  }
+}
+
 export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   let lang: string | null = null;
 
@@ -34,9 +51,9 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     sameSite: 'lax',
   });
 
-  // Redirect back to referer or home
+  // Redirect back to referer or home — validate to prevent open redirect
   const referer = request.headers.get('referer') ?? '/';
-  return redirect(referer, 302);
+  return redirect(safeReferer(referer), 302);
 };
 
 // Also support GET with query param (useful for direct links)
@@ -56,5 +73,5 @@ export const GET: APIRoute = async ({ request, cookies, redirect }) => {
   });
 
   const referer = request.headers.get('referer') ?? '/';
-  return redirect(referer, 302);
+  return redirect(safeReferer(referer), 302);
 };
