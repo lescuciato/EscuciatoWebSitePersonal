@@ -48,8 +48,8 @@ const t = useTranslations(lang);
           <a href="#deploy" class="sidebar-link">{t.sobreSite.nav.deploy}</a>
           <a href="#agentes" class="sidebar-link">{t.sobreSite.nav.agents}</a>
           <a href="#guia" class="sidebar-link">{t.sobreSite.nav.guide}</a>
-          <a href="#usando-ai" class="sidebar-link">{t.sobreSite.nav.ai}</a>
           <a href="#i18n" class="sidebar-link">{t.sobreSite.nav.i18n}</a>
+          <a href="#usando-ai" class="sidebar-link">{t.sobreSite.nav.ai}</a>
         </nav>
       </aside>
 
@@ -844,9 +844,57 @@ git push production main</code></pre>
 
         </section>
 
-        <!-- ─── 8. Usando AI ──────────────────────────────────────────────── -->
-        <section id="usando-ai" class="docs-section fade-in">
+        <!-- ─── 8. Internacionalização ────────────────────────────────────── -->
+        <section id="i18n" class="docs-section fade-in">
           <div class="section-number">08</div>
+          <h2>{t.sobreSite.sections.i18n.title}</h2>
+          <p set:html={t.sobreSite.sections.i18n.desc} />
+
+          <h3>{t.sobreSite.sections.i18n.archTitle}</h3>
+          <ul class="docs-list">
+            <li>
+              <strong><code class="inline-code">src/i18n/pt.ts</code>, <code class="inline-code">en.ts</code>, <code class="inline-code">es.ts</code></strong> —
+              <span set:html={t.sobreSite.sections.i18n.archItem1} />
+            </li>
+            <li>
+              <strong><code class="inline-code">src/i18n/index.ts</code></strong> —
+              <span set:html={t.sobreSite.sections.i18n.archItem2} />
+            </li>
+            <li>
+              <strong><code class="inline-code">src/pages/api/set-lang.ts</code></strong> —
+              <span set:html={t.sobreSite.sections.i18n.archItem3} />
+            </li>
+            <li>
+              <strong><code class="inline-code">src/components/layout/LanguageSwitcher.astro</code></strong> —
+              <span set:html={t.sobreSite.sections.i18n.archItem4} />
+            </li>
+          </ul>
+
+          <h3>{t.sobreSite.sections.i18n.howTitle}</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">astro</span>
+              <span class="code-title">{t.sobreSite.sections.i18n.howCodeTitle}</span>
+            </div>
+            <pre><code>import &#123; getLang, useTranslations &#125; from '../i18n/index';
+
+const lang = getLang(Astro.cookies); // 'pt' | 'en' | 'es'
+const t = useTranslations(lang);
+
+{t.sobreSite.sections.i18n.howComment}
+// &#123;t.nav.home&#125; → 'Home' / 'Home' / 'Inicio'
+// &#123;t.hero.contact&#125; → 'Contato' / 'Contact' / 'Contacto'</code></pre>
+          </div>
+
+          <div class="callout callout-info">
+            <span class="callout-icon">&#8505;</span>
+            <p set:html={t.sobreSite.sections.i18n.callout} />
+          </div>
+        </section>
+
+        <!-- ─── 9. Usando AI ──────────────────────────────────────────────── -->
+        <section id="usando-ai" class="docs-section fade-in">
+          <div class="section-number">09</div>
           <h2>{t.sobreSite.sections.usandoAI.title}</h2>
           <p set:html={t.sobreSite.sections.usandoAI.desc1} />
           <p set:html={t.sobreSite.sections.usandoAI.desc2} />
@@ -916,48 +964,7 @@ git push production main</code></pre>
                 <span class="code-lang">prompt</span>
                 <span class="code-title">{t.sobreSite.sections.usandoAI.prompt1CodeTitle}</span>
               </div>
-              <pre><code>Quero construir um site pessoal usando Astro SSR e publicá-lo em um VPS.
-Ao final deste prompt você vai ter:
-1. O projeto completo rodando localmente
-2. O servidor configurado com Nginx + PM2 + pipeline de deploy via Git hook
-3. Exibida na tela a chave SSH pública que precisa ser autorizada no servidor
-
-Informações do projeto:
-- Meu nome: [SEU NOME]
-- Profissão atual: [SUA PROFISSÃO]
-- Cidade: [SUA CIDADE]
-- Hobbies: [HOBBIES]
-- Experiências profissionais: [COLE AQUI OU INFORME CAMINHO DO CV]
-
-Informações do servidor:
-- IP: [IP_DO_SERVIDOR]
-- Usuário: root
-- Domínio/host: [SEU_DOMINIO]
-- Traefik já está rodando no servidor com Let's Encrypt configurado
-
-Stack desejada (não alterar):
-- Astro SSR com @astrojs/node adapter (standalone)
-- React para componentes interativos
-- TipTap para o editor do blog
-- SQLite (better-sqlite3) para os posts
-- JWT (biblioteca jose) para autenticação do admin
-- PM2 para gerenciar o processo Node.js
-- Nginx (Docker) como proxy reverso para a porta 4321
-
-Páginas que o site deve ter:
-1. Home — apresentação pessoal com hobbies
-2. Profissional — timeline de carreira com tooltip no hover
-3. Blog — listagem de posts + editor admin com TipTap (protegido por JWT)
-4. Games — integração opcional com Steam API (seção pode ficar vazia por ora)
-5. Sobre o Site — documentação técnica do projeto
-
-Tarefa dos agentes:
-- web-dev-craftsman: criar todo o projeto Astro localmente com a stack acima
-- vps-devops-manager: configurar o servidor (repositório bare + hook de deploy + Nginx Docker + PM2)
-
-Ao finalizar:
-- Mostrar o conteúdo do arquivo ~/.ssh/id_ed25519.pub (chave SSH pública)
-- Instruir o que precisa ser feito antes do Prompt 2</code></pre>
+              <pre><code>{t.sobreSite.sections.usandoAI.prompt1Body}</code></pre>
             </div>
           </div>
 
@@ -973,13 +980,13 @@ Ao finalizar:
                 <span class="code-lang">bash</span>
                 <span class="code-title">{t.sobreSite.sections.usandoAI.manualCodeTitle}</span>
               </div>
-              <pre><code><span class="c"># Conectar ao servidor</span>
+              <pre><code><span class="c">{t.sobreSite.sections.usandoAI.manualComment1}</span>
 ssh root@[IP_DO_SERVIDOR]
 
-<span class="c"># Adicionar a chave SSH pública do Claude Code</span>
+<span class="c">{t.sobreSite.sections.usandoAI.manualComment2}</span>
 echo "COLE_AQUI_A_CHAVE_PUBLICA_DO_PROMPT_1" &gt;&gt; ~/.ssh/authorized_keys
 
-<span class="c"># Sair do servidor</span>
+<span class="c">{t.sobreSite.sections.usandoAI.manualComment3}</span>
 exit</code></pre>
             </div>
           </div>
@@ -996,25 +1003,7 @@ exit</code></pre>
                 <span class="code-lang">prompt</span>
                 <span class="code-title">{t.sobreSite.sections.usandoAI.prompt2CodeTitle}</span>
               </div>
-              <pre><code>A chave SSH já foi autorizada no servidor. Agora execute as etapas finais:
-
-1. vps-devops-manager: criar o arquivo .env no servidor em /root/MeuSite/source/.env com:
-   ADMIN_PASSWORD=[SENHA_DO_ADMIN_DO_BLOG]
-   JWT_SECRET=[STRING_ALEATORIA_COM_32_CHARS_MINIMO]
-   HOST=0.0.0.0
-   PORT=4321
-   (Se quiser Steam: STEAM_API_KEY=[SUA_CHAVE_STEAM] e STEAM_ID=[SEU_STEAM_ID])
-
-2. web-dev-craftsman: adicionar o remote de produção e fazer o primeiro deploy:
-   git remote add production root@[IP_DO_SERVIDOR]:/root/repos/meusite.git
-   git push production main
-
-3. vps-devops-manager: verificar que o PM2 subiu corretamente após o deploy
-
-4. qa-bug-hunter: acessar [SEU_DOMINIO] e verificar que o site está funcionando —
-   checar home, blog, profissional e games
-
-Ao final, exibir a URL pública do site.</code></pre>
+              <pre><code>{t.sobreSite.sections.usandoAI.prompt2Body}</code></pre>
             </div>
           </div>
 
@@ -1023,55 +1012,6 @@ Ao final, exibir a URL pública do site.</code></pre>
             <p set:html={t.sobreSite.sections.usandoAI.finalCallout} />
           </div>
 
-        </section>
-
-        <!-- ─── 9. Internacionalização ────────────────────────────────────── -->
-        <section id="i18n" class="docs-section fade-in">
-          <div class="section-number">09</div>
-          <h2>{t.sobreSite.sections.i18n.title}</h2>
-          <p set:html={t.sobreSite.sections.i18n.desc} />
-
-          <h3>{t.sobreSite.sections.i18n.archTitle}</h3>
-          <ul class="docs-list">
-            <li>
-              <strong><code class="inline-code">src/i18n/pt.ts</code>, <code class="inline-code">en.ts</code>, <code class="inline-code">es.ts</code></strong> —
-              Dicionários de tradução em TypeScript, tipados a partir do arquivo PT (fonte de verdade).
-            </li>
-            <li>
-              <strong><code class="inline-code">src/i18n/index.ts</code></strong> —
-              Helper <code class="inline-code">useTranslations(lang)</code> e
-              <code class="inline-code">getLang(cookies)</code> para leitura segura do cookie.
-            </li>
-            <li>
-              <strong><code class="inline-code">src/pages/api/set-lang.ts</code></strong> —
-              Endpoint POST que seta o cookie <code class="inline-code">lang</code> (maxAge: 1 ano) e redireciona de volta via <code class="inline-code">Referer</code>.
-            </li>
-            <li>
-              <strong><code class="inline-code">src/components/layout/LanguageSwitcher.astro</code></strong> —
-              Três botões <code class="inline-code">PT | EN | ES</code> integrados ao Header, com o idioma ativo destacado.
-            </li>
-          </ul>
-
-          <h3>{t.sobreSite.sections.i18n.howTitle}</h3>
-          <div class="code-block">
-            <div class="code-header">
-              <span class="code-lang">astro</span>
-              <span class="code-title">{t.sobreSite.sections.i18n.howCodeTitle}</span>
-            </div>
-            <pre><code>import &#123; getLang, useTranslations &#125; from '../i18n/index';
-
-const lang = getLang(Astro.cookies); // 'pt' | 'en' | 'es'
-const t = useTranslations(lang);
-
-// Usar nas templates:
-// &#123;t.nav.home&#125; → 'Home' / 'Home' / 'Inicio'
-// &#123;t.hero.contact&#125; → 'Contato' / 'Contact' / 'Contacto'</code></pre>
-          </div>
-
-          <div class="callout callout-info">
-            <span class="callout-icon">&#8505;</span>
-            <p set:html={t.sobreSite.sections.i18n.callout} />
-          </div>
         </section>
 
       </main>

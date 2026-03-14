@@ -117,8 +117,8 @@ export const es: Translations = {
       deploy: '5. Despliegue',
       agents: '6. Agentes Claude Code',
       guide: '7. Guía desde Cero',
-      ai: '8. Usando IA',
-      i18n: '9. Internacionalización',
+      ai: '9. Usando IA',
+      i18n: '8. Internacionalización',
     },
     sections: {
       visaoGeral: {
@@ -244,22 +244,91 @@ export const es: Translations = {
         prompt1Title: 'Construir el proyecto + configurar el servidor',
         prompt1Desc: 'Pega este prompt en Claude Code desde una carpeta vacía en tu computadora. El agente creará el proyecto completo localmente <em>y</em> configurará el servidor — al final mostrará la clave SSH pública que debe ser autorizada en el servidor.',
         prompt1CodeTitle: 'Claude Code — Prompt 1',
+        prompt1Body: `Quiero construir un sitio web personal usando Astro SSR y publicarlo en un VPS.
+Al final de este prompt tendrás:
+1. El proyecto completo ejecutándose localmente
+2. El servidor configurado con Nginx + PM2 + pipeline de despliegue via Git hook
+3. La clave SSH pública mostrada en pantalla que necesita ser autorizada en el servidor
+
+Información del proyecto:
+- Mi nombre: [TU NOMBRE]
+- Profesión actual: [TU PROFESIÓN]
+- Ciudad: [TU CIUDAD]
+- Hobbies: [HOBBIES]
+- Experiencias profesionales: [PEGA AQUÍ O INDICA LA RUTA DE TU CV]
+
+Información del servidor:
+- IP: [IP_DEL_SERVIDOR]
+- Usuario: root
+- Dominio/host: [TU_DOMINIO]
+- Traefik ya está ejecutándose en el servidor con Let's Encrypt configurado
+
+Stack deseado (no modificar):
+- Astro SSR con @astrojs/node adapter (standalone)
+- React para componentes interactivos
+- TipTap para el editor del blog
+- SQLite (better-sqlite3) para los posts
+- JWT (librería jose) para autenticación del admin
+- PM2 para gestionar el proceso Node.js
+- Nginx (Docker) como proxy inverso hacia el puerto 4321
+
+Páginas que debe tener el sitio:
+1. Inicio — presentación personal con hobbies
+2. Profesional — línea de tiempo de carrera con tooltip al pasar el cursor
+3. Blog — listado de posts + editor admin con TipTap (protegido por JWT)
+4. Games — integración opcional con Steam API (la sección puede quedar vacía por ahora)
+5. Acerca de — documentación técnica del proyecto
+
+Tarea de los agentes:
+- web-dev-craftsman: crear el proyecto Astro completo localmente con el stack anterior
+- vps-devops-manager: configurar el servidor (repositorio bare + hook de despliegue + Nginx Docker + PM2)
+
+Al finalizar:
+- Mostrar el contenido del archivo ~/.ssh/id_ed25519.pub (clave SSH pública)
+- Indicar qué se necesita hacer antes del Prompt 2`,
         manualBadge: 'Paso Manual',
         manualTitle: 'Autorizar la clave SSH en el servidor',
         manualDesc: 'Este es el único paso manual. Claude Code no puede autorizarse en el servidor sin que ejecutes este comando una vez. Reemplaza con la clave mostrada en el Prompt 1.',
         manualCodeTitle: 'Ejecutar en el servidor (vía SSH)',
+        manualComment1: '# Conectarse al servidor',
+        manualComment2: '# Agregar la clave SSH pública de Claude Code',
+        manualComment3: '# Salir del servidor',
         prompt2Badge: 'Prompt 2 de 2',
         prompt2Title: 'Crear .env + despliegue + verificación',
         prompt2Desc: 'Tras autorizar la clave SSH, ejecuta este segundo prompt en la misma sesión de Claude Code (o una nueva, dentro de la carpeta del proyecto). El agente creará el archivo <code class="inline-code">.env</code> en el servidor, hará el primer despliegue y verificará que el sitio está en línea.',
         prompt2CodeTitle: 'Claude Code — Prompt 2',
+        prompt2Body: `La clave SSH ya fue autorizada en el servidor. Ahora ejecuta los pasos finales:
+
+1. vps-devops-manager: crear el archivo .env en el servidor en /root/MiSitio/source/.env con:
+   ADMIN_PASSWORD=[CONTRASEÑA_ADMIN_BLOG]
+   JWT_SECRET=[CADENA_ALEATORIA_MIN_32_CHARS]
+   HOST=0.0.0.0
+   PORT=4321
+   (Si quieres Steam: STEAM_API_KEY=[TU_CLAVE_STEAM] y STEAM_ID=[TU_STEAM_ID])
+
+2. web-dev-craftsman: agregar el remote de producción y hacer el primer despliegue:
+   git remote add production root@[IP_DEL_SERVIDOR]:/root/repos/misitio.git
+   git push production main
+
+3. vps-devops-manager: verificar que PM2 inició correctamente tras el despliegue
+
+4. qa-bug-hunter: acceder a [TU_DOMINIO] y verificar que el sitio funciona —
+   revisar inicio, blog, profesional y games
+
+Al finalizar, mostrar la URL pública del sitio.`,
         finalCallout: 'Listo — sitio en línea con despliegue automatizado. A partir de ahí, cualquier cambio se hace describiendo en lenguaje natural y confirmando con <code class="inline-code">git push production main</code>.',
       },
       i18n: {
         title: 'Internacionalización (i18n)',
         desc: 'El sitio admite tres idiomas — <strong>Português (PT)</strong>, <strong>English (EN)</strong> y <strong>Español (ES)</strong> — sin cambiar las URLs. El cambio de idioma se realiza mediante la cookie <code class="inline-code">lang</code>, leída en el SSR en cada renderizado.',
         archTitle: 'Arquitectura',
+        archItem1: 'Diccionarios de traducción en TypeScript, tipados a partir del archivo PT (fuente de verdad).',
+        archItem2: 'Helpers <code class="inline-code">useTranslations(lang)</code> y <code class="inline-code">getLang(cookies)</code> para lectura segura de la cookie.',
+        archItem3: 'Endpoint POST que establece la cookie <code class="inline-code">lang</code> (maxAge: 1 año) y redirige de vuelta via <code class="inline-code">Referer</code>.',
+        archItem4: 'Tres botones <code class="inline-code">PT | EN | ES</code> integrados en el Header, con el idioma activo resaltado.',
         howTitle: 'Cómo funciona en cada página SSR',
         howCodeTitle: 'Ejemplo de uso en una página',
+        howComment: '// Usar en las plantillas:',
         callout: 'Las páginas de administración (<code class="inline-code">/blog/admin</code>, <code class="inline-code">/blog/new</code>) permanecen en portugués — son áreas internas sin necesidad de internacionalización. Las APIs tampoco fueron modificadas.',
       },
     },

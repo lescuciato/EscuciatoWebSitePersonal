@@ -117,8 +117,8 @@ export const en: Translations = {
       deploy: '5. Deploy',
       agents: '6. Claude Code Agents',
       guide: '7. Guide from Scratch',
-      ai: '8. Using AI',
-      i18n: '9. Internationalization',
+      ai: '9. Using AI',
+      i18n: '8. Internationalization',
     },
     sections: {
       visaoGeral: {
@@ -244,22 +244,91 @@ export const en: Translations = {
         prompt1Title: 'Build the project + configure the server',
         prompt1Desc: 'Paste this prompt into Claude Code from an empty folder on your computer. The agent will create the complete project locally <em>and</em> configure the server — at the end it will display the public SSH key that needs to be authorized on the server.',
         prompt1CodeTitle: 'Claude Code — Prompt 1',
+        prompt1Body: `I want to build a personal website using Astro SSR and deploy it to a VPS.
+By the end of this prompt you will have:
+1. The complete project running locally
+2. The server configured with Nginx + PM2 + automated deploy pipeline via Git hook
+3. The SSH public key displayed on screen that needs to be authorized on the server
+
+Project information:
+- My name: [YOUR NAME]
+- Current role: [YOUR ROLE]
+- City: [YOUR CITY]
+- Hobbies: [HOBBIES]
+- Professional experience: [PASTE HERE OR PROVIDE PATH TO YOUR CV]
+
+Server information:
+- IP: [SERVER_IP]
+- User: root
+- Domain/host: [YOUR_DOMAIN]
+- Traefik is already running on the server with Let's Encrypt configured
+
+Desired stack (do not change):
+- Astro SSR with @astrojs/node adapter (standalone)
+- React for interactive components
+- TipTap for the blog editor
+- SQLite (better-sqlite3) for posts
+- JWT (jose library) for admin authentication
+- PM2 to manage the Node.js process
+- Nginx (Docker) as reverse proxy to port 4321
+
+Pages the site should have:
+1. Home — personal presentation with hobbies
+2. Professional — career timeline with hover tooltip
+3. Blog — post listing + admin editor with TipTap (JWT protected)
+4. Games — optional Steam API integration (section can be empty for now)
+5. About — technical documentation of the project
+
+Agent tasks:
+- web-dev-craftsman: create the entire Astro project locally with the stack above
+- vps-devops-manager: configure the server (bare repo + deploy hook + Nginx Docker + PM2)
+
+When done:
+- Show the contents of ~/.ssh/id_ed25519.pub (public SSH key)
+- Instruct what needs to be done before Prompt 2`,
         manualBadge: 'Manual Step',
         manualTitle: 'Authorize the SSH key on the server',
         manualDesc: 'This is the only manual step. Claude Code cannot authorize itself on the server without you running this command once. Replace with the key displayed in Prompt 1.',
         manualCodeTitle: 'Run on the server (via SSH)',
+        manualComment1: '# Connect to the server',
+        manualComment2: "# Add Claude Code's public SSH key",
+        manualComment3: '# Exit the server',
         prompt2Badge: 'Prompt 2 of 2',
         prompt2Title: 'Create .env + deploy + verification',
         prompt2Desc: 'After authorizing the SSH key, run this second prompt in the same Claude Code session (or a new one, inside the project folder). The agent will create the <code class="inline-code">.env</code> file on the server, do the first deploy and verify the site is live.',
         prompt2CodeTitle: 'Claude Code — Prompt 2',
+        prompt2Body: `The SSH key has already been authorized on the server. Now execute the final steps:
+
+1. vps-devops-manager: create the .env file on the server at /root/MySite/source/.env with:
+   ADMIN_PASSWORD=[BLOG_ADMIN_PASSWORD]
+   JWT_SECRET=[RANDOM_STRING_MIN_32_CHARS]
+   HOST=0.0.0.0
+   PORT=4321
+   (If you want Steam: STEAM_API_KEY=[YOUR_STEAM_KEY] and STEAM_ID=[YOUR_STEAM_ID])
+
+2. web-dev-craftsman: add the production remote and make the first deploy:
+   git remote add production root@[SERVER_IP]:/root/repos/mysite.git
+   git push production main
+
+3. vps-devops-manager: verify that PM2 started correctly after the deploy
+
+4. qa-bug-hunter: access [YOUR_DOMAIN] and verify the site is working —
+   check home, blog, professional and games
+
+When done, display the site's public URL.`,
         finalCallout: 'Done — site live with automated deploy. From there, any change is made by describing it in natural language and confirmed with <code class="inline-code">git push production main</code>.',
       },
       i18n: {
         title: 'Internationalization (i18n)',
         desc: 'The site supports three languages — <strong>Português (PT)</strong>, <strong>English (EN)</strong> and <strong>Español (ES)</strong> — without changing URLs. Language switching is done via the <code class="inline-code">lang</code> cookie, read on the SSR at every render.',
         archTitle: 'Architecture',
+        archItem1: 'TypeScript translation dictionaries, typed from the PT file (source of truth).',
+        archItem2: 'Helpers <code class="inline-code">useTranslations(lang)</code> and <code class="inline-code">getLang(cookies)</code> for safe cookie reading.',
+        archItem3: 'POST endpoint that sets the <code class="inline-code">lang</code> cookie (maxAge: 1 year) and redirects back via <code class="inline-code">Referer</code>.',
+        archItem4: 'Three <code class="inline-code">PT | EN | ES</code> buttons integrated into the Header, with the active language highlighted.',
         howTitle: 'How it works on each SSR page',
         howCodeTitle: 'Usage example in a page',
+        howComment: '// Use in templates:',
         callout: 'The admin pages (<code class="inline-code">/blog/admin</code>, <code class="inline-code">/blog/new</code>) remain in Portuguese — they are internal areas with no need for internationalization. The APIs were also not changed.',
       },
     },
