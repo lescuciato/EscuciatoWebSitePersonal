@@ -1,6 +1,6 @@
 ---
 /**
- * Hero — above-the-fold introduction section.
+ * Hero — above-the-fold introduction section (personal version).
  * Profile photo placeholder at /images/profile.jpg
  */
 ---
@@ -9,18 +9,12 @@
   <div class="container hero-inner">
     <!-- Text content -->
     <div class="hero-content fade-in">
-      <div class="hero-badge">
-        <span class="status-dot"></span>
-        Available for consulting
-      </div>
-
       <h1 class="hero-name">Leonardo Escuciato</h1>
       <p class="hero-title">Sr. Atlassian Consultant</p>
 
       <p class="hero-summary">
-        Experienced consultant specializing in Atlassian tools, agile transformation,
-        and team leadership. Based in Campinas, São Paulo, Brazil.
-        Atlassian Certified (ACP-620, ACP-120).
+        Apaixonado por tecnologia e lifestyle.
+        Morador de Campinas, São Paulo, Brasil.
       </p>
 
       <div class="hero-cta">
@@ -29,7 +23,7 @@
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
             <polyline points="22,6 12,13 2,6"/>
           </svg>
-          Get in Touch
+          Contato
         </a>
         <a
           href="https://www.linkedin.com/in/leonardo-escuciato"
@@ -44,13 +38,9 @@
           </svg>
           LinkedIn
         </a>
-      </div>
-
-      <!-- Certification badges -->
-      <div class="cert-badges">
-        <span class="cert-badge">ACP-120</span>
-        <span class="cert-badge">ACP-620</span>
-        <span class="cert-badge">Atlassian Certified</span>
+        <a href="/profissional" class="btn btn-ghost">
+          Ver perfil profissional →
+        </a>
       </div>
     </div>
 
@@ -65,7 +55,7 @@
         -->
         <img
           src="/images/profile.jpg"
-          alt="Leonardo Escuciato — Sr. Atlassian Consultant"
+          alt="Leonardo Escuciato"
           width="360"
           height="360"
           class="profile-img"
@@ -123,32 +113,6 @@
     max-width: 600px;
   }
 
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.2);
-    border-radius: 100px;
-    font-size: 0.8rem;
-    color: var(--color-success);
-    margin-bottom: var(--space-3);
-  }
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--color-success);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
   .hero-name {
     font-size: clamp(2.2rem, 5vw, 3.5rem);
     font-weight: 700;
@@ -185,7 +149,6 @@
     display: flex;
     gap: var(--space-2);
     flex-wrap: wrap;
-    margin-bottom: var(--space-3);
     justify-content: center;
   }
 
@@ -193,29 +156,6 @@
     .hero-cta {
       justify-content: flex-start;
     }
-  }
-
-  .cert-badges {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  @media (min-width: 768px) {
-    .cert-badges {
-      justify-content: flex-start;
-    }
-  }
-
-  .cert-badge {
-    padding: 4px 10px;
-    background: rgba(167, 139, 250, 0.1);
-    border: 1px solid rgba(167, 139, 250, 0.25);
-    border-radius: 100px;
-    font-size: 0.75rem;
-    color: var(--color-accent-2);
-    font-weight: 500;
   }
 
   /* ─── Photo ─── */

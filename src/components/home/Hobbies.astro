@@ -1,0 +1,128 @@
+---
+/**
+ * Hobbies — personal interests section with emoji cards.
+ */
+
+const hobbies = [
+  {
+    emoji: '🎾',
+    label: 'Tênis',
+    description: 'Nas quadras sempre que possível',
+  },
+  {
+    emoji: '🎮',
+    label: 'Video Games',
+    description: 'Aventuras digitais de todo tipo',
+  },
+  {
+    emoji: '🍖',
+    label: 'Boa Mesa',
+    description: 'Churrasco, vinho e boa companhia',
+  },
+  {
+    emoji: '⚽',
+    label: 'Futebol',
+    description: 'Torcedor da Ponte Preta — Campinas',
+  },
+  {
+    emoji: '📈',
+    label: 'Finanças & Investimentos',
+    description: 'Investimentos no Brasil e ETFs irlandeses',
+  },
+];
+---
+
+<section class="hobbies">
+  <div class="container">
+    <h2 class="section-title">Interesses</h2>
+    <p class="section-subtitle">O que me move além do trabalho</p>
+
+    <div class="hobbies-grid">
+      {hobbies.map(({ emoji, label, description }) => (
+        <div class="hobby-card">
+          <span class="hobby-emoji" aria-hidden="true">{emoji}</span>
+          <h3 class="hobby-label">{label}</h3>
+          <p class="hobby-desc">{description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hobbies {
+    padding: var(--space-12) 0;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    margin-bottom: var(--space-8);
+  }
+
+  .hobbies-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .hobbies-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hobbies-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  .hobby-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-5) var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    gap: var(--space-2);
+    transition: border-color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+    cursor: default;
+  }
+
+  .hobby-card:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.12);
+  }
+
+  .hobby-emoji {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .hobby-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .hobby-desc {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,414 @@
+---
+/**
+ * Profissional — career and certifications page for Leonardo Escuciato.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const experiences = [
+  {
+    role: 'Sr. Atlassian Consultant',
+    company: 'Modus Create',
+    period: 'Jan 2022 – Presente',
+    tooltip: 'Implementação de setups de Project Management com ferramentas Atlassian para diferentes empresas. Grande experiência com Jira Automation, Advanced Roadmaps e adaptação de processos ágeis a diferentes contextos organizacionais.',
+  },
+  {
+    role: 'Squad Leader',
+    company: 'Modus Create',
+    period: 'Jun 2021 – Fev 2022',
+    tooltip: 'Liderança de cerimônias ágeis, organização do Jira para relatórios e métricas, trabalho em formato Kanban com foco em qualidade, distribuição de tarefas e comunicação com o cliente.',
+  },
+  {
+    role: 'Transformation Lead',
+    company: 'Zup Innovation',
+    period: 'Out 2019 – Jun 2021',
+    tooltip: 'Gestão da saúde financeira do projeto, liderança de rituais ágeis, aplicação da metodologia SAFe, extração de métricas via APIs do Jira e construção de dashboards de qualidade e previsibilidade.',
+  },
+  {
+    role: 'Agile Coach & Jira Administrator',
+    company: 'Softvaro',
+    period: 'Set 2018 – Out 2019',
+    tooltip: 'Melhoria da visibilidade do desenvolvimento de software através de metodologias ágeis. Administração do Jira com padrões customizados por cliente e extração de dados via APIs REST para métricas.',
+  },
+  {
+    role: 'Scrum Master',
+    company: 'CI&T',
+    period: 'Set 2015 – Ago 2018 (Europa)',
+    tooltip: 'Liderança de times como Scrum Master, melhorando processos e entrega através de métricas como Velocity e Produtividade. Deploy de MVP Mobile para grande empresa de bebidas na Europa, República Dominicana e México.',
+  },
+];
+
+const certifications = [
+  {
+    code: 'ACP-120',
+    title: 'Atlassian Certified Jira Administrator for Cloud',
+    issuer: 'Atlassian',
+  },
+  {
+    code: 'ACP-620',
+    title: 'Atlassian Certified in Managing Jira Projects for Cloud',
+    issuer: 'Atlassian',
+  },
+  {
+    code: 'ADV',
+    title: 'Planning With Advanced Roadmaps',
+    issuer: 'Atlassian University',
+  },
+];
+---
+
+<BaseLayout
+  title="Perfil Profissional"
+  description="Leonardo Escuciato — Sr. Atlassian Consultant. Experiência em gestão ágil, consultoria Atlassian e liderança de equipes."
+>
+  <div class="pro-page">
+
+    <!-- ─── Resumo profissional ─── -->
+    <section class="section summary-section">
+      <div class="container">
+        <h1 class="page-title">Perfil Profissional</h1>
+        <div class="summary-card">
+          <div class="summary-icon" aria-hidden="true">💼</div>
+          <p class="summary-text">
+            Profissional com sólida experiência em gestão de times ágeis e consultoria Atlassian.
+            Ao longo da carreira, liderou equipes de desenvolvimento, implementou metodologias ágeis
+            (Scrum, Kanban, SAFe) e se especializou nas ferramentas do ecossistema Atlassian —
+            especialmente Jira e Confluence. Certificado pela Atlassian (ACP-620 e ACP-120), atua hoje
+            como Sr. Atlassian Consultant na Modus Create, ajudando empresas a extrair o máximo das
+            ferramentas de gestão de projetos.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Timeline de carreira ─── -->
+    <section class="section timeline-section">
+      <div class="container">
+        <h2 class="section-title">Trajetória</h2>
+        <p class="section-subtitle">Passe o mouse sobre cada experiência para ver os detalhes</p>
+
+        <div class="timeline">
+          {experiences.map((exp, i) => (
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <div class="marker-dot"></div>
+                {i < experiences.length - 1 && <div class="marker-line"></div>}
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-card">
+                  <div class="card-header">
+                    <div class="card-main">
+                      <h3 class="exp-role">{exp.role}</h3>
+                      <p class="exp-meta">
+                        <span class="exp-company">{exp.company}</span>
+                        <span class="exp-sep">·</span>
+                        <span class="exp-period">{exp.period}</span>
+                      </p>
+                    </div>
+                    <span class="hover-hint" aria-hidden="true">Detalhes ↗</span>
+                  </div>
+                  <div class="tooltip-content" role="tooltip">
+                    <p>{exp.tooltip}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Certificações ─── -->
+    <section class="section certs-section">
+      <div class="container">
+        <h2 class="section-title">Certificações</h2>
+
+        <div class="certs-grid">
+          {certifications.map((cert) => (
+            <div class="cert-card">
+              <div class="cert-badge-code">{cert.code}</div>
+              <div class="cert-info">
+                <p class="cert-title">{cert.title}</p>
+                <p class="cert-issuer">{cert.issuer}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .pro-page {
+    padding-bottom: var(--space-12);
+  }
+
+  .section {
+    padding: var(--space-10) 0;
+  }
+
+  /* ─── Page title ─── */
+  .page-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: var(--space-6);
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent-2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-title {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+  }
+
+  .section-subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-8);
+  }
+
+  /* ─── Summary ─── */
+  .summary-section {
+    padding-top: var(--space-12);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .summary-card {
+    display: flex;
+    gap: var(--space-5);
+    align-items: flex-start;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+
+  .summary-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .summary-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  /* ─── Timeline ─── */
+  .timeline-section {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: var(--space-4);
+    min-height: 80px;
+  }
+
+  .timeline-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 20px;
+    padding-top: 20px;
+  }
+
+  .marker-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    border: 2px solid var(--color-accent-2);
+    flex-shrink: 0;
+    z-index: 1;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .timeline-item:hover .marker-dot {
+    transform: scale(1.3);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+  }
+
+  .marker-line {
+    width: 2px;
+    flex: 1;
+    background: var(--color-border);
+    margin-top: 4px;
+    min-height: 32px;
+  }
+
+  .timeline-content {
+    flex: 1;
+    padding-bottom: var(--space-4);
+    padding-top: 12px;
+  }
+
+  /* ─── Timeline card with hover tooltip ─── */
+  .timeline-card {
+    position: relative;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+    cursor: default;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .timeline-card:hover {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .exp-role {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 4px;
+  }
+
+  .exp-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .exp-company {
+    color: var(--color-accent-2);
+    font-weight: 500;
+  }
+
+  .exp-sep {
+    color: var(--color-border);
+  }
+
+  .exp-period {
+    color: var(--color-text-muted);
+  }
+
+  .hover-hint {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    opacity: 0.6;
+    white-space: nowrap;
+    transition: opacity var(--transition-fast);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .timeline-card:hover .hover-hint {
+    opacity: 0;
+  }
+
+  /* Tooltip — hidden by default, revealed on hover */
+  .tooltip-content {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 300ms ease, opacity 250ms ease, margin-top 250ms ease;
+    margin-top: 0;
+  }
+
+  .timeline-card:hover .tooltip-content {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: var(--space-3);
+  }
+
+  .tooltip-content p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin: 0;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* ─── Certifications ─── */
+  .certs-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .certs-grid {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  .cert-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+    flex: 1;
+    min-width: 260px;
+    transition: border-color var(--transition-base);
+  }
+
+  .cert-card:hover {
+    border-color: rgba(167, 139, 250, 0.4);
+  }
+
+  .cert-badge-code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    height: 40px;
+    padding: 0 10px;
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-accent-2);
+    letter-spacing: 0.05em;
+  }
+
+  .cert-info {
+    flex: 1;
+  }
+
+  .cert-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 2px;
+    line-height: 1.4;
+  }
+
+  .cert-issuer {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+</style>
