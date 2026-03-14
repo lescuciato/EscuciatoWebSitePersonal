@@ -44,6 +44,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <a href="#deploy" class="sidebar-link">5. Deploy</a>
           <a href="#agentes" class="sidebar-link">6. Agentes Claude Code</a>
           <a href="#guia" class="sidebar-link">7. Guia do Zero</a>
+          <a href="#usando-ai" class="sidebar-link">8. Usando AI</a>
         </nav>
       </aside>
 
@@ -884,6 +885,215 @@ git push production main</code></pre>
                 com TLS configurado.
               </p>
             </div>
+          </div>
+
+        </section>
+
+        <!-- ─── 8. Usando AI ──────────────────────────────────────────────── -->
+        <section id="usando-ai" class="docs-section fade-in">
+          <div class="section-number">08</div>
+          <h2>Usando AI</h2>
+          <p>
+            Todo este site foi construído usando o <strong>Claude Code</strong> — uma CLI que permite
+            que um modelo de IA leia arquivos, escreva código, acesse o servidor via SSH e gerencie
+            o ciclo completo de desenvolvimento. O processo humano foi quase inteiramente de
+            <em>direção</em>: descrever o que queria, revisar o resultado e aprovar ou pedir ajustes.
+          </p>
+          <p>
+            Com os dois prompts abaixo, qualquer pessoa pode replicar este projeto completo
+            — do zero ao site no ar — com no máximo <strong>1 comando manual</strong>.
+          </p>
+
+          <!-- Pré-requisitos -->
+          <div class="ai-prereqs">
+            <h3 class="ai-prereqs-title">Antes de começar — o que você precisa ter</h3>
+            <ul class="prereq-list">
+              <li>
+                <span class="prereq-check">&#10003;</span>
+                <div>
+                  <strong>Claude Code instalado</strong>
+                  <span class="prereq-detail"> — <code class="inline-code">npm install -g @anthropic-ai/claude-code</code></span>
+                </div>
+              </li>
+              <li>
+                <span class="prereq-check">&#10003;</span>
+                <div>
+                  <strong>Node.js 20+ local</strong>
+                  <span class="prereq-detail"> — para rodar o projeto durante o desenvolvimento</span>
+                </div>
+              </li>
+              <li>
+                <span class="prereq-check">&#10003;</span>
+                <div>
+                  <strong>VPS com Ubuntu 24.04</strong>
+                  <span class="prereq-detail"> — Docker instalado, Traefik rodando com um wildcard/domínio configurado</span>
+                </div>
+              </li>
+              <li>
+                <span class="prereq-check">&#10003;</span>
+                <div>
+                  <strong>Acesso root ao servidor via SSH</strong>
+                  <span class="prereq-detail"> — o agente vai precisar executar comandos no servidor</span>
+                </div>
+              </li>
+              <li>
+                <span class="prereq-check prereq-optional">?</span>
+                <div>
+                  <strong>Chave da Steam API</strong>
+                  <span class="prereq-detail"> — opcional, só se quiser a integração com Steam na página de Games</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- O que reunir antes -->
+          <div class="callout callout-info" style="margin-bottom: var(--space-6);">
+            <span class="callout-icon">&#128204;</span>
+            <div>
+              <p style="margin:0 0 var(--space-2);"><strong>Tenha em mãos antes de iniciar:</strong></p>
+              <ul style="margin:0; padding-left: 1.25rem; font-size: 0.85rem; line-height: 1.8;">
+                <li>IP do seu servidor e senha root</li>
+                <li>Domínio ou subdomínio que aponta para o servidor</li>
+                <li>Seu currículo / experiências profissionais (texto ou PDF)</li>
+                <li>Uma senha para o admin do blog e uma chave JWT (qualquer string longa aleatória)</li>
+                <li>Steam ID ou vanity URL (opcional)</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- PROMPT 1 -->
+          <div class="ai-prompt-block">
+            <div class="ai-prompt-header">
+              <span class="ai-prompt-badge">Prompt 1 de 2</span>
+              <span class="ai-prompt-title">Construir o projeto + configurar o servidor</span>
+            </div>
+            <p class="ai-prompt-desc">
+              Cole este prompt no Claude Code a partir de uma pasta vazia no seu computador.
+              O agente vai criar o projeto completo localmente <em>e</em> configurar o servidor
+              — ao final ele vai exibir a chave SSH pública que precisa ser autorizada no servidor.
+            </p>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">prompt</span>
+                <span class="code-title">Claude Code — Prompt 1</span>
+              </div>
+              <pre><code>Quero construir um site pessoal usando Astro SSR e publicá-lo em um VPS.
+Ao final deste prompt você vai ter:
+1. O projeto completo rodando localmente
+2. O servidor configurado com Nginx + PM2 + pipeline de deploy via Git hook
+3. Exibida na tela a chave SSH pública que precisa ser autorizada no servidor
+
+Informações do projeto:
+- Meu nome: [SEU NOME]
+- Profissão atual: [SUA PROFISSÃO]
+- Cidade: [SUA CIDADE]
+- Hobbies: [HOBBIES]
+- Experiências profissionais: [COLE AQUI OU INFORME CAMINHO DO CV]
+
+Informações do servidor:
+- IP: [IP_DO_SERVIDOR]
+- Usuário: root
+- Domínio/host: [SEU_DOMINIO]
+- Traefik já está rodando no servidor com Let's Encrypt configurado
+
+Stack desejada (não alterar):
+- Astro SSR com @astrojs/node adapter (standalone)
+- React para componentes interativos
+- TipTap para o editor do blog
+- SQLite (better-sqlite3) para os posts
+- JWT (biblioteca jose) para autenticação do admin
+- PM2 para gerenciar o processo Node.js
+- Nginx (Docker) como proxy reverso para a porta 4321
+
+Páginas que o site deve ter:
+1. Home — apresentação pessoal com hobbies
+2. Profissional — timeline de carreira com tooltip no hover
+3. Blog — listagem de posts + editor admin com TipTap (protegido por JWT)
+4. Games — integração opcional com Steam API (seção pode ficar vazia por ora)
+5. Sobre o Site — documentação técnica do projeto
+
+Tarefa dos agentes:
+- web-dev-craftsman: criar todo o projeto Astro localmente com a stack acima
+- vps-devops-manager: configurar o servidor (repositório bare + hook de deploy + Nginx Docker + PM2)
+
+Ao finalizar:
+- Mostrar o conteúdo do arquivo ~/.ssh/id_ed25519.pub (chave SSH pública)
+- Instruir o que precisa ser feito antes do Prompt 2</code></pre>
+            </div>
+          </div>
+
+          <!-- AÇÃO MANUAL -->
+          <div class="ai-human-action">
+            <div class="ai-human-header">
+              <span class="ai-human-badge">Ação Manual</span>
+              <span class="ai-human-title">Autorizar a chave SSH no servidor</span>
+            </div>
+            <p class="ai-prompt-desc">
+              Esta é a única etapa manual. O Claude Code não pode se autorizar no servidor
+              sem que você execute este comando uma vez. Substitua pela chave exibida no Prompt 1.
+            </p>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">bash</span>
+                <span class="code-title">Executar no servidor (via SSH)</span>
+              </div>
+              <pre><code><span class="c"># Conectar ao servidor</span>
+ssh root@[IP_DO_SERVIDOR]
+
+<span class="c"># Adicionar a chave SSH pública do Claude Code</span>
+echo "COLE_AQUI_A_CHAVE_PUBLICA_DO_PROMPT_1" &gt;&gt; ~/.ssh/authorized_keys
+
+<span class="c"># Sair do servidor</span>
+exit</code></pre>
+            </div>
+          </div>
+
+          <!-- PROMPT 2 -->
+          <div class="ai-prompt-block">
+            <div class="ai-prompt-header">
+              <span class="ai-prompt-badge">Prompt 2 de 2</span>
+              <span class="ai-prompt-title">Criar .env + deploy + verificação</span>
+            </div>
+            <p class="ai-prompt-desc">
+              Após autorizar a chave SSH, execute este segundo prompt na mesma sessão do Claude Code
+              (ou em uma nova, dentro da pasta do projeto). O agente vai criar o arquivo
+              <code class="inline-code">.env</code> no servidor, fazer o primeiro deploy e verificar
+              se o site está no ar.
+            </p>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-lang">prompt</span>
+                <span class="code-title">Claude Code — Prompt 2</span>
+              </div>
+              <pre><code>A chave SSH já foi autorizada no servidor. Agora execute as etapas finais:
+
+1. vps-devops-manager: criar o arquivo .env no servidor em /root/MeuSite/source/.env com:
+   ADMIN_PASSWORD=[SENHA_DO_ADMIN_DO_BLOG]
+   JWT_SECRET=[STRING_ALEATORIA_COM_32_CHARS_MINIMO]
+   HOST=0.0.0.0
+   PORT=4321
+   (Se quiser Steam: STEAM_API_KEY=[SUA_CHAVE_STEAM] e STEAM_ID=[SEU_STEAM_ID])
+
+2. web-dev-craftsman: adicionar o remote de produção e fazer o primeiro deploy:
+   git remote add production root@[IP_DO_SERVIDOR]:/root/repos/meusite.git
+   git push production main
+
+3. vps-devops-manager: verificar que o PM2 subiu corretamente após o deploy
+
+4. qa-bug-hunter: acessar [SEU_DOMINIO] e verificar que o site está funcionando —
+   checar home, blog, profissional e games
+
+Ao final, exibir a URL pública do site.</code></pre>
+            </div>
+          </div>
+
+          <div class="callout callout-success" style="margin-top: var(--space-6);">
+            <span class="callout-icon">&#10003;</span>
+            <p>
+              Pronto — site no ar com deploy automatizado. A partir daí, qualquer mudança é feita
+              descrevendo em linguagem natural e confirmada com
+              <code class="inline-code">git push production main</code>.
+            </p>
           </div>
 
         </section>
@@ -1734,6 +1944,138 @@ git push production main</code></pre>
   /* suppress hover highlight on why-rows */
   .why-row:hover td {
     background: transparent;
+  }
+
+  /* ─── Usando AI section ─────────────────────────────────────────────────── */
+
+  .ai-prereqs {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+
+  .ai-prereqs-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-4);
+  }
+
+  .prereq-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .prereq-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    font-size: 0.9rem;
+  }
+
+  .prereq-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    margin-top: 1px;
+  }
+
+  .prereq-check.prereq-optional {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--color-accent-2);
+  }
+
+  .prereq-detail {
+    color: var(--color-text-muted);
+  }
+
+  .ai-prompt-block,
+  .ai-human-action {
+    margin-bottom: var(--space-6);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+  }
+
+  .ai-prompt-header,
+  .ai-human-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .ai-prompt-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--color-accent-2);
+    white-space: nowrap;
+  }
+
+  .ai-human-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    white-space: nowrap;
+  }
+
+  .ai-prompt-title,
+  .ai-human-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .ai-prompt-desc {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    padding: var(--space-4) var(--space-5);
+    margin: 0;
+    background: var(--color-surface);
+  }
+
+  .ai-prompt-block .code-block,
+  .ai-human-action .code-block {
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 0;
+  }
+
+  .ai-prompt-block .code-header,
+  .ai-human-action .code-header {
+    border-radius: 0;
   }
 </style>
 
