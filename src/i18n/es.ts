@@ -177,6 +177,8 @@ export const es: Translations = {
         step3Desc: 'Genera el bundle SSR optimizado para producción',
         step4Desc: 'Reinicia el proceso Node.js con cero downtime percibido',
         calloutWarning: 'El archivo <code class="inline-code">.env</code> en el servidor <strong>debe existir antes del primer build</strong>. Si añades nuevas variables al proyecto, es necesario actualizarlas en el servidor y hacer un nuevo despliegue.',
+        persistenceTitle: 'Persistencia tras reinicio',
+        persistenceDesc: 'El proceso Node.js es gestionado por <strong>PM2</strong> mediante un archivo <code class="inline-code">ecosystem.config.cjs</code> que fuerza <code class="inline-code">HOST=0.0.0.0</code>. El servicio <code class="inline-code">pm2-root.service</code> está registrado en <strong>systemd</strong>, garantizando que PM2 — y con él el sitio — arranque automáticamente tras cualquier reinicio del servidor. Los contenedores Docker (Nginx, Traefik, n8n) también usan la política <code class="inline-code">restart=always</code>.',
       },
       seguranca: {
         title: '6. Seguridad',
