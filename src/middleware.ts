@@ -1,5 +1,5 @@
 // Astro middleware — protects admin routes and mutation API endpoints.
-// Protected page paths: /blog/new, /blog/:slug/edit, /blog/admin, /games/admin
+// Protected page paths: /notas/new, /notas/:slug/edit, /notas/admin, /games/admin
 // Protected API paths (non-GET): /api/posts, /api/games
 
 import { defineMiddleware } from 'astro:middleware';
@@ -7,9 +7,9 @@ import { getSession } from './lib/auth';
 
 // Page routes that require authentication
 const PROTECTED_PATTERNS = [
-  /^\/blog\/new$/,
-  /^\/blog\/admin$/,
-  /^\/blog\/[^/]+\/edit$/,
+  /^\/notas\/new$/,
+  /^\/notas\/admin$/,
+  /^\/notas\/[^/]+\/edit$/,
   /^\/games\/admin$/,
 ];
 

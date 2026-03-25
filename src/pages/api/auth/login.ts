@@ -15,7 +15,7 @@ import { checkRateLimit, resetRateLimit } from '../../../lib/rateLimit';
  */
 function safeRedirect(next: string | null | undefined): string {
   if (!next || !next.startsWith('/') || next.startsWith('//')) {
-    return '/blog/admin';
+    return '/notas/admin';
   }
   return next;
 }

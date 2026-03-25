@@ -1,36 +1,26 @@
 ---
 /**
- * Edit post — protected route.
- * Pre-populates the TipTap editor with existing post data.
+ * New post editor — protected route.
+ * Uses TipTap (React, client:load) for rich text editing.
  */
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import TipTapEditor from '../../../components/blog/TipTapEditor';
-import { postsDb } from '../../../lib/db';
-
-const { slug } = Astro.params;
-const post = postsDb.getBySlug(slug!);
-
-if (!post) {
-  return Astro.redirect('/blog/admin');
-}
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TipTapEditor from '../../components/blog/TipTapEditor';
 ---
 
-<BaseLayout title={`Edit: ${post.title}`} description="Edit blog post">
+<BaseLayout title="New Post" description="Create a new blog post">
   <div class="editor-page section">
     <div class="container">
       <div class="editor-header">
-        <a href="/blog/admin" class="back-link">
+        <a href="/notas/admin" class="back-link">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
           </svg>
           Voltar ao Admin
         </a>
-        <h1 class="section-title">Editar <span>Post</span></h1>
+        <h1 class="section-title">Novo <span>Post</span></h1>
       </div>
 
       <form id="post-form" class="editor-form">
-        <input type="hidden" id="post-id" value={post.id} />
-
         <div class="form-group">
           <label for="title" class="form-label">Título *</label>
           <input
@@ -38,7 +28,7 @@ if (!post) {
             id="title"
             name="title"
             class="form-input form-input-lg"
-            value={post.title}
+            placeholder="Título do post..."
             required
           />
         </div>
@@ -51,7 +41,6 @@ if (!post) {
               id="tags"
               name="tags"
               class="form-input"
-              value={post.tags ?? ''}
               placeholder="astro, agile, jira (separadas por vírgula)"
             />
           </div>
@@ -62,7 +51,6 @@ if (!post) {
               id="excerpt"
               name="excerpt"
               class="form-input"
-              value={post.excerpt ?? ''}
               placeholder="Breve resumo exibido no feed..."
             />
           </div>
@@ -70,22 +58,18 @@ if (!post) {
 
         <div class="form-group">
           <label class="form-label">Conteúdo *</label>
-          <TipTapEditor
-            client:load
-            content={post.content}
-            onUpdate={(html) => { (window as any).__postContent = html; }}
-          />
+          <!-- TipTap editor rendered client-side -->
+          <TipTapEditor client:load onUpdate={(html) => { (window as any).__postContent = html; }} />
           <input type="hidden" id="content" name="content" />
         </div>
 
         <div class="editor-footer">
-          <a href={`/blog/${post.slug}`} class="btn btn-ghost">Ver Post</a>
-          <a href="/blog/admin" class="btn btn-ghost">Cancelar</a>
-          <button type="submit" class="btn btn-primary" id="update-btn">
+          <a href="/notas/admin" class="btn btn-ghost">Cancelar</a>
+          <button type="submit" class="btn btn-primary" id="publish-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            Atualizar Post
+            Publicar
           </button>
         </div>
       </form>
@@ -93,21 +77,14 @@ if (!post) {
   </div>
 </BaseLayout>
 
-<script define:vars={{ initialContent: post.content }}>
-  // Pre-seed __postContent with the existing content so submit works even without edits
-  if (!(window as any).__postContent) {
-    (window as any).__postContent = initialContent;
-  }
-</script>
-
 <script>
   const form = document.getElementById('post-form') as HTMLFormElement;
   const contentInput = document.getElementById('content') as HTMLInputElement;
-  const postIdEl = document.getElementById('post-id') as HTMLInputElement;
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // Grab TipTap HTML from the global set by the React component
     const content = (window as any).__postContent ?? '';
     if (!content || content === '<p></p>') {
       alert('O conteúdo do post não pode estar vazio.');
@@ -117,38 +94,38 @@ if (!post) {
     contentInput.value = content;
 
     const formData = new FormData(form);
-    const postId = postIdEl.value;
     const payload = {
       title: formData.get('title') as string,
       tags: formData.get('tags') as string,
       excerpt: formData.get('excerpt') as string,
       content,
+      published: 1,
     };
 
-    const btn = document.getElementById('update-btn') as HTMLButtonElement;
+    const btn = document.getElementById('publish-btn') as HTMLButtonElement;
     btn.disabled = true;
-    btn.textContent = 'Salvando...';
+    btn.textContent = 'Publicando...';
 
     try {
-      const res = await fetch(`/api/posts/${postId}`, {
-        method: 'PUT',
+      const res = await fetch('/api/posts', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
       if (res.ok) {
         const data = await res.json();
-        window.location.href = `/blog/${data.slug}`;
+        window.location.href = `/notas/${data.slug}`;
       } else {
         const err = await res.json();
-        alert(`Erro: ${err.message ?? 'Falha ao atualizar o post.'}`);
+        alert(`Erro: ${err.message ?? 'Falha ao publicar o post.'}`);
         btn.disabled = false;
-        btn.textContent = 'Atualizar Post';
+        btn.textContent = 'Publicar';
       }
     } catch (err) {
       alert('Erro de rede. Tente novamente.');
       btn.disabled = false;
-      btn.textContent = 'Atualizar Post';
+      btn.textContent = 'Publicar';
     }
   });
 </script>
@@ -186,6 +163,7 @@ if (!post) {
   .form-row {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 0;
   }
 
   @media (min-width: 640px) {

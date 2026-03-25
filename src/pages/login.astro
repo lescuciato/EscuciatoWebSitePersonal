@@ -1,7 +1,7 @@
 ---
 /**
  * Login page — single password field for admin access.
- * On success: sets session cookie and redirects to /blog/admin.
+ * On success: sets session cookie and redirects to /notas/admin.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSession } from '../lib/auth';
@@ -13,10 +13,10 @@ const t = useTranslations(lang);
 // If already logged in, redirect directly
 const session = await getSession(Astro.request);
 if (session) {
-  return Astro.redirect('/blog/admin');
+  return Astro.redirect('/notas/admin');
 }
 
-const next = Astro.url.searchParams.get('next') ?? '/blog/admin';
+const next = Astro.url.searchParams.get('next') ?? '/notas/admin';
 const error = Astro.url.searchParams.get('error');
 ---
 
