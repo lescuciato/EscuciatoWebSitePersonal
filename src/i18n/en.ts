@@ -8,7 +8,7 @@ export const en: Translations = {
   nav: {
     home: 'Home',
     professional: 'Professional',
-    blog: 'Blog',
+    blog: 'Notes',
     games: 'Games',
     about: 'About',
   },
@@ -71,7 +71,7 @@ export const en: Translations = {
   // ─── Blog listing ─────────────────────────────────────────────────────────
   blog: {
     metaDescription: 'Thoughts on agile transformation, Atlassian tools, team leadership, and technology.',
-    pageTitle: 'Blog',
+    pageTitle: 'Notes',
     subtitle: 'Thoughts on agile transformation, Atlassian tools, team leadership, and technology.',
     emptyTitle: 'No posts yet',
     emptyText: 'Check back soon — content is on its way.',
@@ -82,7 +82,7 @@ export const en: Translations = {
 
   // ─── Blog post ────────────────────────────────────────────────────────────
   blogPost: {
-    backToBlog: 'Back to Blog',
+    backToBlog: 'Back to Notes',
     by: 'by',
   },
 
@@ -126,7 +126,7 @@ export const en: Translations = {
         desc1: 'This is a modern personal website with <strong>Server-Side Rendering (SSR)</strong> built with <strong>Astro</strong>. It goes beyond a simple static page: it includes a blog with a rich text editor, a games area integrated with the Steam API in real time, and a fully automated deploy system via Git hooks.',
         desc2: 'All development was done in collaboration with Claude (Anthropic) using <strong>Claude Code</strong> — a command-line interface that enables AI-assisted development directly in the terminal, with access to the file system, Git and the server.',
         desc3: 'The project uses a set of <strong>specialized agents</strong> that automate frontend, infrastructure, quality and security tasks — all coordinated by natural language.',
-        featureBlog: 'Blog with Rich Editor',
+        featureBlog: 'Notes with Rich Editor',
         featureBlogDesc: 'TipTap + SQLite, admin area protected by JWT',
         featureGames: 'Live Games',
         featureGamesDesc: 'Steam API with real-time game data',
@@ -186,7 +186,7 @@ export const en: Translations = {
         item1Title: 'Secure Session Cookies',
         item1Desc: 'Authentication cookies use the <code>Secure</code> attribute, ensuring they are only transmitted over HTTPS connections.',
         item2Title: 'XSS Prevention',
-        item2Desc: 'Blog post content is sanitized using an allowlist approach before rendering, blocking malicious scripts.',
+        item2Desc: 'Notes content is sanitized using an allowlist approach before rendering, blocking malicious scripts.',
         item3Title: 'Generic Error Responses',
         item3Desc: 'Error responses are intentionally generic to avoid exposing internal system details.',
         item4Title: 'Login Rate Limiting',
@@ -259,7 +259,7 @@ export const en: Translations = {
           'Your server IP and root password',
           'Domain or subdomain pointing to the server',
           'Your resume / professional experience (text or PDF)',
-          'A strong password for the blog admin (mix uppercase, lowercase, numbers and symbols) and a JWT secret (random string, minimum 32 characters)',
+          'A strong password for the Notes admin (mix uppercase, lowercase, numbers and symbols) and a JWT secret (random string, minimum 32 characters)',
           'Steam ID or vanity URL (optional)',
         ],
         prompt1Badge: 'Prompt 1 of 2',
@@ -288,7 +288,7 @@ Server information:
 Desired stack (do not change):
 - Astro SSR with @astrojs/node adapter (standalone)
 - React for interactive components
-- TipTap for the blog editor
+- TipTap for the Notes editor
 - SQLite (better-sqlite3) for posts
 - JWT (jose library) for admin authentication
 - PM2 to manage the Node.js process
@@ -298,7 +298,7 @@ Desired stack (do not change):
 Pages the site should have:
 1. Home — personal presentation with hobbies
 2. Professional — career timeline with hover tooltip
-3. Blog — post listing + admin editor with TipTap (JWT protected)
+3. Notes — post listing + admin editor with TipTap (JWT protected)
 4. Games — optional Steam API integration (section can be empty for now)
 5. About — technical documentation of the project
 
@@ -350,7 +350,7 @@ When done:
    and that the authentication flow in production is working correctly
 
 5. qa-bug-hunter: access [YOUR_DOMAIN] and verify the site is working —
-   check home, blog, professional and games
+   check home, notes, professional and games
 
 When done, display the site's public URL.`,
         finalCallout: 'Done — site live with automated deploy. From there, any change is made by describing it in natural language and confirmed with <code class="inline-code">git push production main</code>.',

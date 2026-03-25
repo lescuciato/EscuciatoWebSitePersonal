@@ -6,7 +6,7 @@ export const pt = {
   nav: {
     home: 'Home',
     professional: 'Profissional',
-    blog: 'Blog',
+    blog: 'Notas',
     games: 'Games',
     about: 'Sobre o Site',
   },
@@ -69,7 +69,7 @@ export const pt = {
   // ─── Blog listing ─────────────────────────────────────────────────────────
   blog: {
     metaDescription: 'Reflexões sobre transformação ágil, ferramentas Atlassian, liderança de times e tecnologia.',
-    pageTitle: 'Blog',
+    pageTitle: 'Notas',
     subtitle: 'Reflexões sobre transformação ágil, ferramentas Atlassian, liderança de times e tecnologia.',
     emptyTitle: 'Ainda sem posts',
     emptyText: 'Volte em breve — o conteúdo está a caminho.',
@@ -80,7 +80,7 @@ export const pt = {
 
   // ─── Blog post ────────────────────────────────────────────────────────────
   blogPost: {
-    backToBlog: 'Voltar ao Blog',
+    backToBlog: 'Voltar às Notas',
     by: 'por',
   },
 
@@ -124,7 +124,7 @@ export const pt = {
         desc1: 'Este é um site pessoal moderno com <strong>Server-Side Rendering (SSR)</strong> construído em <strong>Astro</strong>. Vai além de uma simples página estática: inclui um blog com editor de texto rico, área de games integrada com a Steam API em tempo real, e um sistema de deploy completamente automatizado via Git hooks.',
         desc2: 'Todo o desenvolvimento foi feito em colaboração com Claude (Anthropic) usando o <strong>Claude Code</strong> — uma interface de linha de comando que permite desenvolvimento assistido por IA diretamente no terminal, com acesso ao sistema de arquivos, Git e servidor.',
         desc3: 'O projeto utiliza um conjunto de <strong>agentes especializados</strong> que automatizam tarefas de frontend, infraestrutura, qualidade e segurança — todos coordenados por linguagem natural.',
-        featureBlog: 'Blog com Editor Rico',
+        featureBlog: 'Notas com Editor Rico',
         featureBlogDesc: 'TipTap + SQLite, área admin protegida por JWT',
         featureGames: 'Games ao Vivo',
         featureGamesDesc: 'Steam API com dados de jogos em tempo real',
@@ -184,7 +184,7 @@ export const pt = {
         item1Title: 'Cookies de Sessão Seguros',
         item1Desc: 'Os cookies de autenticação utilizam o atributo <code>Secure</code>, garantindo que só sejam transmitidos em conexões HTTPS.',
         item2Title: 'Prevenção de XSS',
-        item2Desc: 'O conteúdo dos posts do blog passa por sanitização via lista de permissões (allowlist) antes de ser renderizado, bloqueando scripts maliciosos.',
+        item2Desc: 'O conteúdo dos posts das Notas passa por sanitização via lista de permissões (allowlist) antes de ser renderizado, bloqueando scripts maliciosos.',
         item3Title: 'Respostas Genéricas de Erro',
         item3Desc: 'As respostas de erro são intencionalmente genéricas para não expor detalhes internos do sistema.',
         item4Title: 'Rate Limiting no Login',
@@ -257,7 +257,7 @@ export const pt = {
           'IP do seu servidor e senha root',
           'Domínio ou subdomínio que aponta para o servidor',
           'Seu currículo / experiências profissionais (texto ou PDF)',
-          'Uma senha forte para o admin do blog (misture maiúsculas, minúsculas, números e símbolos) e uma chave JWT (string aleatória com mínimo 32 caracteres)',
+          'Uma senha forte para o admin das Notas (misture maiúsculas, minúsculas, números e símbolos) e uma chave JWT (string aleatória com mínimo 32 caracteres)',
           'Steam ID ou vanity URL (opcional)',
         ],
         prompt1Badge: 'Prompt 1 de 2',
@@ -286,7 +286,7 @@ Informações do servidor:
 Stack desejada (não alterar):
 - Astro SSR com @astrojs/node adapter (standalone)
 - React para componentes interativos
-- TipTap para o editor do blog
+- TipTap para o editor de Notas
 - SQLite (better-sqlite3) para os posts
 - JWT (biblioteca jose) para autenticação do admin
 - PM2 para gerenciar o processo Node.js
@@ -296,7 +296,7 @@ Stack desejada (não alterar):
 Páginas que o site deve ter:
 1. Home — apresentação pessoal com hobbies
 2. Profissional — timeline de carreira com tooltip no hover
-3. Blog — listagem de posts + editor admin com TipTap (protegido por JWT)
+3. Notas — listagem de posts + editor admin com TipTap (protegido por JWT)
 4. Games — integração opcional com Steam API (seção pode ficar vazia por ora)
 5. Sobre o Site — documentação técnica do projeto
 
@@ -348,7 +348,7 @@ Ao finalizar:
    e que o fluxo de autenticação em produção está funcionando corretamente
 
 5. qa-bug-hunter: acessar [SEU_DOMINIO] e verificar que o site está funcionando —
-   checar home, blog, profissional e games
+   checar home, notas, profissional e games
 
 Ao final, exibir a URL pública do site.`,
         finalCallout: 'Pronto — site no ar com deploy automatizado. A partir daí, qualquer mudança é feita descrevendo em linguagem natural e confirmada com <code class="inline-code">git push production main</code>.',
